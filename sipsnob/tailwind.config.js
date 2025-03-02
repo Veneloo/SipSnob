@@ -7,9 +7,10 @@ module.exports = {
           accent: "#d7b899", // Warm Tan
         },
         fontFamily: {
-          serif: ['Young Serif', 'serif'], //young serif default font
+          serif: ["Young Serif", "serif"], //young serif default font
         },
       },
     },
+    plugins: [],
   };
   

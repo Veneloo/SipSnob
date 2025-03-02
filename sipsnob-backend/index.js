@@ -2,6 +2,10 @@ require("dotenv").config();
 const axios = require("axios");
 const API_KEY = process.env.GOOGLE_PLACES_API_KEY;
 
+const express = require("express");
+const cors = require("cors");
+const app = express();
+app.use(cors());
 
 async function getCoffeeShops(latitude, longitude) {
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=5000&type=cafe&key=${API_KEY}`;
@@ -15,9 +19,7 @@ async function getCoffeeShops(latitude, longitude) {
     }
 }
 
-
-
-const admin  = require("firebase-admin");
+const admin = require("firebase-admin");
 const serviceAccount = require("./serviceAccountKey.json");
  
 admin.initializeApp({

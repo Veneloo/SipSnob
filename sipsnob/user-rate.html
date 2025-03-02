@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rate Coffee Shop - SipSnob</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Young+Serif&display=swap');
+        body {
+            background-color: #f5e1c8;
+            font-family: 'Young Serif', serif;
+        }
+        .rating-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .rating-input {
+            appearance: none;
+            background: #d7b899;
+            height: 8px;
+            border-radius: 5px;
+            outline: none;
+            width: 100%;
+        }
+        .rating-input::-webkit-slider-thumb {
+            appearance: none;
+            width: 15px;
+            height: 15px;
+            background: #8B5E3C;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .checkbox-radio {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #8B5E3C;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        .checkbox-radio:checked {
+            background-color: #8B5E3C;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+     <!-- Navigation Bar -->
+     <nav class="bg-[#f5e1c8] text-[#5a3e2b] p-4 flex justify-between items-center shadow-md relative">
+        <h1 class="text-xl font-bold">SipSnob</h1>
+        <button id="menu-btn" class="text-lg">☰</button>
+        <div id="menu" class="menu">
+            <a href="#">Home</a>
+            <a href="#">Your Profile</a>
+            <a href="#">Discover</a>
+        </div>
+    </nav>
+    
+    <!-- Page Content -->
+    <div class="flex justify-center items-center p-6">
+    <div class="max-w-md w-full bg-[#f5e1c8] p-6 rounded-lg shadow-lg">
+        
+        <!-- Coffee Shop Info -->
+        <div class="text-center">
+            <h1 class="text-2xl font-bold text-[#5a3e2b]">SipSnob</h1>
+            <h2 class="text-xl font-semibold text-[#5a3e2b] mt-2">Blank Street (71st & Lex)</h2>
+            <img src="https://via.placeholder.com/300x150" alt="Coffee Shop Image" class="w-full rounded-lg mt-3 shadow-md">
+        </div>
+        
+        <!-- Rating Section -->
+        <div class="mt-4 space-y-4">
+            <div>
+                <label class="font-semibold text-[#5a3e2b]">Drink Consistency:</label>
+                <div class="rating-container">
+                    <input type="range" min="1" max="10" class="rating-input" oninput="this.nextElementSibling.innerText = this.value">
+                    <span class="ml-2 text-[#5a3e2b] font-semibold">5</span>
+                </div>
+            </div>
+            <div>
+                <label class="font-semibold text-[#5a3e2b]">Ambiance:</label>
+                <div class="rating-container">
+                    <input type="range" min="1" max="10" class="rating-input" oninput="this.nextElementSibling.innerText = this.value">
+                    <span class="ml-2 text-[#5a3e2b] font-semibold">5</span>
+                </div>
+            </div>
+            <div>
+                <label class="font-semibold text-[#5a3e2b]">Wait Time:</label>
+                <div class="rating-container">
+                    <input type="range" min="1" max="10" class="rating-input" oninput="this.nextElementSibling.innerText = this.value">
+                    <span class="ml-2 text-[#5a3e2b] font-semibold">5</span>
+                </div>
+            </div>
+            <div>
+                <label class="font-semibold text-[#5a3e2b]">Pricing:</label>
+                <div class="rating-container">
+                    <input type="range" min="1" max="10" class="rating-input" oninput="this.nextElementSibling.innerText = this.value">
+                    <span class="ml-2 text-[#5a3e2b] font-semibold">5</span>
+                </div>
+            </div>
+            <div>
+                <label class="font-semibold text-[#5a3e2b]">Customer Service:</label>
+                <div class="rating-container">
+                    <input type="range" min="1" max="10" class="rating-input" oninput="this.nextElementSibling.innerText = this.value">
+                    <span class="ml-2 text-[#5a3e2b] font-semibold">5</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alternative Milk Options -->
+        <div class="mt-6">
+            <label class="font-semibold text-[#5a3e2b]">Alternative Milk Options:</label>
+            <div class="flex flex-wrap gap-3 mt-2">
+                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-radio"> Oat</label>
+                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-radio"> Almond</label>
+                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-radio"> Coconut</label>
+                <label class="flex items-center gap-2"><input type="checkbox" class="checkbox-radio"> Soy</label>
+            </div>
+        </div>
+
+        <!-- Food & Sugar-Free Syrup Options -->
+        <div class="mt-6 space-y-4">
+            <div>
+                <label class="font-semibold text-[#5a3e2b]">Food Items Available:</label>
+                <div class="flex gap-4 mt-2">
+                    <label class="flex items-center gap-2"><input type="radio" name="food" class="checkbox-radio"> Yes</label>
+                    <label class="flex items-center gap-2"><input type="radio" name="food" class="checkbox-radio"> No</label>
+                </div>
+            </div>
+            <div>
+                <label class="font-semibold text-[#5a3e2b]">Sugar-Free Syrup Options Available:</label>
+                <div class="flex gap-4 mt-2">
+                    <label class="flex items-center gap-2"><input type="radio" name="sugarfree" class="checkbox-radio"> Yes</label>
+                    <label class="flex items-center gap-2"><input type="radio" name="sugarfree" class="checkbox-radio"> No</label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Button -->
+        <div class="mt-6 text-center">
+            <button class="bg-[#8B5E3C] text-white py-2 px-6 rounded hover:bg-[#5a3e2b] transition">
+                Submit Rating
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+        document.getElementById("menu-btn").addEventListener("click", function() {
+            var menu = document.getElementById("menu");
+            if (menu.style.display === "block") {
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        });
+    </script>
+    
+</body>
+</html>
