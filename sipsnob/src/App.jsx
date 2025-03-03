@@ -6,30 +6,24 @@ import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
 import HomePage from './pages/home'
 import LogIn from './pages/login';
 import SignUp from './pages/signup';
+import Launch from './pages/launch';
 
-function SignIn(){
 
-
-}
 
 function App() {
   return (
       <div>
-      <h1> SipSnob </h1>
     <BrowserRouter>
        
     
-      <nav>
-      <Link to="/pages/login">Login</Link>
-      <Link to="/pages/signup">Signup</Link>
 
-      </nav>
       <Routes>
-        <Route path="/" element={<h2> Log In </h2>}/>
+        <Route path="/pages/login" element={<LogIn />}/>
+        <Route path="/pages/signup" element={<SignUp />}/>
+        <Route path="/" element={<Launch />}/>
 
 
       </Routes>
-      <h2>  Sign Up</h2>
     </BrowserRouter> 
      </div>
 
