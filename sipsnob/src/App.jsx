@@ -8,7 +8,7 @@ import Launch from './pages/launch';
 import Navbar from './components/Navbar'; 
 //import Profile from './pages/profile'; 
 import Discover from './pages/discover'; 
-//import Ratings from './pages/ratings'; 
+import Ratings from './pages/ratings'; 
 
 function App() {
   return (
@@ -18,6 +18,8 @@ function App() {
         <Route path="/" element={<Launch />} />
         <Route path="/pages/login" element={<LogIn />} />
         <Route path="/pages/signup" element={<SignUp />} />
+        <Route path="/pages/discover" element={<Discover />} />
+        <Route path="/pages/ratings" element={<Ratings />} />
       
 
       {/* Navbar should be present on all other pages */}
