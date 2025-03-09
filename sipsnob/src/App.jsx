@@ -6,9 +6,9 @@ import LogIn from './pages/login';
 import SignUp from './pages/signup';
 import Launch from './pages/launch';
 import Navbar from './components/Navbar'; 
-import Profile from './pages/profile'; 
+//import Profile from './pages/profile'; 
 import Discover from './pages/discover'; 
-import Ratings from './pages/ratings'; 
+//import Ratings from './pages/ratings'; 
 
 function App() {
   return (
@@ -18,14 +18,14 @@ function App() {
         <Route path="/" element={<Launch />} />
         <Route path="/pages/login" element={<LogIn />} />
         <Route path="/pages/signup" element={<SignUp />} />
-      </Routes>
+      
 
       {/* Navbar should be present on all other pages */}
-      <Routes>
-        <Route path="/home" element={<><Navbar /><HomePage /></>} />
-        <Route path="/profile" element={<><Navbar /><Profile /></>} />
-        <Route path="/discover" element={<><Navbar /><Discover /></>} />
-        <Route path="/ratings" element={<><Navbar /><Ratings /></>} />
+      
+        <Route path="/home" element={<><Navbar/><HomePage /></>} />
+        {/*<Route path="/profile" element={<Profile />} />*/}
+        <Route path="/discover" element={<><Navbar/><Discover /></>} />
+        {/*<Route path="/ratings" element={<Ratings />} />*/}
       </Routes>
     </BrowserRouter>
   );
