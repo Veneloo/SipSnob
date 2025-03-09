@@ -7,7 +7,6 @@ import SignUp from './pages/signup';
 import Launch from './pages/launch';
 
 
-
 function App() {
   return (
       <div>
@@ -19,7 +18,6 @@ function App() {
         <Route path="/pages/login" element={<LogIn />}/>
         <Route path="/pages/signup" element={<SignUp />}/>
         <Route path="/" element={<Launch />}/>
-
 
       </Routes>
     </BrowserRouter> 

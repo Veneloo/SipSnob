@@ -13,24 +13,10 @@ function LogIn(){
     //
  
     return (
+        
       <div 
-        className="min-h-screen bg-center"
-        style={{
-            backgroundColor: "#9d7d5d",
-        }}>
+        className="min-h-screen bg-center bg-primary">
 
-        <div
-            className="container"
-            style={{
-                blockSize: "75%",
-                boxShadow: "4px #8B5E3C",
-                justifyContent: "space-around"
-                }}>
-
-
-
-   
- 
         <h1 className="text-2xl font-bold text-[#5a3e2b] mb-4"> Welcome back! </h1>  
 
     
@@ -39,7 +25,6 @@ function LogIn(){
             onChange={setUsername}
             type="text"
             id="username"
-            value={username}
         />
         <br></br>
         <label>Password: </label>
@@ -47,8 +32,6 @@ function LogIn(){
             type="text"
             id="password"
         />
-
-        </div>
          </div>
     )
 
