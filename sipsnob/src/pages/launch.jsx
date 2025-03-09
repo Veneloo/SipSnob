@@ -15,11 +15,11 @@ function Launch(){
             <h1 className="font-bold"> SipSnob</h1>
 
             {/*About Us*/}
-            <p>(temp)A community-driven coffee discovery app with structured reviews</p>
+            <p>A community-driven coffee discovery app with structured reviews</p>
  
             {/*Login/signup*/}
-            <div className="flex justify-center space-x-4">
-                <button onClick={() => navigate('/pages/login')} className="bg-[#f5e1c8] text-[#5a3e2b] py-2 px-6 rounded hover:bg-[#f5e1c8] transition mx-4">
+            <div className="mt-4 space-y-4">
+                <button onClick={() => navigate('/pages/login')} className="bg-[#f5e1c8] text-[#5a3e2b] py-10 px-30 rounded hover:bg-[#f5e1c8] transition">
                     Log In
                 </button>
                 <button onClick={() => navigate('/pages/signup')} className="bg-[#f5e1c8] text-[#5a3e2b] py-2 px-6 rounded hover:bg-[#f5e1c8] transition">

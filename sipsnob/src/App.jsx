@@ -1,7 +1,5 @@
 import { useState } from 'react'
-
 import './App.css'
-
 import { BrowserRouter, Route, Link, Routes } from 'react-router-dom';
 import HomePage from './pages/home'
 import LogIn from './pages/login';
