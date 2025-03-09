@@ -29,3 +29,5 @@ lerna-debug.log*
 # Ignore all node_modules directories
 node_modules/
 **/node_modules/
+
+sipsnob/dev-dist/sw.js
