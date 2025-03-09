@@ -8,7 +8,7 @@ import Launch from './pages/launch';
 import Navbar from './components/Navbar'; 
 //import Profile from './pages/profile'; 
 import Discover from './pages/discover'; 
-//import Ratings from './pages/ratings'; 
+import Ratings from './pages/ratings'; 
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
         <Route path="/home" element={<><Navbar/><HomePage /></>} />
         {/*<Route path="/profile" element={<Profile />} />*/}
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
-        {/*<Route path="/ratings" element={<Ratings />} />*/}
+        <Route path="/ratings" element={<><Navbar/><Ratings /></>} />
       </Routes>
     </BrowserRouter>
   );
