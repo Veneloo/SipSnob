@@ -27,7 +27,7 @@ function App() {
         <Route path="/home" element={<><Navbar/><HomePage /></>} />
         {/*<Route path="/profile" element={<Profile />} />*/}
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
-        {/*<Route path="/ratings" element={<Ratings />} />*/}
+        <Route path="/ratings" element={<><Navbar/><Ratings /></>} />
       </Routes>
     </BrowserRouter>
   );
