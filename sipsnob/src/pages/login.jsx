@@ -10,7 +10,6 @@ function LogIn(){
     function handleChange(e){
         setUsername(e.target.value)
     }
-    //
  
     return (
         
