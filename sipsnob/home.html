@@ -11,10 +11,30 @@
             background-color: #f5e1c8;
             font-family: 'Young Serif', serif;
         }
-        .bookmark-container {
+        .bookmark-list {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            overflow: auto;
+            white-space: nowrap;
+            justify-content: center;
+        }
+        .bookmark-container{
+            display: inline-block;
+            text-align: center;
+            padding-top: 75px;
+            padding-right: 50px;
+            padding-bottom: 75px;
+            padding-left: 50px;
+            margin: 15px;
+            background-color: #5a3e2b;
+            border-radius: 50px;
+            color: #f5e1c8;
+            
+        }
+        .bookmark-container a{
+            display: inline-block;
+            text-align: center;
+            padding: 5;
+            text-shadow: 2px 2px black;
         }
         .friend-list{
             color: #5a3e2b;
@@ -37,13 +57,37 @@
             <a href="#">Discover</a>
         </div>
     </nav>    
-    <!--Welcome, user-->
+    <!--Home Page Content-->
 
+        
+    <!--Welcome, user-->
+    <div class="mt-4 ml-4">
+
+        <h1 class="text-4xl text-[#A2845E] ml-10"> Welcome, user </h1>
+
+    </div>
     <!--Bookmarked shops-->
+    <h1 class="text-2xl mt-5 ml-10 text-[#5a3e2b]"> Bookmarked Shops Near You </h1>
+        <div class="bookmark-list">
+        <a>
+        <div class="bookmark-container">
+            <h1>  Bookmark</h1>
+            <h2> Location</h2>
+
+        </div></a>
+        <a class="bookmark-container">
+            <h1>  Bookmark</h1>
+        </a>
+
+
+        
+
 
     <!--Friend List-->
 
     <!--Add a friend-->
+
+    </div>
 
 </body>
 </html>
