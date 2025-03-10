@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: 'autoUpdate', // Automatically updates service worker
+      registerType: 'autoUpdate',
       manifest: {
         name: "SipSnob - Coffee Reviews",
         short_name: "SipSnob",
@@ -29,12 +29,25 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,png,svg}'],
+        globDirectory: "dist", 
+        globPatterns: ["**/*.{js,css,html,png,svg,ico,json,webp}"],
+        globIgnores: ["dist/sw.js", "dist/workbox-*.js"],
+        cleanupOutdatedCaches: true,
+        swDest: "dist/sw.js" 
       },
       devOptions: {
-        enabled: true,  // Ensures PWA works in development mode
+        enabled: false, 
+        type: "module",
+        navigateFallback: "index.html"
       }
     })
-  ]
+  ],
+  build: {
+    outDir: "dist", 
+  },
+  server: {
+    fs: {
+      strict: false, 
+    }
+  }
 });
-
