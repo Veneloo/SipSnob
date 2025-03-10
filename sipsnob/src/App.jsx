@@ -24,7 +24,7 @@ function App() {
 
       {/* Navbar should be present on all other pages */}
       
-        <Route path="/home" element={<><Navbar/><HomePage /></>} />
+        <Route path="/pages/home" element={<><Navbar/><HomePage /></>} />
         {/*<Route path="/profile" element={<Profile />} />*/}
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
         <Route path="/ratings" element={<><Navbar/><Ratings /></>} />
