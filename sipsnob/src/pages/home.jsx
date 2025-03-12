@@ -1,9 +1,10 @@
 import React from "react";
+import './pages.css'
 
-function HomePage(){
+const HomePage = () =>{
     return (
 
-        <div>
+        <div className="page-container">
         <h1> Welcome, user </h1>
         <br></br>
         <h2> Bookmarked shops near you: </h2>

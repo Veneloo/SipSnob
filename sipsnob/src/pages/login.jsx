@@ -27,18 +27,19 @@ function LogIn(){
  
     return (
         
-      <div 
+      <div
         style={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
             padding: "10px",
             height:"100vh",
             width:"100vw",
             backgroundColor: "#d7b898",
             fontFamily: "YoungSerif",
             fontWeight: "bold",
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            flexDirection: "column"
+            flexDirection: "column",
+            textAlign: "center",
 
         }
         }>
@@ -60,6 +61,7 @@ function LogIn(){
             maxHeight: "fit-content",
             maxWidth: "50vw",
             justifyItems: "center",
+            alignItems: "center",
             padding: "25px",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
             borderRadius: "10px",
@@ -69,7 +71,6 @@ function LogIn(){
     style={{
         fontWeight: "bold"
     }}> Welcome back! </h1>  
-
     <form onSubmit={handleSubmit}>
         <label style={{
             textAlign: "left",
@@ -112,7 +113,6 @@ function LogIn(){
 <br/>
         <button type="submit"
         style={{
-
             fontFamily: 'YoungSerif',
             margin: "10px",
             textAlign: "center",

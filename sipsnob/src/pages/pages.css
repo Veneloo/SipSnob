@@ -1,0 +1,11 @@
+.page-container{
+    padding: 50px;
+    height: 100%;
+    width: 100%;
+    background-color: #d7b898;
+    font-family: YoungSerif;
+    font-weight: bold;
+    display: flex;
+    justify-content:center;
+    flex-direction: column;
+  }

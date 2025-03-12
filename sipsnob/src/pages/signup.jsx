@@ -88,6 +88,7 @@ function SignUp(){
             maxHeight: "fit-content",
             maxWidth: "50vw",
             justifyItems: "center",
+            textAlign: "center",
             padding: "25px",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
             borderRadius: "10px",
@@ -96,7 +97,7 @@ function SignUp(){
     <h1
     style={{
         fontWeight: "bold"
-    }}> Sign Up </h1>  
+    }}>Sign Up</h1>  
 
     <form onSubmit={handleSignUp}>
         <label style={{
