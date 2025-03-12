@@ -21,6 +21,9 @@ function LogIn(){
     function handleUsernameChange(e){
         setUsername(e.target.value)
     }
+    function handlePasswordchange(e){
+        setPassword(e.target.value)
+    }
  
     return (
         
@@ -54,7 +57,7 @@ function LogIn(){
 
         <div 
         style={{
-            maxHeight: "40vh",
+            maxHeight: "fit-content",
             maxWidth: "50vw",
             justifyItems: "center",
             padding: "25px",
