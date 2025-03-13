@@ -30,6 +30,7 @@ const Navbar = () => {
 
       {/* Hamburger Button */}
       <button onClick={toggleMenu} style={{
+        backgroundColor: "transparent",
         fontSize: "24px",
         color: "#5a3e2b",
         margin: "12px"
@@ -41,21 +42,21 @@ const Navbar = () => {
       {menuOpen && (
         <div 
         style={{
-          top: "100%",
           position: "absolute",
+          marginRight: "50px",
           padding: "10px",
           right: "10px",
           display: "inline-block",
           minWidth: "160px"
 
         }}className="absolute right-4 mt-2 w-48 bg-[#8B5E3C] rounded-md shadow-lg z-50">
-          <Link to="/home" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+          <Link to="/home" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
  }}>Home</Link>
-          <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+          <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
  }}>Discover & Search</Link>
-          <Link to="/ratings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+          <Link to="/ratings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
  }}>Rate Coffee Shops</Link>
-          <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+          <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
  }}>Your Profile</Link>
         </div>
       )}
