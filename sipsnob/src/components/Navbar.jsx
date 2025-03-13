@@ -11,6 +11,7 @@ const Navbar = () => {
   return (
     <nav className="bg-[#f5e1c8] text-[#5a3e2b] p-4 flex justify-between items-center relative shadow-md"
       style={{
+        top: "0",
         position: "fixed",
         width: "100%",
         padding: "2px",
@@ -18,6 +19,8 @@ const Navbar = () => {
         justifyContent: "space-between",
         alignItems: "center",
         boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+        zIndex: "1000"
+
       }}>
       <p 
       style={{
@@ -38,13 +41,22 @@ const Navbar = () => {
       {menuOpen && (
         <div 
         style={{
+          top: "100%",
           position: "absolute",
+          padding: "10px",
+          right: "10px",
+          display: "inline-block",
+          minWidth: "160px"
 
         }}className="absolute right-4 mt-2 w-48 bg-[#8B5E3C] rounded-md shadow-lg z-50">
-          <Link to="/" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]">Home</Link>
-          <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]">Your Profile</Link>
-          <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]">Discover & Search</Link>
-          <Link to="/ratings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]">Rate Coffee Shops</Link>
+          <Link to="/home" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+ }}>Home</Link>
+          <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+ }}>Discover & Search</Link>
+          <Link to="/ratings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+ }}>Rate Coffee Shops</Link>
+          <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" style={{ padding: "5px 10px", backgroundColor: "rgb(0,0,0,0.2)", boxShadow: "0 2px 2px rgb(0,0,0,0.2)", color: "#5a3e2b",
+ }}>Your Profile</Link>
         </div>
       )}
     </nav>

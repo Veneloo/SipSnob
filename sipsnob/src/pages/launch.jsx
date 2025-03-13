@@ -1,10 +1,13 @@
 import React from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import LogIn from "./login";
 import SignUp from "./signup";
 
 function Launch(){
-    const navigate =useNavigate();
+    const navigate =useNavigate()
+
+
     return(
 
         <div className="min-h-screen bg-[#5a3e2b] font-[Young Serif">
@@ -19,10 +22,10 @@ function Launch(){
  
             {/*Login/signup*/}
             <div className="mt-4 space-y-4">
-                <button onClick={() => navigate('/pages/login')} className="bg-[#f5e1c8] text-[#5a3e2b] py-10 px-30 rounded hover:bg-[#f5e1c8] transition">
+                <button onClick={() => navigate('/login')} className="bg-[#f5e1c8] text-[#5a3e2b] py-10 px-30 rounded hover:bg-[#f5e1c8] transition">
                     Log In
                 </button>
-                <button onClick={() => navigate('/pages/signup')} className="bg-[#f5e1c8] text-[#5a3e2b] py-2 px-6 rounded hover:bg-[#f5e1c8] transition">
+                <button onClick={() => navigate('/signup')} className="bg-[#f5e1c8] text-[#5a3e2b] py-2 px-6 rounded hover:bg-[#f5e1c8] transition">
                     Sign In
                 </button>
 

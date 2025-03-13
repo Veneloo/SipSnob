@@ -7,15 +7,17 @@ import HomePage from "./home";
 function LogIn(){
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [error, setError] = useState("")
+
     const navigate = useNavigate()
     
     const handleSubmit = (e) => {
        e.preventDefault()
         if(username==="username" && password === "password"){
-            navigate('/pages/home')
+            navigate('/home')
         }
         else {
-            console.log("Invalid Log In Attempt")
+            setError("Invalid Log In Attempt")
         }
     }
     function handleUsernameChange(e){
@@ -111,6 +113,9 @@ function LogIn(){
 
         />
 <br/>
+        {error && <p 
+            style={{color: "red",
+            margin: "25px"}}>{error}</p>}
         <button type="submit"
         style={{
             fontFamily: 'YoungSerif',

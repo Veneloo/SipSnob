@@ -16,15 +16,15 @@ function App() {
       {/* Show Navbar on all pages EXCEPT login, signup, and launch */}
       <Routes>
         <Route path="/" element={<Launch />} />
-        <Route path="/pages/login" element={<LogIn />} />
-        <Route path="/pages/signup" element={<SignUp />} />
+        <Route path="/login" element={<LogIn />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/pages/discover" element={<Discover />} />
         <Route path="/pages/ratings" element={<Ratings />} />
       
 
       {/* Navbar should be present on all other pages */}
       
-        <Route path="/pages/home" element={<><Navbar/><HomePage /></>} />
+        <Route path="/home" element={<><Navbar/><HomePage /></>} />
         {/*<Route path="/profile" element={<Profile />} />*/}
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
         <Route path="/ratings" element={<><Navbar/><Ratings /></>} />

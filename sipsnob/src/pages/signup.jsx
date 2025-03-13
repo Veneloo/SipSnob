@@ -36,7 +36,7 @@ function SignUp(){
         }
 
         setError("")
-        navigate('/pages/home')
+        navigate('/home')
     }
     const handleEmailChange = (e) =>{
         const emailValue = e.target.value
