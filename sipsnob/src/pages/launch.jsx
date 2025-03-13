@@ -1,6 +1,7 @@
 import React from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import "./pages.css"
 import LogIn from "./login";
 import SignUp from "./signup";
 
@@ -10,22 +11,28 @@ function Launch(){
 
     return(
 
-        <div className="min-h-screen bg-[#5a3e2b] font-[Young Serif">
+        <div className="page-container"
+            style={{
+                justifyContent: "center",
+                backgroundColor: "#8B5E3C"
+            }}>
             <div className="max-w-4xl mx-auto p-6">
 
             {/*Welcome to SipSnob */}
-            <p> Welcome to </p>
-            <h1 className="font-bold"> SipSnob</h1>
+            <p  style={{ color: "#572e05",  fontSize: "1.5em"}}> Welcome to </p>
+            <h1 style={{textShadow: "0 2px 2px rgb(0,0,0,0.2)", margin: "-12px", color: "#f5e1c8", fontWeight: "bold", fontSize: "6em"}}> SipSnob</h1>
 
             {/*About Us*/}
-            <p>A community-driven coffee discovery app with structured reviews</p>
+            <p style={{marginTop: "36px", color: "#572e05"}}>A community-driven coffee discovery app with structured reviews</p>
  
             {/*Login/signup*/}
             <div className="mt-4 space-y-4">
-                <button onClick={() => navigate('/login')} className="bg-[#f5e1c8] text-[#5a3e2b] py-10 px-30 rounded hover:bg-[#f5e1c8] transition">
+                <button onClick={() => navigate('/login')} 
+                className="button"
+                style={{color: "#f5e1c8", backgroundColor: "#572e05"}}>
                     Log In
                 </button>
-                <button onClick={() => navigate('/signup')} className="bg-[#f5e1c8] text-[#5a3e2b] py-2 px-6 rounded hover:bg-[#f5e1c8] transition">
+                <button onClick={() => navigate('/signup')} className="button" style={{ color: "#f5e1c8", backgroundColor: "#572e05"}}>
                     Sign In
                 </button>
 

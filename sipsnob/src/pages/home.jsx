@@ -1,21 +1,130 @@
 import React from "react";
 import './pages.css'
+import { useState } from "react";
+import sampleImg from "../assets/sampleimg.png"
+
+const bookmarkedShops = [
+    {name:"Blank Street (71st & Lex)" },
+    {name: "Coffee"},
+    {name: "new coffee!"},
+    {name: "java chip"},
+    {name: "latte at 91st"},
+    {name: "another coffe shop"},
+]
+const handleUnfavorite = (shopname) => {
+    console.log(`Unfavorite ${shopname}`)
+}
+
+const BookmarkItem = ({bookmarkDetails}) => {
+    if (!bookmarkDetails){
+        return null;
+    }
+    return (
+        <div style={{
+            height: "200px",
+            width: "250px",
+            borderRadius: "50px", 
+            backgroundColor: "#572e05",
+            padding: "24px",
+            marginRight: "75px",
+            flexShrink: "0",
+            alignContent: "center",
+            position: "relative"
+            }}>
+        {/* Shop Photo*/}
+        <div style={{
+            
+            position: "absolute",
+            top: "0",
+            bottom: "0",
+            left: "0",
+            right: "0",
+            backgroundImage: `url(${sampleImg})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            borderRadius: "50px", 
+            opacity: "0.4",
+            zIndex: "1"
+            
+        }}>
+        </div>
+
+        
+        <button onClick="handleUnfavorite"
+        className="bookmark-button"
+        style={{
+            zIndex: "2",
+        }}>
+        ★
+        </button>
+        <h2
+        style={{
+            textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+            color: "#f5e1c8",
+            zIndex: "2",
+            position: "relative",
+        }}>{bookmarkDetails.name}</h2>
+
+        
+        </div>
+    );
+}
 
 const HomePage = () =>{
     return (
 
-        <div className="page-container">
+        <div className="page-container"
+        style={{
+        }}>
 
-        <h1> Welcome, user </h1> //get user name from stored user info
+        <h1 style={{
+            textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+            textAlign: "left",
+            color: "#A2845E"
+        }}> Welcome, user </h1> {/*get user name from stored user info*/}
 
-        /*bookmarked shops*/
+        {/*bookmarked shops*/}
         <div>
-        <h2> Bookmarked shops near you: </h2>
-        
-                
+        <h2 style={{
+            textAlign: "left",
+        }}> Bookmarked shops near you: </h2>
 
-            </div>
+
+        <div className="bookmarkItem" 
+            style={{
+            borderRadius: "50px", 
+            height: "250px",
+            width: "95%",
+            overflowX: "scroll",
+            overflowY: "hidden", 
+            display: "flex"
+            }}>
+        {bookmarkedShops.map((item,index) => (
+            <BookmarkItem key={index} bookmarkDetails={item}/>
+        ))}
+        <BookmarkItem>
+
+        </BookmarkItem>
+        <BookmarkItem>
+        </BookmarkItem>
+        <BookmarkItem></BookmarkItem>
+        <BookmarkItem></BookmarkItem>
+        <BookmarkItem></BookmarkItem>
+        <BookmarkItem></BookmarkItem>
+        <BookmarkItem></BookmarkItem>
+        <BookmarkItem></BookmarkItem>
+
+
+        </div>
+
+
+
+    </div>
         <br></br>
+
+    {/*Feed*/}
+    
+    {/*Feed*/}
 
         
         </div>

@@ -6,6 +6,32 @@
     font-family: YoungSerif;
     font-weight: bold;
     display: flex;
-    justify-content:center;
     flex-direction: column;
+    text-align: center;
+  }
+
+  .button{
+    font-family: YoungSerif;
+    margin: 10px;
+    text-align: center;
+    font-size: medium;
+    padding: 8px 24px 8px 24px;
+    border-radius: 5px;
+    border: 0;
+    box-shadow: 0 2px 2px rgb(0,0,0,0.2);
+  }
+
+  .bookmark-button {
+    text-shadow: 0 2px 2px rgb(0,0,0,0.2);
+    font-size: 35px;
+    border: 0;
+    background-color: transparent;
+    color: rgba(245, 225, 200,0.5);
+    position: absolute;
+    top: 5%;
+    right: 10%;
+  }
+  .bookmark-button:hover{
+    color: rgba(245, 225, 200);
+
   }

@@ -80,6 +80,7 @@ function LogIn(){
         }}>Username: </label>
         <input className="w-full p-2 rounded border bg-[#5a3e2b]"
         style={{
+            color: "black" ,
             height: "20px",
             width: "100%",
             borderRadius: "5px",
@@ -99,6 +100,7 @@ function LogIn(){
         }}>Password: </label>
         <input 
         style={{
+            color: "black",
             height: "20px",
             width: "100%",
             borderRadius: "5px",
@@ -131,17 +133,10 @@ function LogIn(){
             Log In
         </button>
         <br/>
-        <button type="submit"
+        <button className="button" type="submit"
         style={{
-            fontFamily: 'YoungSerif',
-            margin: "10px",
-            textAlign: "center",
-            fontSize: "medium",
-            backgroundColor: "#8B5E3C",
-            padding: "8px 16px 8px 16px",
-            borderRadius: "5px",
-            border: "0",
-            boxShadow: "0 2px 2px rgb(0,0,0,0.2)"
+            backgroundColor: "#8B5E3C"
+
         }}>
             Forgot Password
         </button>
