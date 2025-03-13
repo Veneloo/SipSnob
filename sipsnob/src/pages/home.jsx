@@ -29,7 +29,8 @@ const BookmarkItem = ({bookmarkDetails}) => {
             marginRight: "75px",
             flexShrink: "0",
             alignContent: "center",
-            position: "relative"
+            position: "relative",
+            boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
             }}>
         {/* Shop Photo*/}
         <div style={{
@@ -73,20 +74,23 @@ const BookmarkItem = ({bookmarkDetails}) => {
 const HomePage = () =>{
     return (
 
-        <div className="page-container"
-        style={{
-        }}>
+        <div className="page-container">
 
         <h1 style={{
+            marginTop: "5%",
             textShadow: "0 2px 2px rgb(0,0,0,0.2)",
             textAlign: "left",
-            color: "#A2845E"
         }}> Welcome, user </h1> {/*get user name from stored user info*/}
 
         {/*bookmarked shops*/}
         <div>
         <h2 style={{
+            marginTop: "0",
             textAlign: "left",
+            color: "#A2845E",
+            textShadow: "0 1px 1px rgb(0,0,0,0.1)",
+
+
         }}> Bookmarked shops near you: </h2>
 
 
@@ -102,17 +106,7 @@ const HomePage = () =>{
         {bookmarkedShops.map((item,index) => (
             <BookmarkItem key={index} bookmarkDetails={item}/>
         ))}
-        <BookmarkItem>
 
-        </BookmarkItem>
-        <BookmarkItem>
-        </BookmarkItem>
-        <BookmarkItem></BookmarkItem>
-        <BookmarkItem></BookmarkItem>
-        <BookmarkItem></BookmarkItem>
-        <BookmarkItem></BookmarkItem>
-        <BookmarkItem></BookmarkItem>
-        <BookmarkItem></BookmarkItem>
 
 
         </div>

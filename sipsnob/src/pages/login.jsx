@@ -34,7 +34,7 @@ function LogIn(){
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            padding: "10px",
+            padding: "2px",
             height:"100vh",
             width:"100vw",
             backgroundColor: "#d7b898",
@@ -47,39 +47,52 @@ function LogIn(){
         }>
 
         <div 
-        style={{
-            width: "100%",
-            padding: "10px",
-            boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-            textAlign: "left",
-            fontWeight: "bold"
-        }}>
-            <p> SipSnob</p>    
-        </div>
+         style={{
+        top: "0",
+        position: "fixed",
+        width: "100%",
+        padding: "2px",
+        textAlign: "center",
+        boxShadow: "0 2px 2px rgb(0,0,0,0.1)",
+        zIndex: "1000"
+
+      }}>
+      <p 
+      style={{
+        fontSize: "24px",
+        margin: "12px",
+        textShadow: "0 2px 2px rgb(0,0,0,0.2)"
+      }}>SipSnob</p>
+      </div>
 
 
         <div 
         style={{
+            marginTop: "10%",
             maxHeight: "fit-content",
             maxWidth: "50vw",
             justifyItems: "center",
             alignItems: "center",
             padding: "25px",
-            boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+            boxShadow: "0 0 2px 2px rgb(0,0,0,0.1)",
             borderRadius: "10px",
             }}>
 
     <h1
     style={{
-        fontWeight: "bold"
+        fontWeight: "bold",
+        textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+        margin: "15px",
+
     }}> Welcome back! </h1>  
     <form onSubmit={handleSubmit}>
         <label style={{
             textAlign: "left",
-            margin: "10px"
+            margin: "10px",
         }}>Username: </label>
         <input className="w-full p-2 rounded border bg-[#5a3e2b]"
         style={{
+            margin: "10px",
             color: "black" ,
             height: "20px",
             width: "100%",
@@ -100,6 +113,7 @@ function LogIn(){
         }}>Password: </label>
         <input 
         style={{
+            margin: "10px",
             color: "black",
             height: "20px",
             width: "100%",
@@ -125,7 +139,7 @@ function LogIn(){
             textAlign: "center",
             fontSize: "medium",
             backgroundColor: "#8B5E3C",
-            padding: "8px 16px 8px 16px",
+            padding: "8px 24px 8px 24px",
             borderRadius: "5px",
             border: "0",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)"
@@ -135,7 +149,8 @@ function LogIn(){
         <br/>
         <button className="button" type="submit"
         style={{
-            backgroundColor: "#8B5E3C"
+            backgroundColor: "#8B5E3C",
+            padding: "8px 24px 8px 24px",
 
         }}>
             Forgot Password

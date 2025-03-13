@@ -23,7 +23,7 @@ function Launch(){
             <h1 style={{textShadow: "0 2px 2px rgb(0,0,0,0.2)", margin: "-12px", color: "#f5e1c8", fontWeight: "bold", fontSize: "6em"}}> SipSnob</h1>
 
             {/*About Us*/}
-            <p style={{marginTop: "36px", color: "#572e05"}}>A community-driven coffee discovery app with structured reviews</p>
+            <p style={{marginTop: "36px", color: "#572e05"}}>Your guide to the best brews, powered by coffee enthusiasts like you.</p>
  
             {/*Login/signup*/}
             <div className="mt-4 space-y-4">
@@ -33,7 +33,7 @@ function Launch(){
                     Log In
                 </button>
                 <button onClick={() => navigate('/signup')} className="button" style={{ color: "#f5e1c8", backgroundColor: "#572e05"}}>
-                    Sign In
+                    Sign Up
                 </button>
 
             </div>

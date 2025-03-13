@@ -20,7 +20,7 @@ const Navbar = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+        boxShadow: "0 2px 2px rgb(0,0,0,0.1)",
         zIndex: "1000"
 
       }}>
@@ -59,7 +59,7 @@ const Navbar = () => {
           onClick={{toggleMenu}}
           style={{border: "0",
           padding: "5px 10px",
-          boxShadow: location.pathname === "/home" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          boxShadow: location.pathname === "/home" ? "0 1px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
           color: "#5a3e2b",
  }}>Home</Link>
           <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 

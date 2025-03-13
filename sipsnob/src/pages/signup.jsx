@@ -72,31 +72,45 @@ function SignUp(){
         }>
 
         <div 
-        style={{
+            style={{
+            top: "0",
+            position: "fixed",
             width: "100%",
-            padding: "10px",
+            padding: "2px",
+            textAlign: "center",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-            textAlign: "left",
-            fontWeight: "bold"
-        }}>
-            <p> SipSnob</p>    
+            zIndex: "1000"
+
+            }}>
+        <p 
+            style={{
+            fontSize: "24px",
+            margin: "12px",
+            textShadow: "0 2px 2px rgb(0,0,0,0.2)"
+            }}>
+                SipSnob</p>
         </div>
+
+
 
 
         <div 
         style={{
+            margin: "10%",
             maxHeight: "fit-content",
             maxWidth: "50vw",
             justifyItems: "center",
             textAlign: "center",
             padding: "25px",
-            boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+            boxShadow: " 0 0 2px 2px rgb(0,0,0,0.1)",
             borderRadius: "10px",
             }}>
 
     <h1
     style={{
-        fontWeight: "bold"
+        fontWeight: "bold",
+        textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+
     }}>Sign Up</h1>  
 
     <form onSubmit={handleSignUp}>
@@ -106,6 +120,7 @@ function SignUp(){
         }}>Email: </label>
         <input className="w-full p-2 rounded border bg-[#5a3e2b]"
         style={{
+            margin: "10px",
             color: "black" ,
             height: "20px",
             width: "100%",
@@ -128,6 +143,7 @@ function SignUp(){
         }}>Username: </label>
         <input className="w-full p-2 rounded border bg-[#5a3e2b]"
         style={{
+            margin: "10px",
             color: "black" ,
             height: "20px",
             width: "100%",
@@ -138,6 +154,7 @@ function SignUp(){
         }}
             type="text"
             id="username"
+            placeholder="jsmith25"
             value={username}
             onChange={handleUsernameChange}
 
@@ -148,6 +165,7 @@ function SignUp(){
         }}>Password: </label>
         <input 
         style={{
+            margin: "10px",
             color: "black" ,
             height: "20px",
             width: "100%",
@@ -158,6 +176,7 @@ function SignUp(){
         }}        
             type="text"
             id="password"
+            placeholder="mypassword@"
             value={password}
             onChange={handlePasswordchange}
 
