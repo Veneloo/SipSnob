@@ -43,7 +43,7 @@ export default defineConfig({
     })
   ],
   build: {
-    outDir: "dist", 
+    outDir: "dev-dist", 
   },
   server: {
     fs: {
