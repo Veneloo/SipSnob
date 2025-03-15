@@ -1,36 +1,97 @@
 import React from "react";
+import "./pages.css"; // Import your CSS file
 
 const Discover = () => {
   return (
-    <div className="min-h-screen bg-[#f5e1c8]">
-      {/* Discover Page Container */}
-      <div className="max-w-4xl mx-auto p-6">
-        <h1 className="text-3xl font-bold text-[#5a3e2b] mb-4">Discover Coffee Shops</h1>
+    <div className="page-container">
+      {/* Heading */}
+      <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>
+        Discover Coffee Shops
+      </h1>
 
-        {/* Refresh Button */}
-        <button className="bg-[#8B5E3C] text-white py-2 px-4 rounded hover:bg-[#5a3e2b] transition">
-          Refresh Selection
-        </button>
+      {/* Refresh Button */}
+      <button
+        style={{
+          backgroundColor: "#5a3e2b",
+          color: "#fff",
+          padding: "0.4rem 1rem",
+          borderRadius: "0.25rem",
+          border: "none",
+          cursor: "pointer",
+          fontSize: "1rem",
+          maxWidth: "200px",
+          margin: "10px auto",
+          display: "block",
+          fontFamily: "'Young Serif', serif", // Ensures correct font
+        }}
+      >
+        Refresh Selection
+      </button>
 
-        {/* Coffee Shop List */}
-        <div className="mt-4 space-y-4">
-          <div className="bg-[#d7b899] p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold">Blank Street (71st & Lex)</h2>
-            <p className="text-sm">68 ft away • 985 Lexington Ave, NY</p>
-            <p className="text-sm">Today’s Hours: 6:30 AM - 6 PM</p>
-            <button className="mt-2 bg-[#5a3e2b] text-white py-1 px-3 rounded">
-              Shop Details
-            </button>
-          </div>
+      {/* Coffee Shop List */}
+      <div style={{ marginTop: "1rem" }}>
+        <div
+          style={{
+            backgroundColor: "#d7b899",
+            padding: "1rem",
+            borderRadius: "0.5rem",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            margin: "0.75rem auto",
+            maxWidth: "400px",
+          }}
+        >
+          <h2 style={{ fontSize: "1.125rem", fontWeight: 600, marginBottom: "0.25rem" }}>
+            Blank Street (71st & Lex)
+          </h2>
+          <p style={{ fontSize: "0.875rem" }}>68 ft away • 985 Lexington Ave, NY</p>
+          <p style={{ fontSize: "0.875rem" }}>Today’s Hours: 6:30 AM - 6 PM</p>
+          <button
+            style={{
+              marginTop: "0.5rem",
+              backgroundColor: "#5a3e2b",
+              color: "#fff",
+              padding: "0.25rem 0.75rem",
+              borderRadius: "0.25rem",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              fontFamily: "'Young Serif', serif", // Ensures correct font
+            }}
+          >
+            Shop Details
+          </button>
+        </div>
 
-          <div className="bg-[#d7b899] p-4 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold">Blue Bottle Coffee</h2>
-            <p className="text-sm">0.2 miles away • 10th Ave, NY</p>
-            <p className="text-sm">Today’s Hours: 7 AM - 7 PM</p>
-            <button className="mt-2 bg-[#5a3e2b] text-white py-1 px-3 rounded">
-              Shop Details
-            </button>
-          </div>
+        <div
+          style={{
+            backgroundColor: "#d7b899",
+            padding: "1rem",
+            borderRadius: "0.5rem",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            margin: "0.75rem auto",
+            maxWidth: "400px",
+          }}
+        >
+          <h2 style={{ fontSize: "1.125rem", fontWeight: 600, marginBottom: "0.25rem" }}>
+            Blue Bottle Coffee
+          </h2>
+          <p style={{ fontSize: "0.875rem" }}>0.2 miles away • 10th Ave, NY</p>
+          <p style={{ fontSize: "0.875rem" }}>Today’s Hours: 7 AM - 7 PM</p>
+          <button
+            style={{
+              marginTop: "0.5rem",
+              backgroundColor: "#5a3e2b",
+              color: "#fff",
+              padding: "0.25rem 0.75rem",
+              borderRadius: "0.25rem",
+              border: "none",
+              cursor: "pointer",
+              fontSize: "0.9rem",
+              fontFamily: "'Young Serif', serif", // Ensures correct font
+            }}
+          >
+            Shop Details
+          </button>
         </div>
       </div>
     </div>
