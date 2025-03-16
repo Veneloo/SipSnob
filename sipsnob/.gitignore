@@ -31,5 +31,5 @@ node_modules/
 **/node_modules/
 
 # Ignore PWA-generated files
-#sipsnob/dev-dist/sw.js
-#sipsnob/dev-dist/workbox-*.js
+sipsnob/dev-dist/sw.js
+sipsnob/dev-dist/workbox-*.js
