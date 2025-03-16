@@ -4,7 +4,7 @@
       {
         "src": "sipsnob/package.json",
         "use": "@vercel/static-build",
-        "config": { "distDir": "sipsnob" }
+        "config": { "distDir": "sipsnob/dev-dist" }
       },
       {
         "src": "sipsnob-backend/index.js",
