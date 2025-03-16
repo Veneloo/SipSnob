@@ -1,10 +1,12 @@
 {
-  "version": 3,
+  "version": 2,
   "builds": [
     {
       "src": "sipsnob/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "sipsnob/dev-dist" }
+      "config": {
+        "distDir": "sipsnob/dev-dist"
+      }
     }
   ],
   "routes": [
