@@ -1,11 +1,18 @@
 {
   "version": 2,
   "builds": [
-    { "src": "sipsnob/package.json", "use": "@vercel/node" },
-    { "src": "sipsnob-backend/package.json", "use": "@vercel/node" }
+    {
+      "src": "sipsnob/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "sipsnob/dev-dist" }
+    },
+    {
+      "src": "sipsnob-backend/index.js",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "sipsnob-backend/$1" },
-    { "src": "/(.*)", "dest": "sipsnob/$1" }
+    { "src": "/api/(.*)", "dest": "sipsnob-backend/index.js" },
+    { "src": "/(.*)", "dest": "sipsnob/dev-dist/$1" }
   ]
 }
