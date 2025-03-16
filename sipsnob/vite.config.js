@@ -29,21 +29,21 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globDirectory: "dev-dist",
+        globDirectory: "dist",  
         globPatterns: ["**/*.{js,css,html,png,svg,ico,json,webp}"],
-        globIgnores: ["dev-dist/sw.js", "dev-dist/workbox-*.js"], 
+        globIgnores: ["dist/sw.js", "dist/workbox-*.js"],  
         cleanupOutdatedCaches: true,
-        swDest: "dev-dist/sw.js"
+        swDest: "dist/sw.js"  
       },
       devOptions: {
-        enabled: false,
+        enabled: true, 
         type: "module",
         navigateFallback: "index.html"
       }
     })
   ],
   build: {
-    outDir: "dev-dist", 
+    outDir: "dist",  
   },
   server: {
     fs: {
