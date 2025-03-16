@@ -14,7 +14,7 @@ export default defineConfig({
         theme_color: "#a77c51",
         background_color: "#ffffff",
         display: "standalone",
-        start_url: "/",
+        start_url: "./",  
         icons: [
           {
             src: "/icons/icon-192x192.png",
@@ -29,14 +29,14 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globDirectory: "dist", 
+        globDirectory: "dev-dist",
         globPatterns: ["**/*.{js,css,html,png,svg,ico,json,webp}"],
-        globIgnores: ["dist/sw.js", "dist/workbox-*.js"],
+        globIgnores: ["dev-dist/sw.js", "dev-dist/workbox-*.js"], 
         cleanupOutdatedCaches: true,
-        swDest: "dist/sw.js" 
+        swDest: "dev-dist/sw.js"
       },
       devOptions: {
-        enabled: false, 
+        enabled: false,
         type: "module",
         navigateFallback: "index.html"
       }
