@@ -14,29 +14,21 @@ export default defineConfig({
         theme_color: "#a77c51",
         background_color: "#ffffff",
         display: "standalone",
-        start_url: "./",  
+        start_url: "./",
         icons: [
-          {
-            src: "/icons/icon-192x192.png",
-            sizes: "192x192",
-            type: "image/png"
-          },
-          {
-            src: "/icons/icon-512x512.png",
-            sizes: "512x512",
-            type: "image/png"
-          }
+          { src: "/icons/icon-192x192.png", sizes: "192x192", type: "image/png" },
+          { src: "/icons/icon-512x512.png", sizes: "512x512", type: "image/png" }
         ]
       },
       workbox: {
-        globDirectory: "dist",  
+        globDirectory: "dist",
         globPatterns: ["**/*.{js,css,html,png,svg,ico,json,webp}"],
-        globIgnores: ["dist/sw.js", "dist/workbox-*.js"],  
+        globIgnores: ["dist/sw.js", "dist/workbox-*.js"],
         cleanupOutdatedCaches: true,
-        swDest: "dist/sw.js"  
+        swDest: "dist/sw.js"
       },
       devOptions: {
-        enabled: true, 
+        enabled: true,
         type: "module",
         navigateFallback: "index.html"
       }
@@ -46,8 +38,6 @@ export default defineConfig({
     outDir: "dist",  
   },
   server: {
-    fs: {
-      strict: false, 
-    }
+    fs: { strict: false }
   }
 });
