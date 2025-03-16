@@ -3,7 +3,7 @@
     "builds": [
       {
         "src": "sipsnob/package.json",
-        "use": "@vercel/static-build",
+        "use": "@vercel/build",
         "config": { "distDir": "sipsnob/dev-dist" }
       }
     ],
