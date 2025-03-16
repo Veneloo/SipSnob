@@ -5,11 +5,11 @@
       "src": "sipsnob/package.json",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "sipsnob/dev-dist"
+        "distDir": "sipsnob/dist"
       }
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "sipsnob/dev-dist/$1" }
+    { "src": "/(.*)", "dest": "sipsnob/dist/$1" }
   ]
 }
