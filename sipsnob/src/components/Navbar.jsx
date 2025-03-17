@@ -37,7 +37,9 @@ const Navbar = () => {
         fontSize: "24px",
         color: "#5a3e2b",
         margin: "12px",
-        border: "0"
+        border: "0",
+        position: "absolute",
+        right: "0"
       }}>
         ☰
       </button>
@@ -47,12 +49,10 @@ const Navbar = () => {
         <div 
         onChange={{toggleMenu}}
         style={{
-          position: "absolute",
           marginRight: "50px",
           padding: "10px",
           right: "10px",
           display: "inline-block",
-          minWidth: "160px",
           border: "0"
         }}className="absolute right-4 mt-2 w-48 bg-[#8B5E3C] rounded-md shadow-lg z-50">
           <Link to="/home" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
