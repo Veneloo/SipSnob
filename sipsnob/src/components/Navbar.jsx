@@ -28,6 +28,7 @@ const Navbar = () => {
       style={{
         fontSize: "24px",
         margin: "12px",
+        paddingRight: "100px",
         textShadow: "0 2px 2px rgb(0,0,0,0.2)"
       }}>SipSnob</p>
 
@@ -49,6 +50,7 @@ const Navbar = () => {
         <div 
         onChange={{toggleMenu}}
         style={{
+          position: "relative",
           marginRight: "50px",
           padding: "10px",
           right: "10px",
@@ -61,6 +63,7 @@ const Navbar = () => {
           padding: "5px 10px",
           boxShadow: location.pathname === "/home" ? "0 1px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
           color: "#5a3e2b",
+          flexWrap: "nowrap"
  }}>Home</Link>
           <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
           onClick={{toggleMenu}}
@@ -68,12 +71,14 @@ const Navbar = () => {
           padding: "5px 10px", 
           boxShadow: location.pathname === "/discover" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
           color: "#5a3e2b",
+          flexWrap: "nowrap"
  }}>Discover & Search</Link>
           <Link to="/ratings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
           onClick={{toggleMenu}}
           style={{ padding: "5px 10px", 
           boxShadow: location.pathname === "/ratings" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
           color: "#5a3e2b",
+          flexWrap: "nowrap"
  }}>Rate Coffee Shops</Link>
           <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
           onClick={{toggleMenu}}
