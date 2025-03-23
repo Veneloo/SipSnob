@@ -14,13 +14,15 @@ function Launch(){
         <div className="page-container"
             style={{
                 justifyContent: "center",
-                backgroundColor: "#8B5E3C"
+                backgroundColor: "#8B5E3C",
+                flexWrap: "pretty",
+                textWrap: "pretty"
             }}>
             <div className="max-w-4xl mx-auto p-6">
 
             {/*Welcome to SipSnob */}
-            <p  style={{ color: "#572e05",  fontSize: "1.5em"}}> Welcome to </p>
-            <h1 style={{textShadow: "0 2px 2px rgb(0,0,0,0.2)", margin: "-12px", color: "#f5e1c8", fontWeight: "bold", fontSize: "6em"}}> SipSnob</h1>
+            <p  style={{ color: "#572e05"}}> Welcome to </p>
+            <h1 style={{textShadow: "0 2px 2px rgb(0,0,0,0.2)", margin: "-12px", color: "#f5e1c8", fontWeight: "bold", fontSize: "10ex"}}> SipSnob</h1>
 
             {/*About Us*/}
             <p style={{marginTop: "36px", color: "#572e05"}}>Your guide to the best brews, powered by coffee enthusiasts like you.</p>

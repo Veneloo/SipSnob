@@ -32,6 +32,8 @@ function LogIn(){
       <div
         style={{
             display: "flex",
+            flexWrap: "wrap",
+            textWrap: "wrap",
             justifyContent: "flex-start",
             alignItems: "center",
             padding: "2px",
@@ -49,7 +51,6 @@ function LogIn(){
         <div 
          style={{
         top: "0",
-        position: "fixed",
         width: "100%",
         padding: "2px",
         textAlign: "center",
@@ -70,7 +71,7 @@ function LogIn(){
         style={{
             marginTop: "10%",
             maxHeight: "fit-content",
-            maxWidth: "50vw",
+            width: "fit-content",
             justifyItems: "center",
             alignItems: "center",
             padding: "25px",
@@ -95,7 +96,7 @@ function LogIn(){
             margin: "10px",
             color: "black" ,
             height: "20px",
-            width: "100%",
+            width: "80%",
             borderRadius: "5px",
             border: "0px",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
@@ -116,7 +117,7 @@ function LogIn(){
             margin: "10px",
             color: "black",
             height: "20px",
-            width: "100%",
+            width: "80%",
             borderRadius: "5px",
             border: "0px",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",

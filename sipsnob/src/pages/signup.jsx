@@ -66,7 +66,8 @@ function SignUp(){
             display: "flex",
             justifyContent: "flex-start",
             alignItems: "center",
-            flexDirection: "column"
+            flexDirection: "column",
+            flexWrap: "wrap"
 
         }
         }>
@@ -74,8 +75,7 @@ function SignUp(){
         <div 
             style={{
             top: "0",
-            position: "fixed",
-            width: "100%",
+            width: "100vw",
             padding: "2px",
             textAlign: "center",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
@@ -97,9 +97,12 @@ function SignUp(){
         <div 
         style={{
             margin: "10%",
+            display: "flex",
+            flexDirection: "column",
             maxHeight: "fit-content",
-            maxWidth: "50vw",
+            width: "fit-content",
             justifyItems: "center",
+            alignItems: "center",
             textAlign: "center",
             padding: "25px",
             boxShadow: " 0 0 2px 2px rgb(0,0,0,0.1)",
@@ -123,7 +126,7 @@ function SignUp(){
             margin: "10px",
             color: "black" ,
             height: "20px",
-            width: "100%",
+            width: "80%",
             borderRadius: "5px",
             border: "0px",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
@@ -146,7 +149,7 @@ function SignUp(){
             margin: "10px",
             color: "black" ,
             height: "20px",
-            width: "100%",
+            width: "80%",
             borderRadius: "5px",
             border: "0px",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
@@ -168,7 +171,7 @@ function SignUp(){
             margin: "10px",
             color: "black" ,
             height: "20px",
-            width: "100%",
+            width: "80%",
             borderRadius: "5px",
             border: "0px",
             boxShadow: "0 2px 2px rgb(0,0,0,0.2)",

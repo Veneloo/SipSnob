@@ -20,6 +20,7 @@ const Navbar = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        backgroundColor:"#d7b898",
         boxShadow: "0 2px 2px rgb(0,0,0,0.1)",
         zIndex: "1000"
 

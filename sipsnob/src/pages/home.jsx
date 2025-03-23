@@ -45,7 +45,8 @@ const BookmarkItem = ({bookmarkDetails}) => {
             backgroundPosition: "center",
             borderRadius: "50px", 
             opacity: "0.4",
-            zIndex: "1"
+            zIndex: "1",
+            boxShadow: "0 1px 1px rgb(0,0,0,0.1)"
             
         }}>
         </div>
@@ -74,7 +75,8 @@ const BookmarkItem = ({bookmarkDetails}) => {
 const HomePage = () =>{
     return (
 
-        <div className="page-container">
+        <div className="page-container" style={{
+}}>
 
         <h1 style={{
             marginTop: "5%",
