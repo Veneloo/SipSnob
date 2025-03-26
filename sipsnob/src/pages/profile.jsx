@@ -4,11 +4,6 @@ import sampleImg from "../assets/sampleimg.png"
 import { useState } from "react";
 
 const Profile = () => {
-    const [isVisible, setIsVisible] = useState(false);
-
-    const toggleEditContent = () => {
-        setIsVisible(!isVisible)
-    }
 
     return(
         <div className="page-container"
@@ -20,7 +15,7 @@ const Profile = () => {
         <div style={{
             display: "flex",
             flexDirection: "row",
-            margin: "64px",
+            marginTop: "64px",
         }}>
         {/*Page Table Content*/}
         <div style={{
@@ -31,8 +26,10 @@ const Profile = () => {
             flexDirection: "column",
             textAlign: "left",
             padding: "2%",
-            position: "sticky",
-            top: "10%"
+            position: "absolute",
+            top: "10%",
+            left: "0"
+            
         }}>   
         
          <p onClick={() => window.location.replace("/profile/#PersonalInfo")} >Personal Information</p> 
@@ -46,203 +43,139 @@ const Profile = () => {
         <div style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "75%",
-            margin: "2%",
+            justifyContent: "space-around",
+            width: "100%",
+            alignItems: "center"
         }}>   
-        {/*Personal Information*/}   
-        <h1 style={{color: "#572e05"}}>Personal Information</h1>
+
+
         
         <div id="PersonalInfo" style={{
             display: "flex",
-            flexDirection: "column",
-            alignItems: "center"
+            flexDirection: "Row",
+            alignSelf: "center",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "fit-content",
+            backgroundColor: "#A2845E",
+            borderRadius: "24px",
+            boxShadow: "0px 3px 3px rgb(0,0,0,0.5)",
+            flexWrap: "wrap",
+            minWidth: "300px",
+            paddingRight: "10px",
+            padding: "0 24px"
         }}>
             {/*Edit
                 reveals inputs*/}  
 
             {/* Profile Picture*/}
             <div style={{
-                
-                height: "150px",
-                width: "150px",
+                height: "120px",
+                width: "120px",
                 backgroundImage: `url(${sampleImg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 borderRadius: "100%", 
                 boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
-                flexWrap: "wrap"
+                margin: "24px"
                 
-            }}>
+            }}/>
 
-            </div>
+
 
             {/*Info Box*/} 
             
             <div style={{
             display: "flex",
             flexDirection: "column",
-            justifyContent:"space-around",
+            alignItems: "flex-start",
+            marginTop: "10%",
+            paddingRight: "5%"
             }}>
-                <p> John Smith </p>
-                <p style={{marginTop: "-12px"}}> jsmith25@email.com</p>
+                <p style={{color: "rgba(245, 225, 200)"}}> John Smith </p>
+                <p style={{marginTop: "-12px"}}> jsmith25</p>
                 <p style={{marginTop: "-12px"}}> New York, NY</p>
-            </div>  
-
-            <button className="button" style={{maxHeight: "fit-content"}} onClick={toggleEditContent}>Edit</button>              
-            </div>
-
-
-            {isVisible && (
- 
-
-                <form>
-                    <div style={{
-                display: "flex",
-                flexDirection: "row",
-                margin: "24px", 
-                }}>
-                    <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    margin: "24px", 
-                    }}>
-                    <label>First Name: </label>
-                    <input style={{
-                        display: "inline-block",
-                        height: "50%",
-                        width: "100%",
-                        backgroundColor: "#572e05"
-                    }}/>
-                    </div>
-                    <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    margin: "24px", 
-                    }}>
-                    <label>Last Name: </label>
-                    <input style={{
-                        display: "inline-block",
-                        height: "50%",
-                        width: "100%",
-                        backgroundColor: "#572e05"
-                    }}/>
-                    </div>
-                </div>
-                <div style={{
-                display: "flex",
-                flexDirection: "row",
-                margin: "24px", 
-                }}>
-                    <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    margin: "24px", 
-                    }}>
-                    <label> Username: </label>
-                    <input style={{
-                        display: "inline-block",
-                        height: "50%",
-                        width: "100%",
-                        backgroundColor: "#572e05"
-                    }}/>
-                    </div>
-                    <div style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent:"space-evenly" ,
-                    margin: "24px", 
-                    }}>
-                    <label>Email: </label>
-                    <input style={{
-                        display: "inline-block",
-                        height: "50%",
-                        width: "100%",
-                        backgroundColor: "#572e05"
-                    }}/>
-                    </div>
-                </div>
-                </form>
-
-
-            )}
-
-            <div style={{
-                width: "50%"
-                }}>
-           <div style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent:"space-evenly" ,
-            margin: "24px", 
-            }}>
-            {/*First Name*/} 
-            <div style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%"
-                }}>
-                {/*Last Name*/}             
-                <p style={{color: "#5a3e2b", marginTop: "-2%"}}>First Name:</p>
-                <p style={{color: "black", marginTop: "-2%"}}>John</p>
-                </div>
-            <div style={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%"
-                }}>
             
-            <p style={{color: "#5a3e2b", marginTop: "-2%"}}>Last Name:</p>
-                <p style={{color: "black", marginTop: "-2%"}}>Smith</p>
-                </div>
+            <button className="button" style={{maxHeight: "fit-content",marginTop: "-5px"}} >Edit</button>              
+            
+            </div>  
             </div>
-            {/*Email*/}
-            <div style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent:"space-between" ,
+
+            <div className="row-container" style={{
+                justifyContent: "space-around",
+                flexWrap:"wrap",
+                width: "100%"
+
+            }}>
+
+                <div style={{
+                    width: "fit-content"
+                }}>
+                <h2>User Details</h2>
+                <p>Edit your personal information</p>   
+                </div>
+                
+            
+
+            <form style={{flexWrap:"wrap"
+        }}>
+            
+
+           <div className="row-container" style={{
             margin: "24px"
             }}>
-            <p style={{color: "#5a3e2b"}}>Email:</p>
-            <p style={{color: "black"}}> jsmith25@email.com</p>   
+            {/*First Name*/} 
+            <div className="column-container" style={{
+            marginRight: "24px",
+            width: "100%",
+                }}>
+                            
+                <label style={{alignSelf: "flex-start"}}>First Name:</label>
+                <input className="profile-input">
+                </input>
+                </div>
+            <div className="column-container" style={{
+            marginLeft: "24px",
+            width: "100%"
+                }}>
+            {/*Last Name*/} 
+            <label style={{alignSelf: "flex-start"}}>Last Name:</label>
+                <input className="profile-input">
+                </input>
+                </div>
             </div>
 
-            
-
-            
+            {/*Email*/}
+            <div className="column-container" style={{
+            margin: "24px",
+            }}>
+            <label style={{alignSelf: "flex-start"}}>Email:</label>
+                <input className="profile-input">
+                </input>
+                
 
 
             {/*UserName*/}
-            <div style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent:"space-between" ,
-            width: "90%",
-            margin: "24px"
-            }}>
-            <p style={{color: "#5a3e2b"}}>Username:</p>
-            <p style={{color: "black"}}>John Smith</p>   
-            </div>
+
+            <label style={{alignSelf: "flex-start"}}>Username:</label>
+                <input className="profile-input">
+                </input>
             {/*Location*/}
-            <div style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent:"space-between",
-            margin: "24px",
-            }}>
-            <p style={{color: "#5a3e2b"}}>Location:</p>
-            <p style={{color: "black"}}>John Smith</p>   
-            </div>
+
+            <label style={{alignSelf: "flex-start"}}>Location:</label>
+                <input className="profile-input">
+                </input>
+                
 
             {/*Change Password*/}
-            <h2 style={{color: "#5a3e2b"}}>Change Password</h2>
+            <button className="button" style={{color: "#5a3e2b"}}>Change Password</button>
 
-            {/*Save Changes*/}     
-</div>
- 
+            {/*Save Changes*/} 
+            <button className="button" style={{color: "#5a3e2b"}}>Save Changes</button>    
+            </div>         
+            </form> 
         {/*Friends List*/}
-
+</div>
         <div id="Friends">
 
         </div>
@@ -267,7 +200,8 @@ const Profile = () => {
 
         </div>
         </div>
-</div>
+        </div>
+
 
     );
 };

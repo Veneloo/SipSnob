@@ -34,3 +34,22 @@
 .bookmark-button:hover {
   color: rgba(245, 225, 200);
 }
+
+.profile-input{
+
+  background-color: rgba(245, 225, 200, 0.2);
+  border-radius: 5px;
+  border-color: rgba(0, 0, 0, 0.2);
+  width: 100%;
+  height: 24px;
+  margin-bottom: 24px;
+}
+
+.row-container{
+  display: flex;
+  flex-direction: row;
+}
+.column-container{
+  display: flex;
+  flex-direction: column;
+}
