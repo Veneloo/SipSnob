@@ -81,12 +81,12 @@ const Navbar = () => {
           color: "#5a3e2b",
           flexWrap: "nowrap"
  }}>Rate Coffee Shops</Link>
-          <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
+          <Link to="/settings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
           onClick={{toggleMenu}}
           style={{ padding: "5px 10px", 
-          boxShadow: location.pathname === "/profile" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          boxShadow: location.pathname === "/settings" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
           color: "#5a3e2b",
- }}>Your Profile</Link>
+ }}>Settings</Link>
         </div>
       )}
     </nav>

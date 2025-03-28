@@ -9,7 +9,7 @@ import Navbar from './components/Navbar';
 //import Profile from './pages/profile'; 
 import Discover from './pages/discover'; 
 import Ratings from './pages/ratings'; 
-import Profile from './pages/profile';
+import Settings from './pages/settings';
 
 function App() {
   return (
@@ -26,7 +26,7 @@ function App() {
       {/* Navbar should be present on all other pages */}
       
         <Route path="/home" element={<><Navbar/><HomePage /></>} />
-        <Route path="/profile" element={<><Navbar/><Profile /></>} />
+        <Route path="/settings" element={<><Navbar/><Settings /></>} />
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
         <Route path="/ratings" element={<><Navbar/><Ratings /></>} />
       </Routes>

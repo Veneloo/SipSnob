@@ -9,7 +9,7 @@ const bookmarkedShops = [
     {name: "new coffee!"},
     {name: "java chip"},
     {name: "latte at 91st"},
-    {name: "another coffe shop"},
+    {name: "another coffe shop"}
 ]
 const handleUnfavorite = (shopname) => {
     console.log(`Unfavorite ${shopname}`)

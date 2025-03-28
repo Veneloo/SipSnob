@@ -53,3 +53,14 @@
   display: flex;
   flex-direction: column;
 }
+
+.settings-menu{
+  width: fit-content;
+  transition: 0.5s;
+  transform: translateX(-90%);
+}
+
+.settings-menu:hover{
+  transform: translateX(0%);
+}
+
