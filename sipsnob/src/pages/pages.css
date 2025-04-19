@@ -8,6 +8,7 @@
   display: flex;
   flex-direction: column;
   text-align: center;
+  overflow-x: scroll;
 }
 
 .button {
@@ -62,5 +63,35 @@
 
 .settings-menu:hover{
   transform: translateX(0%);
+}
+
+.feed{
+  display: flex;
+  flex-wrap: wrap;
+  height: fit-content;
+  padding: 10%;
+  border: 1px ridge #623f1d2c;
+  border-radius: 24px;
+}
+
+.review{
+  display: flex;
+  flex-wrap: wrap;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+
+}
+
+.comment{
+  background-color: #A2845E;
+
+
+}
+
+.rating-detail{
+  background-color: rgba(245, 225, 200,0.5);
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: #5a3e2b;
+  border: 1px solid #8B5E3C;
 }
 

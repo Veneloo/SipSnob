@@ -72,6 +72,187 @@ const BookmarkItem = ({bookmarkDetails}) => {
     );
 }
 
+const formatRatingDetail = (label) => {
+    {/* ratings: {
+        drinkConsistency: 8,
+        ambiance: 7,
+        waitTime: 5,
+        pricing: 6,
+        customerService: 9,
+      },
+      milkOptions: ["Oat", "Almond"],
+      foodAvailable: "Yes",
+    sugarFree: "No",*/}
+
+
+    const map = {
+        drinkConsistency: "Drink Consistency",
+        ambiance: "Ambiance",
+        waitTime: "Wait Time",
+        pricing: "Pricing",
+        customerService: "Costumer Service",
+        milkOptions: "Milk Options",
+        foodAvailable: "Food Available",
+        sugarFree: "Sugar Free"
+    }
+
+    return(map[label] || label)
+
+}
+
+
+const sampleRatings = [
+    {
+      shopName: "Blank Street (71st & Lex)",
+      user: "Axel",
+      timestamp: "2025-04-18T14:00:00",
+      ratings: {
+        drinkConsistency: 8,
+        ambiance: 7,
+        waitTime: 5,
+        pricing: 6,
+        customerService: 9,
+      },
+      milkOptions: ["Oat", "Almond"],
+      foodAvailable: "Yes",
+      sugarFree: "No",
+      comment: "Cute space! Wish there were more food options.",
+      replies: [
+        {
+          user: "Liliana",
+          timestamp: "2025-04-18T16:12:00",
+          text: "Totally agree! Their pastry section is lacking 😩",
+        },
+        {
+          user: "Hannah",
+          timestamp: "2025-04-18T18:45:00",
+          text: "They told me food is coming soon!",
+        },
+      ],
+    },
+    // more ratings...
+  ];
+
+
+ const RatingItem = ({ratingDetails}) =>{
+    if (!ratingDetails){
+        return null;
+    }
+    return(
+    <div className="review" style={{
+        height: "fit-content",
+        minWidth: "75%",
+        borderRadius: "50px", 
+        padding: "24px",
+        boxShadow: " 1px 1px 1px 2px rgb(0,0,0,0.1)",
+        color: "black",
+        textAlign: "left",
+        display: "flex",
+        flexDirection: "column"
+        }}>
+
+            
+        {/*User rated Shop*/}
+        <div className="row-container" style={{justifyContent: "space-between"}}>
+        {/*Left*/}
+        <div className="row-container">
+            {/*Pfp*/}
+
+            <div style={{
+                height: "50px",
+                width: "50px",
+                backgroundImage: `url(${sampleImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "100%", 
+                boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
+            }}
+            />
+
+            {/*User rated Shop*/}
+
+            <h3 style={{margin: "12px"}}>{ratingDetails.user}{" "} <span style={{color: "#5a3e2b"}}>rated</span>{" "}{ratingDetails.shopName}</h3>
+            </div>
+            {/*View Profile Button*/}
+
+            <button className="button" style={{right: "0", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>username ▶</button>
+        </div>
+
+          {/*Timestamp*/}      
+        <small style={{color: "#5a3e2b"}}>{new Date(ratingDetails.timestamp).toDateString()}</small>
+<div>
+        {/*Overall Rating*/}
+        <h3 style={{color: "#5a3e2b"}}>★★★☆☆</h3>
+        {/*Review*/}
+        <p style={{width: "fit-content", color: "#59290A"}}>{ratingDetails.comment}</p>
+</div>
+        
+        {/*Rating Details*/}
+        <div style={{
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px",
+  marginTop: "12px"
+}}>
+  {Object.entries(ratingDetails.ratings).map(([label, rating]) => (
+    <span key={label} className="rating-detail">
+      {formatRatingDetail(label)}: {rating}/10
+    </span>
+  ))}
+</div>
+{/*Extras */}
+<div style={{
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px",
+  marginTop: "12px"
+}}>
+    <div className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
+        Food Available: {ratingDetails.foodAvailable}        
+    </div>
+    <div className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
+        Sugar Free: {ratingDetails.sugarFree}
+    </div>
+    <div  className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
+    Milk Options: {ratingDetails.milkOptions.join(", " || "None")}
+</div>
+</div>
+
+        {/*Leave a comment button*/}
+        <div className="row-container">
+        <button className="button" style={{right: "0", backgroundColor: "rgb(117, 82, 39)", color: "rgba(245, 225, 200)"}}> Shop Details</button>
+
+        <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Leave a comment</button>
+</div>
+
+        {/*Comments*/}
+
+
+
+
+        </div>
+    );
+
+
+}
+
+const CommentItem = ({commentDetails}) =>{
+    if (!commentDetails){
+        return null;
+    }
+    return(
+        <div>
+            {/*User */}
+            {/*PFP and name */}
+            {/*view profile */}
+
+            {/*comment */}
+
+            {/*reply button */}
+        </div>
+    )
+}
+
 const HomePage = () =>{
     return (
 
@@ -119,14 +300,24 @@ const HomePage = () =>{
         <br></br>
 
     {/*Feed*/}
-    
-    {/*Feed*/}
+  
 
-        
+    <h2 style={{    textAlign: "left",
+            color: "#A2845E",
+            textShadow: "0 1px 1px rgb(0,0,0,0.1)"}}> Your Feed: </h2>
+
+        {/*Feed*/}
+
+        <div className="feed">
+        {sampleRatings.map((rating,index) => (
+            <RatingItem key={index} ratingDetails={rating}/>
+        ))}
+    
+
         </div>
 
+    </div>
     )
-
 };
 
 export default HomePage;

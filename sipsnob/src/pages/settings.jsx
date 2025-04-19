@@ -25,12 +25,12 @@ const FriendItem = ({friendDetails}) => {
             height: "fit-content",
             alignItems: "center",
             flexWrap: "wrap",
-            margin: "12px",
+            margin: "24px",
             justifyContent: "space-between"
 
         }}> 
             {/*Profile Picture*/}
-        <div className="row-container">
+        <div className="row-container" style={{}}>
             <div style={{
                 height: "80px",
                 width: "80px",
@@ -41,8 +41,8 @@ const FriendItem = ({friendDetails}) => {
                 boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
             }}/>
 
-            <div className="column-container" style={{lineHeight: "0.1", 
-            flexWrap: "wrap", marginInline: "5%"}}>
+            <div className="column-container" style={{ 
+            flexWrap: "wrap"}}>
             {/*Name*/}
             <p style={{fontWeight: "bolder"}}>{friendDetails.name}</p>
 
@@ -266,7 +266,7 @@ const Settings = () => {
 
         {/*Bookmark History*/}
 
-        <div id="BookmarkHistory" style={{
+        <div id="ReviewHistory" style={{
             backgroundColor: "rgba(245, 225, 200, 0.5)",
             padding: "5%",
             borderRadius: "24px",
