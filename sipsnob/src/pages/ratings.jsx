@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./pages.css";
 
 const Ratings = () => {
   const [ratings, setRatings] = useState({
@@ -14,101 +15,123 @@ const Ratings = () => {
   const [sugarFree, setSugarFree] = useState(null);
 
   const handleRatingChange = (e, category) => {
-    setRatings({ ...ratings, [category]: e.target.value });
+    setRatings({ ...ratings, [category]: parseInt(e.target.value) });
   };
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    setMilkOptions(checked ? [...milkOptions, value] : milkOptions.filter((item) => item !== value));
+    setMilkOptions(checked
+      ? [...milkOptions, value]
+      : milkOptions.filter((item) => item !== value)
+    );
   };
 
   return (
-    <div className="min-h-screen bg-[#f5e1c8] flex justify-center items-center p-6">
-      <div className="max-w-md w-full bg-[#f5e1c8] p-6 rounded-lg shadow-lg border border-[#8B5E3C]">
+    <div
+      className="page-container"
+      style={{
+        maxWidth: "600px",
+        margin: "0 auto",
+        borderRadius: "12px",
+        border: "2px solid #8B5E3C",
+        padding: "40px",
+        backgroundColor: "#f5e1c8",
+      }}
+    >
+      <h1 className="rating-header">Rate Shop</h1>
+      <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>Blank Street (71st & Lex)</h2>
 
-        {/* Coffee Shop Info */}
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#5a3e2b]">SipSnob</h1>
-          <h2 className="text-xl font-semibold text-[#5a3e2b] mt-2">Blank Street (71st & Lex)</h2>
-          <img src="https://via.placeholder.com/300x150" alt="Coffee Shop" className="w-full rounded-lg mt-3 shadow-md border border-[#8B5E3C]" />
+      <img
+        src="https://via.placeholder.com/300x150"
+        alt="Coffee Shop"
+        style={{
+          width: "100%",
+          borderRadius: "8px",
+          border: "1px solid #8B5E3C",
+          marginBottom: "2rem",
+        }}
+      />
+
+      {/* Ratings sliders */}
+      {Object.entries(ratings).map(([category, value]) => (
+        <div key={category} style={{ marginBottom: "1.5rem", textAlign: "left" }}>
+          <label className="rating-label">
+            {category.replace(/([A-Z])/g, " $1")}:
+          </label>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={value}
+              onChange={(e) => handleRatingChange(e, category)}
+            />
+            <span>{value}</span>
+          </div>
         </div>
+      ))}
 
-        {/* Rating Sliders */}
-        <div className="mt-4 space-y-4">
-          {Object.keys(ratings).map((key) => (
-            <div key={key}>
-              <label className="font-semibold text-[#5a3e2b] block">{key.replace(/([A-Z])/g, " $1").trim()}:</label>
-              <div className="flex justify-between items-center">
-                <input
-                  type="range"
-                  min="1"
-                  max="10"
-                  value={ratings[key]}
-                  className="w-full h-2 bg-[#d7b899] rounded-lg appearance-none cursor-pointer accent-[#8B5E3C]"
-                  onChange={(e) => handleRatingChange(e, key)}
-                />
-                <span className="ml-2 text-[#5a3e2b] font-semibold">{ratings[key]}</span>
-              </div>
-            </div>
+      {/* Alternative Milk Options */}
+      <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
+        <label className="rating-label">Alternative Milk Options:</label>
+        <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
+          {["Oat", "Almond", "Coconut", "Soy"].map((option) => (
+            <label key={option}>
+              <input
+                type="checkbox"
+                value={option}
+                checked={milkOptions.includes(option)}
+                onChange={handleCheckboxChange}
+              />{" "}
+              {option}
+            </label>
           ))}
         </div>
+      </div>
 
-        {/* Alternative Milk Options */}
-        <div className="mt-6">
-          <label className="font-semibold text-[#5a3e2b]">Alternative Milk Options:</label>
-          <div className="flex flex-wrap gap-3 mt-2">
-            {["Oat", "Almond", "Coconut", "Soy"].map((option) => (
-              <label key={option} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  value={option}
-                  checked={milkOptions.includes(option)}
-                  onChange={handleCheckboxChange}
-                  className="w-5 h-5 border border-[#8B5E3C] rounded-md checked:bg-[#8B5E3C] checked:border-transparent"
-                />
-                {option}
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {/* Food & Sugar-Free Syrup Options */}
-        <div className="mt-6 space-y-4">
-          <div>
-            <label className="font-semibold text-[#5a3e2b]">Food Items Available:</label>
-            <div className="flex gap-4 mt-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="food" checked={foodAvailable === "Yes"} onChange={() => setFoodAvailable("Yes")} className="w-5 h-5 accent-[#8B5E3C]" />
-                Yes
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="food" checked={foodAvailable === "No"} onChange={() => setFoodAvailable("No")} className="w-5 h-5 accent-[#8B5E3C]" />
-                No
-              </label>
-            </div>
-          </div>
-          <div>
-            <label className="font-semibold text-[#5a3e2b]">Sugar-Free Syrup Options Available:</label>
-            <div className="flex gap-4 mt-2">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="sugarFree" checked={sugarFree === "Yes"} onChange={() => setSugarFree("Yes")} className="w-5 h-5 accent-[#8B5E3C]" />
-                Yes
-              </label>
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="radio" name="sugarFree" checked={sugarFree === "No"} onChange={() => setSugarFree("No")} className="w-5 h-5 accent-[#8B5E3C]" />
-                No
-              </label>
-            </div>
-          </div>
-        </div>
-
-        {/* Submit Button */}
-        <div className="mt-6 text-center">
-          <button className="bg-[#8B5E3C] text-white py-2 px-6 rounded hover:bg-[#5a3e2b] transition">
-            Submit Rating
-          </button>
+      {/* Food Available */}
+      <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
+        <label className="rating-label">Food Items Available:</label>
+        <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
+          {["Yes", "No"].map((val) => (
+            <label key={val}>
+              <input
+                type="radio"
+                name="food"
+                checked={foodAvailable === val}
+                onChange={() => setFoodAvailable(val)}
+              />{" "}
+              {val}
+            </label>
+          ))}
         </div>
       </div>
+
+      {/* Sugar-Free Syrup Options */}
+      <div style={{ marginBottom: "2rem", textAlign: "left" }}>
+        <label className="rating-label">Sugar-Free Syrup Options Available:</label>
+        <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
+          {["Yes", "No"].map((val) => (
+            <label key={val}>
+              <input
+                type="radio"
+                name="sugarFree"
+                checked={sugarFree === val}
+                onChange={() => setSugarFree(val)}
+              />{" "}
+              {val}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Submit Button */}
+      <button
+        className="button"
+        style={{ backgroundColor: "#8B5E3C", color: "white", fontWeight: "bold" }}
+      >
+        Submit Rating
+      </button>
     </div>
   );
 };
