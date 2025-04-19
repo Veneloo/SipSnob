@@ -65,6 +65,137 @@
   transform: translateX(0%);
 }
 
+
+body {
+  background-color: #f5e1c8;
+  margin: 0;
+}
+
+
+input[type="range"] {
+  accent-color: #8B5E3C;
+}
+
+
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: #8B5E3C;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+
+.rating-header {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  font-family: YoungSerif;
+  color: #5a3e2b;
+}
+
+
+.rating-label {
+  color: #5a3e2b;
+  font-weight: bold;
+  margin-bottom: 6px;
+  display: block;
+  font-family: YoungSerif;
+}
+
+
+html, body {
+  height: 100%;
+  overflow-y: auto;
+  background-color: #f5e1c8;
+}
+
+
+input[type="range"] {
+  appearance: none;
+  height: 6px;
+  background: #d7b899;
+  border-radius: 8px;
+  outline: none;
+  width: 100%;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #8B5E3C;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #5a3e2b;
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: #8B5E3C;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid #5a3e2b;
+}
+
+
+input[type="checkbox"],
+input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #f5e1c8;
+  border: 2px solid #8B5E3C;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0;
+  position: relative;
+  top: 0.15em;
+}
+
+
+input[type="checkbox"]:checked::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: #8B5E3C;
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+/* Radio round style */
+input[type="radio"] {
+  border-radius: 50%;
+}
+
+input[type="radio"]:checked::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  background-color: #8B5E3C;
+  display: block;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+
+.form-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 16px;
+}
+
+
+
 .feed{
   display: flex;
   flex-wrap: wrap;
