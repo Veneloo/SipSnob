@@ -10,6 +10,7 @@ import Navbar from './components/Navbar';
 import Discover from './pages/discover'; 
 import Ratings from './pages/ratings'; 
 import Settings from './pages/settings';
+import ShopDetails from './pages/shop_details';
 
 function App() {
   return (
@@ -21,6 +22,8 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/pages/discover" element={<Discover />} />
         <Route path="/pages/ratings" element={<Ratings />} />
+        <Route path="/shop_details" element={<ShopDetails />} />
+
       
 
       {/* Navbar should be present on all other pages */}
