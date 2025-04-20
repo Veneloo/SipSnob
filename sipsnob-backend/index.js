@@ -4,18 +4,15 @@ import express from 'express';
 import cors from 'cors';
 import admin from 'firebase-admin';
 
-import { readFileSync } from 'fs';
 
 dotenv.config();
 
 const API_KEY = process.env.GOOGLE_PLACES_API_KEY;
-const serviceAccount = JSON.parse(
-    process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, '\n')
-  );
-  
+const decoded = Buffer.from(process.env.FIREBASE_SERVICE_ACCOUNT, 'base64').toString('utf8');
+const serviceAccount = JSON.parse(decoded);
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const db = admin.firestore();
