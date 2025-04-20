@@ -139,6 +139,7 @@ const sampleRatings = [
         return null;
     }
     return(
+        <div>
     <div className="review" style={{
         height: "fit-content",
         minWidth: "75%",
@@ -180,19 +181,20 @@ const sampleRatings = [
 
           {/*Timestamp*/}      
         <small style={{color: "#5a3e2b"}}>{new Date(ratingDetails.timestamp).toDateString()}</small>
-<div>
+    <div>
         {/*Overall Rating*/}
         <h3 style={{color: "#5a3e2b"}}>★★★☆☆</h3>
         {/*Review*/}
         <p style={{width: "fit-content", color: "#59290A"}}>{ratingDetails.comment}</p>
-</div>
+    </div>
         
         {/*Rating Details*/}
         <div style={{
   display: "flex",
   flexWrap: "wrap",
   gap: "10px",
-  marginTop: "12px"
+  marginTop: "12px",
+  flexDirection: "column"
 }}>
   {Object.entries(ratingDetails.ratings).map(([label, rating]) => (
     <span key={label} className="rating-detail">
@@ -225,12 +227,19 @@ const sampleRatings = [
         <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Leave a comment</button>
 </div>
 
-        {/*Comments*/}
+       {/*Comments*/}
+</div>
+<div>
+        {ratingDetails.replies.map((item,index) => (
+            <CommentItem key={index} commentDetails={item}/>
+        ))}
+        
 
 
 
-
-        </div>
+</div>
+</div>
+        
     );
 
 
@@ -241,12 +250,42 @@ const CommentItem = ({commentDetails}) =>{
         return null;
     }
     return(
-        <div>
+        <div className="comment" style={{
+            height: "fit-content",
+            minWidth: "75%",
+            borderRadius: "50px", 
+            padding: "24px 12px",
+            color: "black",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            marginBlock: "12px"
+            }}>
             {/*User */}
-            {/*PFP and name */}
-            {/*view profile */}
-
+            
+                {/*PFP and name */}
+            <div className="row-container" style={{justifyContent: "space-between", alignContent: "flex-start"}}>
+                <div className="row-container" style={{alignItems: "center"}}>
+                <div style={{
+                height: "50px",
+                width: "50px",
+                backgroundImage: `url(${sampleImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "100%", 
+                boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
+                marginInline: "12px",
+                }}/>
+            <p style={{
+                color: "#f5e1c8"}}>{commentDetails.user}<span>{" "}</span> <span style={{color: "#5a3e2b"}}>commented: </span></p>
+            </div>
+                {/*view profile */}
+            <button className="button" style={{height: "fit-content"}}>View Profile</button>
+            </div>
             {/*comment */}
+            <p style={{
+                color: "#5a3e2b"}}>{commentDetails.text}</p>
+
 
             {/*reply button */}
         </div>

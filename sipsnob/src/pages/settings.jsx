@@ -42,7 +42,7 @@ const FriendItem = ({friendDetails}) => {
             }}/>
 
             <div className="column-container" style={{ 
-            flexWrap: "wrap"}}>
+            flexWrap: "wrap", gap: "0"}}>
             {/*Name*/}
             <p style={{fontWeight: "bolder"}}>{friendDetails.name}</p>
 
@@ -245,13 +245,14 @@ const Settings = () => {
 
         <div className="FriendItem" 
             style={{
-            borderRadius: "50px",
             width: "95%",
             height: "200px",
             overflowX: "hidden",
             overflowY: "scroll", 
             display: "flex",
-            flexDirection: "column"
+            flexDirection: "column",
+            paddingInline: "24px",
+            scrollSnapAlign: "center"
             }}>
         {friendList.map((item,index) => (
             <FriendItem key={index} friendDetails={item}/>
@@ -259,12 +260,13 @@ const Settings = () => {
 
 
         </div>   
-        </div>
+        
 
             {/*Add or delete friends*/}  
             {/*Search for friends*/}
-
-        {/*Bookmark History*/}
+            <input className="button" text="Input username to add friend"/>
+</div>
+        {/*Review History*/}
 
         <div id="ReviewHistory" style={{
             backgroundColor: "rgba(245, 225, 200, 0.5)",
