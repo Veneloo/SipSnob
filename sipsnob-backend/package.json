@@ -1,4 +1,11 @@
 {
+    "name": "sip-snob-backend",
+    "version": "1.0.0",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+      "start": "node index.js"
+    },
   "dependencies": {
     "@google-cloud/firestore": "^7.11.0",
     "axios": "^1.7.9",
