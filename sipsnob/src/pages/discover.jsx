@@ -13,7 +13,7 @@ const Discover = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/coffee-shops?lat=${lat}&lng=${lng}`
+        `https://sip-snob-backend.onrender.com/api/coffee-shops?lat=${lat}&lng=${lng}`
       );
       setShops(response.data);
     } catch (error) {
