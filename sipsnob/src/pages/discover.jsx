@@ -1,7 +1,23 @@
 import React from "react";
+import axios from "axios";
 import "./pages.css"; // Import your CSS file
 
 const Discover = () => {
+  const [shops, setShops] = useState([]);
+
+  const fetchShops = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/api/coffee-shops?lat=40.7128&lng=-74.0060");
+      setShops(response.data);
+    } catch (error) {
+      console.error("Error fetching coffee shops", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchShops();
+  }, []);
+
   return (
     <div className="page-container">
       {/* Heading */}
