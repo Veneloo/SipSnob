@@ -1,11 +1,18 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const axios = require("axios");
-const admin = require("firebase-admin");
+import dotenv from 'dotenv';
+import axios from 'axios';
+import express from 'express';
+import cors from 'cors';
+import admin from 'firebase-admin';
+
+import { readFileSync } from 'fs';
+
+dotenv.config();
 
 const API_KEY = process.env.GOOGLE_PLACES_API_KEY;
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, '\n'));
+const serviceAccount = JSON.parse(
+    process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, '\n')
+  );
+  
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
