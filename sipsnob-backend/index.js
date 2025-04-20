@@ -5,10 +5,10 @@ const axios = require("axios");
 const admin = require("firebase-admin");
 
 const API_KEY = process.env.GOOGLE_PLACES_API_KEY;
-const serviceAccount = require("./serviceAccountKey.json");
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT.replace(/\\n/g, '\n'));
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+  credential: admin.credential.cert(serviceAccount)
 });
 
 const db = admin.firestore();
