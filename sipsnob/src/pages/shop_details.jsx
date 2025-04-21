@@ -5,7 +5,6 @@ import "./pages.css";
 const ShopDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { shopId } = useParams();
   const shop = location.state?.shop || JSON.parse(localStorage.getItem("selectedShop"));
 
 
