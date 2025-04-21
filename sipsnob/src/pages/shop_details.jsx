@@ -6,10 +6,7 @@ const ShopDetails = () => {
   const { shopId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [shop, setShop] = useState(() => {
-    const cached = location.state?.shop || localStorage.getItem("selectedShop");
-    return cached ? typeof cached === "string" ? JSON.parse(cached) : cached : null;
-  });  
+  const [shop, setShop] = useState(location.state?.shop || null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -33,14 +30,7 @@ const ShopDetails = () => {
     }
   }, [shop, shopId]);
 
-  if (!shop && !error) {
-    return (
-      <div className="page-container">
-        <p style={{ textAlign: "center", color: "#5a3e2b" }}>Loading shop details...</p>
-      </div>
-    );
-  }
-  
+  if (!shop && !error) return null;
 
   return (
     <div className="page-container">
@@ -73,17 +63,14 @@ const ShopDetails = () => {
             <p style={{ textAlign: "center" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
 
             <div style={{ maxWidth: 400, margin: "1rem auto" }}>
-            {shop.photos?.[0]?.photo_reference && (
-              <img
-                src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
-                alt={shop.name}
-                style={{ width: "100%", borderRadius: 8 }}
-              />
-            )}
-              <p style={{ marginTop: "1rem" }}><strong>Place ID:</strong> {shop.place_id}</p>
-              <p><strong>Latitude:</strong> {shop.geometry?.location?.lat}</p>
-              <p><strong>Longitude:</strong> {shop.geometry?.location?.lng}</p>
-              <p><strong>Address:</strong> {shop.vicinity || shop.formatted_address}</p>
+              {shop.photos?.[0]?.photo_reference && (
+                <img
+                  src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
+                  alt={shop.name}
+                  style={{ width: "100%", borderRadius: 8 }}
+                />
+              )}
+              <p style={{ marginTop: "1rem" }}><strong>Address:</strong> {shop.vicinity || shop.formatted_address}</p>
 
               {shop.opening_hours?.weekday_text && (
                 <div>
@@ -91,6 +78,19 @@ const ShopDetails = () => {
                   <ul style={{ marginTop: "0.5rem" }}>
                     {shop.opening_hours.weekday_text.map((line, index) => (
                       <li key={index}>{line}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {shop.reviews && (
+                <div style={{ marginTop: "1.5rem" }}>
+                  <strong>Recent Reviews:</strong>
+                  <ul style={{ marginTop: "0.5rem" }}>
+                    {shop.reviews.slice(0, 3).map((review, index) => (
+                      <li key={index}>
+                        <p><strong>{review.author_name}</strong> ({review.rating}⭐): {review.text}</p>
+                      </li>
                     ))}
                   </ul>
                 </div>
