@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useParams, useNavigate, useEffect } from "react-router-dom";
 import "./pages.css";
 
 const Ratings = () => {
+  useEffect(() => {
+    if (!shop?.name) {
+      navigate("/discover");
+    }
+  }, [shop, navigate]);
+  
+  const navigate = useNavigate();
   const location = useLocation();
   const { shopId } = useParams();
   const shop = location.state?.shop || {};
@@ -51,8 +58,9 @@ const Ratings = () => {
         },
         body: JSON.stringify(payload),
       });
-
+      
       alert("Rating submitted successfully!");
+      navigate("/discover"); // 🔁 Redirect here      
     } catch (err) {
       console.error("Error submitting rating:", err);
       alert("Something went wrong. Try again.");
@@ -72,6 +80,22 @@ const Ratings = () => {
       }}
     >
       <h1 className="rating-header">Rate Shop</h1>
+      <button
+        onClick={() => navigate("/discover")}
+        style={{
+          backgroundColor: "#d7b899",
+          border: "1px solid #5a3e2b",
+          padding: "6px 12px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontFamily: "'Young Serif', serif",
+          marginBottom: "1rem",
+          color: "#5a3e2b",
+          fontWeight: "bold"
+        }}
+        >← Back to Discover
+      </button>
+
       <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
         {shop.name || "Selected Coffee Shop"}
       </h2>
