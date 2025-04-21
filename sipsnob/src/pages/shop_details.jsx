@@ -64,11 +64,7 @@ const ShopDetails = () => {
 
             <div style={{ maxWidth: 400, margin: "1rem auto" }}>
               <img
-                src={
-                  shop.photos?.[0]?.photo_reference
-                    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${shop.photos[0].photo_reference}&key=YOUR_GOOGLE_API_KEY`
-                    : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
-                }
+                src={`https://sip-snob-backend.onrender.com/api/photo?ref=${photo_reference}`}
                 alt={shop.name}
                 style={{ width: "100%", borderRadius: 8 }}
               />
