@@ -6,7 +6,10 @@ const ShopDetails = () => {
   const { shopId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [shop, setShop] = useState(location.state?.shop || null);
+  const [shop, setShop] = useState(() => {
+    const cached = location.state?.shop || localStorage.getItem("selectedShop");
+    return cached ? typeof cached === "string" ? JSON.parse(cached) : cached : null;
+  });  
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -30,7 +33,14 @@ const ShopDetails = () => {
     }
   }, [shop, shopId]);
 
-  if (!shop && !error) return null;
+  if (!shop && !error) {
+    return (
+      <div className="page-container">
+        <p style={{ textAlign: "center", color: "#5a3e2b" }}>Loading shop details...</p>
+      </div>
+    );
+  }
+  
 
   return (
     <div className="page-container">
