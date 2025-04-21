@@ -2,6 +2,9 @@ import React from "react";
 import './pages.css'
 import sampleImg from "../assets/sampleimg.png"
 import { useState } from "react";
+import Launch from './launch';
+import { useNavigate } from 'react-router-dom';
+
 
 
 
@@ -63,7 +66,15 @@ const FriendItem = ({friendDetails}) => {
 
 
 
+
+
 const Settings = () => {
+
+    const navigate = useNavigate();
+
+    const handleLogOut = () => {
+        navigate("/");
+    }
 
     return(
         <div className="page-container"
@@ -263,9 +274,11 @@ const Settings = () => {
         
 
             {/*Add or delete friends*/}  
-            {/*Search for friends*/}
-            <input className="button" text="Input username to add friend"/>
-</div>
+            {/*Search for friends*/}<div className="button" style={{backgroundColor: "#5a3e2b",height: "fit-content", width: "50%", justifyContent: "space-between", alignSelf: "center", margin: "24px"}}>
+            <input style={{color: "#f5e1c8", marginInline: "12px",height: "100%",backgroundColor: "transparent", fontSize: "14px", fontFamily: "inherit", width: "75%", border: "0"}} placeholder="Input username to add friend"/>
+        <button className="button">Add</button>
+        </div>
+        </div>
         {/*Review History*/}
 
         <div id="ReviewHistory" style={{
@@ -281,7 +294,9 @@ const Settings = () => {
             {/*Clear*/}
 
         {/*Log Out*/}   
-        <div id="LogOut">
+        <div id="LogOut" style={{paddingBlock: "5%"}}>
+
+            <button className="button" onClick={handleLogOut} style={{backgroundColor: "#A2845E"}}>Log Out</button>
 
         </div>
         

@@ -333,11 +333,11 @@ const sampleRatings = [
                 marginInline: "12px",
                 }}/>
             <h3 style={{
-                color: "#f5e1c8"}}>{ratingDetails.user}<span>{" "}</span> <span style={{color: "#d7b899"}}> is thinking:</span></h3>
+                color: "#f5e1c8"}}>You<span>{" "}</span> <span style={{color: "#d7b899"}}> are replying to: </span>{ratingDetails.user}</h3>
                 </div>
             </div>
             {/*comment */}
-            <input placeholder="of leaving this comment..." style={{color: "#f5e1c8", marginInline: "12px",height: "48px", backgroundColor: "transparent", border: "0", fontSize: "14px", fontFamily: "inherit"}}/>
+            <input placeholder="Leaving this comment..." style={{color: "#f5e1c8", marginInline: "12px",height: "48px", backgroundColor: "transparent", border: "0", fontSize: "14px", fontFamily: "inherit"}}/>
 
             {/*Submit button */}
             <button className="button">Submit</button>
@@ -397,8 +397,8 @@ const CommentItem = ({commentDetails}) =>{
             <p style={{
                 color: "#5a3e2b"}}>{commentDetails.text}</p>
 
-
             {/*reply button */}
+            <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Reply</button>
         </div>
     )
 }
