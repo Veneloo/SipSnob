@@ -129,8 +129,51 @@ const sampleRatings = [
           text: "They told me food is coming soon!",
         },
       ],
+      shopName: "The Daily Drip",
+      user: "John",
+      timestamp: "2025-04-14T10:20:00",
+      ratings: {
+        drinkConsistency: 7,
+        ambiance: 6,
+        waitTime: 8,
+        pricing: 5,
+        customerService: 7,
+      },
+      milkOptions: ["Whole", "Almond"],
+      foodAvailable: "Yes",
+      sugarFree: "No",
+      comment: "Fast service, decent coffee. Good spot for a quick stop.",
+      replies: [
+        {
+          user: "Sarah",
+          timestamp: "2025-04-14T12:05:00",
+          text: "Their croissants are underrated tbh!",
+        }
+      ]
     },
-    // more ratings...
+    {
+      shopName: "Mocha Mornings",
+      user: "Emily",
+      timestamp: "2025-04-16T13:55:00",
+      ratings: {
+        drinkConsistency: 9,
+        ambiance: 8,
+        waitTime: 3,
+        pricing: 6,
+        customerService: 9,
+      },
+      milkOptions: ["Oat", "Soy"],
+      foodAvailable: "No",
+      sugarFree: "Yes",
+      comment: "So cute inside! Wish they had food but the drinks are top tier.",
+      replies: [
+        {
+          user: "David",
+          timestamp: "2025-04-16T15:10:00",
+          text: "Right?? Their iced mocha is insane.",
+        }
+      ]
+    }
   ];
 
 
@@ -138,6 +181,18 @@ const sampleRatings = [
     if (!ratingDetails){
         return null;
     }
+
+    const [areCommentsVisible, setCommentsVisible] = useState(false);
+
+    const toggleComments = () => {
+        setCommentsVisible(!areCommentsVisible);
+    }
+
+    const [isReplyVisible, setReplyVisible] = useState(false)
+    const handleReplyButton = () => {
+        setReplyVisible(!isReplyVisible);
+    }
+
     return(
         <div>
     <div className="review" style={{
@@ -176,7 +231,7 @@ const sampleRatings = [
             </div>
             {/*View Profile Button*/}
 
-            <button className="button" style={{right: "0", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>username ▶</button>
+            <button className="button" style={{right: "0", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>View Profile ▶</button>
         </div>
 
           {/*Timestamp*/}      
@@ -194,7 +249,8 @@ const sampleRatings = [
   flexWrap: "wrap",
   gap: "10px",
   marginTop: "12px",
-  flexDirection: "column"
+  flexDirection: "row",
+
 }}>
   {Object.entries(ratingDetails.ratings).map(([label, rating]) => (
     <span key={label} className="rating-detail">
@@ -225,19 +281,18 @@ const sampleRatings = [
         <button className="button" style={{right: "0", backgroundColor: "rgb(117, 82, 39)", color: "rgba(245, 225, 200)"}}> Shop Details</button>
 
         <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Leave a comment</button>
-</div>
+        </div>
+        <button className="button" onClick={toggleComments} style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>{areCommentsVisible ? "Close Comments" : "View Comments"}</button>
+
 
        {/*Comments*/}
 </div>
-<div>
+{areCommentsVisible && (<div>
         {ratingDetails.replies.map((item,index) => (
             <CommentItem key={index} commentDetails={item}/>
         ))}
         
-
-
-
-</div>
+</div>)}
 </div>
         
     );
