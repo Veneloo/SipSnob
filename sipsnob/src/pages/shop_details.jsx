@@ -6,7 +6,8 @@ const ShopDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { shopId } = useParams();
-  const shop = location.state?.shop;
+  const shop = location.state?.shop || JSON.parse(localStorage.getItem("selectedShop"));
+
 
   useEffect(() => {
     if (!shop) {
