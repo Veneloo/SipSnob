@@ -242,7 +242,7 @@ const sampleRatings = [
 
             {/*User rated Shop*/}
 
-            <h3 style={{margin: "12px"}}>{ratingDetails.user}{" "} <span style={{color: "#5a3e2b"}}>rated</span>{" "}{ratingDetails.shopName}</h3>
+            <h3 style={{margin: "12px", color: "#5a3e2b"}}>{ratingDetails.user}{" "} <span style={{color: "#A2845E"}}>rated</span>{" "}{ratingDetails.shopName}</h3>
             </div>
             {/*Post Details Button*/}
             <div className="row-container" style={{justifyContent: "flex-end", alignItems: "flex-end", flexDirection: "row-reverse"}}>
@@ -300,7 +300,7 @@ const sampleRatings = [
 
         {/*Leave a comment button*/}
         <div className="row-container">
-        <button className="button" onClick={toggleComments} style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>{areCommentsVisible ? "Close Comments" : "View Comments"}</button>
+        <button className="button" onClick={toggleComments} style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>{areCommentsVisible ? "Close Comments" : `View ${ratingDetails.replies.length} Comment${ratingDetails.replies.length == 1 ? "" : "s" }`}</button>
        {areCommentsVisible && <button className="button" onClick={handleReplyButton} style={{width: "fit-content", backgroundColor: "#8B5E3C", color: "rgba(245, 225, 200)"}}>Leave a comment</button>}
 </div>
        {/*Comments*/}
