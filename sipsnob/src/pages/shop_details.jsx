@@ -20,7 +20,7 @@ const ShopDetails = () => {
   }
 
   const photoUrl = shop.photos?.[0]?.photo_reference
-    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=${shop.photos[0].photo_reference}&key=YOUR_GOOGLE_API_KEY`
+    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=500&photoreference=${shop.photos[0].photo_reference}&key=AIzaSyBHH5HtHRJl1eKFe67hWuCOqzAXncPWtTw`
     : "https://via.placeholder.com/500x250";
 
   return (
