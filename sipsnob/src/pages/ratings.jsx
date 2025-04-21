@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import "./pages.css";
 
 const Ratings = () => {
+  const location = useLocation();
+  const { shopId } = useParams();
+  const shop = location.state?.shop || {};
+
   const [ratings, setRatings] = useState({
     drinkConsistency: 5,
     ambiance: 5,
@@ -20,10 +25,38 @@ const Ratings = () => {
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    setMilkOptions(checked
-      ? [...milkOptions, value]
-      : milkOptions.filter((item) => item !== value)
+    setMilkOptions(
+      checked
+        ? [...milkOptions, value]
+        : milkOptions.filter((item) => item !== value)
     );
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+      shopId,
+      shopName: shop.name,
+      ratings,
+      milkOptions,
+      foodAvailable,
+      sugarFree,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      await fetch("https://sip-snob-backend.onrender.com/api/ratings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      alert("Rating submitted successfully!");
+    } catch (err) {
+      console.error("Error submitting rating:", err);
+      alert("Something went wrong. Try again.");
+    }
   };
 
   return (
@@ -39,10 +72,16 @@ const Ratings = () => {
       }}
     >
       <h1 className="rating-header">Rate Shop</h1>
-      <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>Blank Street (71st & Lex)</h2>
+      <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
+        {shop.name || "Selected Coffee Shop"}
+      </h2>
 
       <img
-        src="https://via.placeholder.com/300x150"
+        src={
+          shop.photos?.[0]?.photo_reference
+            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${shop.photos[0].photo_reference}&key=YOUR_GOOGLE_API_KEY`
+            : "https://via.placeholder.com/300x150"
+        }
         alt="Coffee Shop"
         style={{
           width: "100%",
@@ -52,7 +91,6 @@ const Ratings = () => {
         }}
       />
 
-      {/* Ratings sliders */}
       {Object.entries(ratings).map(([category, value]) => (
         <div key={category} style={{ marginBottom: "1.5rem", textAlign: "left" }}>
           <label className="rating-label">
@@ -71,7 +109,6 @@ const Ratings = () => {
         </div>
       ))}
 
-      {/* Alternative Milk Options */}
       <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
         <label className="rating-label">Alternative Milk Options:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
@@ -89,7 +126,6 @@ const Ratings = () => {
         </div>
       </div>
 
-      {/* Food Available */}
       <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
         <label className="rating-label">Food Items Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
@@ -107,7 +143,6 @@ const Ratings = () => {
         </div>
       </div>
 
-      {/* Sugar-Free Syrup Options */}
       <div style={{ marginBottom: "2rem", textAlign: "left" }}>
         <label className="rating-label">Sugar-Free Syrup Options Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
@@ -125,10 +160,10 @@ const Ratings = () => {
         </div>
       </div>
 
-      {/* Submit Button */}
       <button
         className="button"
         style={{ backgroundColor: "#8B5E3C", color: "white", fontWeight: "bold" }}
+        onClick={handleSubmit}
       >
         Submit Rating
       </button>
