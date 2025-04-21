@@ -32,7 +32,7 @@ function App() {
         <Route path="/settings" element={<><Navbar/><Settings /></>} />
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
         <Route path="/ratings/:shopId" element={<><Navbar /><Ratings /></>} />
-        <Route path="/shop_details" element={<ShopDetails />} />
+        <Route path="/shop_details/:shopId" element={<ShopDetails />} />
       </Routes>
     </BrowserRouter>
   );
