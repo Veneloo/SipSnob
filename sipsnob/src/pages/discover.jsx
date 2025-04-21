@@ -127,10 +127,10 @@ const Discover = () => {
                 >
                 Shop Details
               </button>
-              
+
               <button
                   onClick={() =>
-                    navigate(`/ratings/${shop.place_id}`, { state: { shop } })
+                    navigate(`/shop_details/${shop.place_id}`, { state: { shop } })
                   }
                   style={{
                     backgroundColor: "#8B5E3C",

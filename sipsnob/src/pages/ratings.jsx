@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./pages.css";
 
 const Ratings = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { shopId } = useParams();
   const shop = location.state?.shop || {};
 
   useEffect(() => {
-    if (!shop?.name) navigate("/discover");
+    if (!shop?.name) {
+      navigate("/discover");
+    }
   }, [shop, navigate]);
 
   const [ratings, setRatings] = useState({
@@ -19,6 +20,7 @@ const Ratings = () => {
     pricing: 5,
     customerService: 5,
   });
+
   const [milkOptions, setMilkOptions] = useState([]);
   const [foodAvailable, setFoodAvailable] = useState(null);
   const [sugarFree, setSugarFree] = useState(null);
@@ -29,32 +31,32 @@ const Ratings = () => {
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    setMilkOptions(checked
-      ? [...milkOptions, value]
-      : milkOptions.filter((item) => item !== value));
+    setMilkOptions(
+      checked ? [...milkOptions, value] : milkOptions.filter((item) => item !== value)
+    );
   };
 
   const handleSubmit = async () => {
     const payload = {
-      shopId,
+      shopId: shop.place_id,
       shopName: shop.name,
       ratings,
       milkOptions,
       foodAvailable,
       sugarFree,
       timestamp: new Date().toISOString(),
-      user: "Axel" // 🔁 Replace with actual authenticated user if available
     };
 
     try {
       await fetch("https://sip-snob-backend.onrender.com/api/ratings", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(payload),
       });
 
-      // Store latest review in localStorage for HomePage or global context
-      localStorage.setItem("latestRating", JSON.stringify(payload));
+      alert("Rating submitted successfully!");
       navigate("/home");
     } catch (err) {
       console.error("Error submitting rating:", err);
@@ -63,28 +65,37 @@ const Ratings = () => {
   };
 
   return (
-    <div className="page-container" style={{
-      minHeight: "100vh",
-      maxWidth: "700px",
-      margin: "0 auto",
-      padding: "40px 20px",
-      borderRadius: "12px",
-      backgroundColor: "#f5e1c8",
-      overflow: "visible"
-    }}>
+    <div
+      className="page-container"
+      style={{
+        maxWidth: "700px",
+        margin: "2rem auto",
+        padding: "2rem",
+        backgroundColor: "#f5e1c8",
+        borderRadius: "12px",
+        border: "2px solid #8B5E3C",
+        minHeight: "100vh",
+        boxSizing: "border-box",
+      }}
+    >
       <h1 className="rating-header">Rate Shop</h1>
 
-      <button onClick={() => navigate("/discover")} style={{
-        backgroundColor: "#d7b899",
-        border: "1px solid #5a3e2b",
-        padding: "6px 12px",
-        borderRadius: "6px",
-        cursor: "pointer",
-        fontFamily: "'Young Serif', serif",
-        marginBottom: "1rem",
-        color: "#5a3e2b",
-        fontWeight: "bold"
-      }}>← Back to Discover</button>
+      <button
+        onClick={() => navigate("/discover")}
+        style={{
+          backgroundColor: "#d7b899",
+          border: "1px solid #5a3e2b",
+          padding: "6px 12px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontFamily: "'Young Serif', serif",
+          marginBottom: "1rem",
+          color: "#5a3e2b",
+          fontWeight: "bold",
+        }}
+      >
+        ← Back to Discover
+      </button>
 
       <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>{shop.name}</h2>
 
@@ -100,69 +111,85 @@ const Ratings = () => {
           borderRadius: "8px",
           border: "1px solid #8B5E3C",
           marginBottom: "2rem",
-          objectFit: "cover"
         }}
       />
 
-      {/* Ratings Sliders */}
       {Object.entries(ratings).map(([category, value]) => (
         <div key={category} style={{ marginBottom: "1.5rem", textAlign: "left" }}>
-          <label className="rating-label">{category.replace(/([A-Z])/g, " $1")}:</label>
+          <label className="rating-label">
+            {category.replace(/([A-Z])/g, " $1")}:
+          </label>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <input type="range" min="1" max="10" value={value}
-              onChange={(e) => handleRatingChange(e, category)} />
+            <input
+              type="range"
+              min="1"
+              max="10"
+              value={value}
+              onChange={(e) => handleRatingChange(e, category)}
+            />
             <span>{value}</span>
           </div>
         </div>
       ))}
 
-      {/* Milk Options */}
       <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
         <label className="rating-label">Alternative Milk Options:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
-          {["Oat", "Almond", "Coconut", "Soy"].map((option) => (
+          {[
+            "Oat",
+            "Almond",
+            "Coconut",
+            "Soy"
+          ].map((option) => (
             <label key={option}>
-              <input type="checkbox" value={option} checked={milkOptions.includes(option)}
-                onChange={handleCheckboxChange} />{" "}
-              {option}
+              <input
+                type="checkbox"
+                value={option}
+                checked={milkOptions.includes(option)}
+                onChange={handleCheckboxChange}
+              /> {option}
             </label>
           ))}
         </div>
       </div>
 
-      {/* Food Available */}
       <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
         <label className="rating-label">Food Items Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
           {["Yes", "No"].map((val) => (
             <label key={val}>
-              <input type="radio" name="food"
+              <input
+                type="radio"
+                name="food"
                 checked={foodAvailable === val}
-                onChange={() => setFoodAvailable(val)} />{" "}
-              {val}
+                onChange={() => setFoodAvailable(val)}
+              /> {val}
             </label>
           ))}
         </div>
       </div>
 
-      {/* Sugar-Free */}
       <div style={{ marginBottom: "2rem", textAlign: "left" }}>
-        <label className="rating-label">Sugar-Free Syrup Options:</label>
+        <label className="rating-label">Sugar-Free Syrup Options Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
           {["Yes", "No"].map((val) => (
             <label key={val}>
-              <input type="radio" name="sugarFree"
+              <input
+                type="radio"
+                name="sugarFree"
                 checked={sugarFree === val}
-                onChange={() => setSugarFree(val)} />{" "}
-              {val}
+                onChange={() => setSugarFree(val)}
+              /> {val}
             </label>
           ))}
         </div>
       </div>
 
-      <button className="button"
+      <button
+        className="button"
         style={{ backgroundColor: "#8B5E3C", color: "white", fontWeight: "bold" }}
-        onClick={handleSubmit}>
+        onClick={handleSubmit}
+      >
         Submit Rating
       </button>
     </div>
