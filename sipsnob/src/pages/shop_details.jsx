@@ -1,42 +1,42 @@
-import React from "react";
-import { useLocation, useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import "./pages.css";
 
 const ShopDetails = () => {
   const { shopId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const [shop, setShop] = useState(location.state?.shop || null);
+  const [error, setError] = useState(null);
 
-  // Try to get shop from location state, otherwise fallback to localStorage
-  const shop = location.state?.shop || JSON.parse(localStorage.getItem("selectedShop"));
+  useEffect(() => {
+    if (!shop && shopId) {
+      const fetchDetails = async () => {
+        try {
+          const response = await fetch(`https://sip-snob-backend.onrender.com/api/shop-details/${shopId}`);
+          const data = await response.json();
+          if (data) {
+            setShop(data);
+          } else {
+            setError("No details found for this shop.");
+          }
+        } catch (err) {
+          console.error("Error fetching shop details:", err);
+          setError("Failed to fetch shop details.");
+        }
+      };
 
-  if (!shop) {
-    return (
-      <div className="page-container">
-        <h1 style={{ color: "#5a3e2b" }}>Shop Details</h1>
-        <p style={{ textAlign: "center", color: "#5a3e2b" }}>No shop data found.</p>
-        <button
-          onClick={() => navigate("/discover")}
-          style={{
-            marginTop: "1rem",
-            backgroundColor: "#5a3e2b",
-            color: "white",
-            padding: "0.5rem 1rem",
-            border: "none",
-            borderRadius: "0.25rem",
-            cursor: "pointer",
-            fontFamily: "'Young Serif', serif",
-          }}
-        >
-          ← Back to Discover
-        </button>
-      </div>
-    );
-  }
+      fetchDetails();
+    }
+  }, [shop, shopId]);
+
+  if (!shop && !error) return null;
 
   return (
-    <div className="page-container" style={{ paddingBottom: "2rem" }}>
-      <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>Shop Details</h1>
+    <div className="page-container">
+      <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>
+        Shop Details
+      </h1>
       <button
         onClick={() => navigate("/discover")}
         style={{
@@ -54,32 +54,43 @@ const ShopDetails = () => {
         ← Back to Discover
       </button>
 
-      <h2 style={{ fontSize: "1.25rem", color: "#5a3e2b", marginBottom: "0.5rem" }}>{shop.name}</h2>
-      <p style={{ fontSize: "1rem", marginBottom: "0.25rem" }}>{shop.address}</p>
-      <p style={{ fontSize: "1rem", marginBottom: "0.75rem" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
+      {error ? (
+        <p style={{ color: "red" }}>{error}</p>
+      ) : (
+        shop && (
+          <>
+            <h2 style={{ textAlign: "center" }}>{shop.name}</h2>
+            <p style={{ textAlign: "center" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
 
-      <img
-        src={
-          shop.photos?.[0]?.photo_reference
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${shop.photos[0].photo_reference}&key=YOUR_GOOGLE_API_KEY`
-            : "https://upload.wikimedia.org/wikipedia/commons/e/ec/No_image_available.svg"
-        }
-        alt={shop.name}
-        style={{
-          width: "100%",
-          maxWidth: "500px",
-          borderRadius: "0.5rem",
-          marginBottom: "1.5rem",
-          border: "1px solid #ccc"
-        }}
-      />
+            <div style={{ maxWidth: 400, margin: "1rem auto" }}>
+              <img
+                src={
+                  shop.photos?.[0]?.photo_reference
+                    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${shop.photos[0].photo_reference}&key=YOUR_GOOGLE_API_KEY`
+                    : "https://upload.wikimedia.org/wikipedia/commons/6/65/No-Image-Placeholder.svg"
+                }
+                alt={shop.name}
+                style={{ width: "100%", borderRadius: 8 }}
+              />
+              <p style={{ marginTop: "1rem" }}><strong>Place ID:</strong> {shop.place_id}</p>
+              <p><strong>Latitude:</strong> {shop.geometry?.location?.lat}</p>
+              <p><strong>Longitude:</strong> {shop.geometry?.location?.lng}</p>
+              <p><strong>Address:</strong> {shop.vicinity || shop.formatted_address}</p>
 
-      <div style={{ textAlign: "left", color: "#5a3e2b" }}>
-        <p><strong>Place ID:</strong> {shop.place_id}</p>
-        <p><strong>Latitude:</strong> {shop.geometry?.location?.lat ?? "N/A"}</p>
-        <p><strong>Longitude:</strong> {shop.geometry?.location?.lng ?? "N/A"}</p>
-        {/* Add more info if needed */}
-      </div>
+              {shop.opening_hours?.weekday_text && (
+                <div>
+                  <strong>Opening Hours:</strong>
+                  <ul style={{ marginTop: "0.5rem" }}>
+                    {shop.opening_hours.weekday_text.map((line, index) => (
+                      <li key={index}>{line}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          </>
+        )
+      )}
     </div>
   );
 };
