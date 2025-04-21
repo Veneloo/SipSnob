@@ -113,6 +113,9 @@ const Discover = () => {
               {/* Buttons: Shop Details + Rate */}
               <div style={{ display: "flex", gap: "10px", marginTop: "0.5rem" }}>
                 <button
+                  onClick={() =>
+                    navigate(`/shop_details/${shop.place_id}`, { state: { shop } })
+                  }                
                   style={{
                     backgroundColor: "#5a3e2b",
                     color: "#fff",
