@@ -139,7 +139,8 @@ const Ratings = () => {
             "Oat",
             "Almond",
             "Coconut",
-            "Soy"
+            "Soy",
+            "Skim"
           ].map((option) => (
             <label key={option}>
               <input
