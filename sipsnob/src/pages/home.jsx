@@ -100,6 +100,10 @@ const formatRatingDetail = (label) => {
 
 }
 
+const handlePostDetails = () => {
+
+}
+
 
 const sampleRatings = [
     {
@@ -186,12 +190,22 @@ const sampleRatings = [
 
     const toggleComments = () => {
         setCommentsVisible(!areCommentsVisible);
+        if(areCommentsVisible==true){
+            setReplyVisible(false);
+        }
+    }
+
+    const [arePostActionsVisible, setPostActionsVisible] = useState(false);
+
+    const togglePostActions = () => {
+        setPostActionsVisible(!arePostActionsVisible);
     }
 
     const [isReplyVisible, setReplyVisible] = useState(false)
     const handleReplyButton = () => {
         setReplyVisible(!isReplyVisible);
     }
+
 
     return(
         <div>
@@ -204,7 +218,8 @@ const sampleRatings = [
         color: "black",
         textAlign: "left",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        margin: "24px"
         }}>
 
             
@@ -229,9 +244,16 @@ const sampleRatings = [
 
             <h3 style={{margin: "12px"}}>{ratingDetails.user}{" "} <span style={{color: "#5a3e2b"}}>rated</span>{" "}{ratingDetails.shopName}</h3>
             </div>
-            {/*View Profile Button*/}
+            {/*Post Details Button*/}
+            <div className="row-container" style={{justifyContent: "flex-end", alignItems: "flex-end", flexDirection: "row-reverse"}}>
 
-            <button className="button" style={{right: "0", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>View Profile ▶</button>
+        <button className="button" onClick={togglePostActions} style={{boxShadow: "0px 0px",right: "0", backgroundColor: "transparent", color: "#59290A"}}>...</button>
+        {arePostActionsVisible && <div>
+            <button className="button" style={{right: "0", backgroundColor: "transparent", color: "#5a3e2b"}}> View Profile</button>
+            <button className="button" style={{right: "0", backgroundColor: "transparent", color: "#5a3e2b"}}> Shop Details</button>
+
+            </div>}
+        </div>
         </div>
 
           {/*Timestamp*/}      
@@ -278,15 +300,49 @@ const sampleRatings = [
 
         {/*Leave a comment button*/}
         <div className="row-container">
-        <button className="button" style={{right: "0", backgroundColor: "rgb(117, 82, 39)", color: "rgba(245, 225, 200)"}}> Shop Details</button>
-
-        <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Leave a comment</button>
-        </div>
         <button className="button" onClick={toggleComments} style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>{areCommentsVisible ? "Close Comments" : "View Comments"}</button>
-
-
+       {areCommentsVisible && <button className="button" onClick={handleReplyButton} style={{width: "fit-content", backgroundColor: "#8B5E3C", color: "rgba(245, 225, 200)"}}>Leave a comment</button>}
+</div>
        {/*Comments*/}
 </div>
+{isReplyVisible && areCommentsVisible && (<div className="comment" style={{
+            height: "fit-content",
+            minWidth: "75%",
+            borderRadius: "50px", 
+            padding: "24px 12px",
+            color: "black",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            marginBlock: "12px",
+            backgroundColor: "#8B5E3C",
+            }}>
+            {/*User */}
+            
+                {/*PFP and name */}
+            <div className="row-container" style={{justifyContent: "space-between", alignContent: "flex-start"}}>
+                <div className="row-container" style={{alignItems: "center"}}>
+                <div style={{
+                height: "50px",
+                width: "50px",
+                backgroundImage: `url(${sampleImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "100%", 
+                boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
+                marginInline: "12px",
+                }}/>
+            <h3 style={{
+                color: "#f5e1c8"}}>{ratingDetails.user}<span>{" "}</span> <span style={{color: "#d7b899"}}> is thinking:</span></h3>
+                </div>
+            </div>
+            {/*comment */}
+            <input placeholder="of leaving this comment..." style={{color: "#f5e1c8", marginInline: "12px",height: "48px", backgroundColor: "transparent", border: "0", fontSize: "14px", fontFamily: "inherit"}}/>
+
+            {/*Submit button */}
+            <button className="button">Submit</button>
+        </div>)}
+
 {areCommentsVisible && (<div>
         {ratingDetails.replies.map((item,index) => (
             <CommentItem key={index} commentDetails={item}/>
@@ -331,8 +387,8 @@ const CommentItem = ({commentDetails}) =>{
                 boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
                 marginInline: "12px",
                 }}/>
-            <p style={{
-                color: "#f5e1c8"}}>{commentDetails.user}<span>{" "}</span> <span style={{color: "#5a3e2b"}}>commented: </span></p>
+            <h3 style={{
+                color: "#f5e1c8"}}>{commentDetails.user}<span>{" "}</span> <span style={{color: "#5a3e2b"}}>commented: </span></h3>
             </div>
                 {/*view profile */}
             <button className="button" style={{height: "fit-content"}}>View Profile</button>
