@@ -3,16 +3,17 @@ import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "./pages.css";
 
 const Ratings = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { shopId } = useParams();
+  const shop = location.state?.shop || {};
+  
   useEffect(() => {
     if (!shop?.name) {
       navigate("/discover");
     }
   }, [shop, navigate]);
   
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { shopId } = useParams();
-  const shop = location.state?.shop || {};
 
   const [ratings, setRatings] = useState({
     drinkConsistency: 5,
