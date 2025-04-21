@@ -99,16 +99,18 @@ const Ratings = () => {
 
       <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>{shop.name}</h2>
 
-      <img
-        src={`https://sip-snob-backend.onrender.com/api/photo?ref=${photo_reference}`}
-        alt="Coffee Shop"
-        style={{
+      {shop.photos?.[0]?.photo_reference && (
+        <img
+          src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
+          alt="Coffee Shop"
+          style={{
           width: "100%",
           borderRadius: "8px",
           border: "1px solid #8B5E3C",
           marginBottom: "2rem",
         }}
       />
+    )}
 
       {Object.entries(ratings).map(([category, value]) => (
         <div key={category} style={{ marginBottom: "1.5rem", textAlign: "left" }}>
