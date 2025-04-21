@@ -63,11 +63,13 @@ const ShopDetails = () => {
             <p style={{ textAlign: "center" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
 
             <div style={{ maxWidth: 400, margin: "1rem auto" }}>
+            {shop.photos?.[0]?.photo_reference && (
               <img
-                src={`https://sip-snob-backend.onrender.com/api/photo?ref=${photo_reference}`}
+                src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
                 alt={shop.name}
                 style={{ width: "100%", borderRadius: 8 }}
               />
+            )}
               <p style={{ marginTop: "1rem" }}><strong>Place ID:</strong> {shop.place_id}</p>
               <p><strong>Latitude:</strong> {shop.geometry?.location?.lat}</p>
               <p><strong>Longitude:</strong> {shop.geometry?.location?.lng}</p>
