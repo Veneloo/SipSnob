@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useLocation, useParams, useNavigate, useEffect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useParams, useNavigate } from "react-router-dom";
 import "./pages.css";
 
 const Ratings = () => {
