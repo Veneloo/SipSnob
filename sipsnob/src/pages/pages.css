@@ -22,6 +22,9 @@
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
   width: fit-content;
 }
+.button::after{
+  box-shadow: inset 0 2px 2px rgba(0, 0, 0, 0.2);;
+}
 
 .bookmark-button {
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -235,7 +238,4 @@ input[type="radio"]:checked::before {
   flex-wrap: wrap;
 }
 
-.reply{
-
-}
 
