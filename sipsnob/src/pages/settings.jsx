@@ -5,7 +5,336 @@ import { useState } from "react";
 import Launch from './launch';
 import { useNavigate } from 'react-router-dom';
 
+const sampleRatings = [{
+    shopName: "Ground & Grind",
+    user: "You",
+    timestamp: "2025-04-12T11:10:00",
+    ratings: {
+      drinkConsistency: 9,
+      ambiance: 7,
+      waitTime: 4,
+      pricing: 6,
+      customerService: 8,
+    },
+    milkOptions: ["Oat", "Almond"],
+    foodAvailable: "Yes",
+    sugarFree: "Yes",
+    comment: "Really solid flat white. Staff was sweet. Ambiance felt like Pinterest threw up in a good way.",
+    replies: []
+  },
+  {
+    shopName: "Café Soleil",
+    user: "You",
+    timestamp: "2025-04-10T08:45:00",
+    ratings: {
+      drinkConsistency: 6,
+      ambiance: 9,
+      waitTime: 3,
+      pricing: 7,
+      customerService: 9,
+    },
+    milkOptions: ["Soy", "Whole"],
+    foodAvailable: "No",
+    sugarFree: "No",
+    comment: "Gorgeous interior but my latte tasted like vibes instead of espresso. Still, I’d come back to sit and read here.",
+    replies: [
+      {
+        user: "Jasmine",
+        timestamp: "2025-04-10T10:02:00",
+        text: "LMAO that description is too real 😭"
+      }
+    ]
+  },
+  {
+    shopName: "Java Junction",
+    user: "You",
+    timestamp: "2025-04-08T16:20:00",
+    ratings: {
+      drinkConsistency: 7,
+      ambiance: 5,
+      waitTime: 7,
+      pricing: 8,
+      customerService: 6,
+    },
+    milkOptions: ["Whole"],
+    foodAvailable: "Yes",
+    sugarFree: "No",
+    comment: "Good for a grab-and-go. Not really a sit-and-stay unless you love fluorescent lighting.",
+    replies: []
+  },
+  {
+    shopName: "The Bean Scene",
+    user: "You",
+    timestamp: "2025-04-05T14:00:00",
+    ratings: {
+      drinkConsistency: 10,
+      ambiance: 10,
+      waitTime: 2,
+      pricing: 5,
+      customerService: 10,
+    },
+    milkOptions: ["Oat", "Almond", "Soy"],
+    foodAvailable: "Yes",
+    sugarFree: "Yes",
+    comment: "If I could live here I would. Pricey, but the lavender oat latte healed my inner child.",
+    replies: [
+      {
+        user: "Ava",
+        timestamp: "2025-04-05T16:33:00",
+        text: "I KNEW you’d love this one 🥺"
+      }
+    ]
+  }]
 
+  const formatRatingDetail = (label) => {
+    {/* ratings: {
+        drinkConsistency: 8,
+        ambiance: 7,
+        waitTime: 5,
+        pricing: 6,
+        customerService: 9,
+      },
+      milkOptions: ["Oat", "Almond"],
+      foodAvailable: "Yes",
+    sugarFree: "No",*/}
+
+
+    const map = {
+        drinkConsistency: "Drink Consistency",
+        ambiance: "Ambiance",
+        waitTime: "Wait Time",
+        pricing: "Pricing",
+        customerService: "Costumer Service",
+        milkOptions: "Milk Options",
+        foodAvailable: "Food Available",
+        sugarFree: "Sugar Free"
+    }
+
+    return(map[label] || label)
+
+}
+
+  const RatingItem = ({ratingDetails}) =>{
+    if (!ratingDetails){
+        return null;
+    }
+
+    const [areCommentsVisible, setCommentsVisible] = useState(false);
+
+    const toggleComments = () => {
+        setCommentsVisible(!areCommentsVisible);
+        if(areCommentsVisible==true){
+            setReplyVisible(false);
+        }
+    }
+
+    const [arePostActionsVisible, setPostActionsVisible] = useState(false);
+
+    const togglePostActions = () => {
+        setPostActionsVisible(!arePostActionsVisible);
+    }
+
+    const [isReplyVisible, setReplyVisible] = useState(false)
+    const handleReplyButton = () => {
+        setReplyVisible(!isReplyVisible);
+    }
+
+
+    return(
+        <div>
+    <div className="review" style={{
+        height: "fit-content",
+        minWidth: "75%",
+        borderRadius: "50px", 
+        padding: "24px",
+        boxShadow: " 1px 1px 1px 2px rgb(0,0,0,0.1)",
+        color: "black",
+        textAlign: "left",
+        display: "flex",
+        flexDirection: "column",
+        margin: "24px"
+        }}>
+
+            
+        {/*User rated Shop*/}
+        <div className="row-container" style={{justifyContent: "space-between"}}>
+        {/*Left*/}
+        <div className="row-container">
+            {/*Pfp*/}
+
+            <div style={{
+                height: "50px",
+                width: "50px",
+                backgroundImage: `url(${sampleImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "100%", 
+                boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
+            }}
+            />
+
+            {/*User rated Shop*/}
+
+            <h3 style={{margin: "12px"}}>{ratingDetails.user}{" "} <span style={{color: "#5a3e2b"}}>rated</span>{" "}{ratingDetails.shopName}</h3>
+            </div>
+            {/*Post Details Button*/}
+            <div className="row-container" style={{justifyContent: "flex-end", alignItems: "flex-end", flexDirection: "row-reverse"}}>
+
+        <button className="button" onClick={togglePostActions} style={{boxShadow: "0px 0px",right: "0", backgroundColor: "transparent", color: "#59290A"}}>...</button>
+        {arePostActionsVisible && <div>
+            <button className="button" style={{right: "0", backgroundColor: "transparent", color: "#5a3e2b"}}> View Profile</button>
+            <button className="button" style={{right: "0", backgroundColor: "transparent", color: "#5a3e2b"}}> Shop Details</button>
+
+            </div>}
+        </div>
+        </div>
+
+          {/*Timestamp*/}      
+        <small style={{color: "#5a3e2b"}}>{new Date(ratingDetails.timestamp).toDateString()}</small>
+    <div>
+        {/*Overall Rating*/}
+        <h3 style={{color: "#5a3e2b"}}>★★★☆☆</h3>
+        {/*Review*/}
+        <p style={{width: "fit-content", color: "#59290A"}}>{ratingDetails.comment}</p>
+    </div>
+        
+        {/*Rating Details*/}
+        <div style={{
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px",
+  marginTop: "12px",
+  flexDirection: "row",
+
+}}>
+  {Object.entries(ratingDetails.ratings).map(([label, rating]) => (
+    <span key={label} className="rating-detail">
+      {formatRatingDetail(label)}: {rating}/10
+    </span>
+  ))}
+</div>
+{/*Extras */}
+<div style={{
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px",
+  marginTop: "12px"
+}}>
+    <div className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
+        Food Available: {ratingDetails.foodAvailable}        
+    </div>
+    <div className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
+        Sugar Free: {ratingDetails.sugarFree}
+    </div>
+    <div  className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
+    Milk Options: {ratingDetails.milkOptions.join(", " || "None")}
+</div>
+</div>
+
+        {/*Leave a comment button*/}
+        <div className="row-container">
+        <button className="button" onClick={toggleComments} style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>{areCommentsVisible ? "Close Comments" : `View ${ratingDetails.replies.length} Comment${ratingDetails.replies.length == 1 ? "" : "s" }`}</button>
+       {areCommentsVisible && <button className="button" onClick={handleReplyButton} style={{width: "fit-content", backgroundColor: "#8B5E3C", color: "rgba(245, 225, 200)"}}>Leave a comment</button>}
+</div>
+       {/*Comments*/}
+</div>
+{isReplyVisible && areCommentsVisible && (<div className="comment" style={{
+            height: "fit-content",
+            minWidth: "75%",
+            borderRadius: "50px", 
+            padding: "24px 12px",
+            color: "black",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            marginBlock: "12px",
+            backgroundColor: "#8B5E3C",
+            }}>
+            {/*User */}
+            
+                {/*PFP and name */}
+            <div className="row-container" style={{justifyContent: "space-between", alignContent: "flex-start"}}>
+                <div className="row-container" style={{alignItems: "center"}}>
+                <div style={{
+                height: "50px",
+                width: "50px",
+                backgroundImage: `url(${sampleImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "100%", 
+                boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
+                marginInline: "12px",
+                }}/>
+            <h3 style={{
+                color: "#f5e1c8"}}>You<span>{" "}</span> <span style={{color: "#d7b899"}}> are replying to: </span>{ratingDetails.user}</h3>
+                </div>
+            </div>
+            {/*comment */}
+            <input placeholder="Leaving this comment..." style={{color: "#f5e1c8", marginInline: "12px",height: "48px", backgroundColor: "transparent", border: "0", fontSize: "14px", fontFamily: "inherit"}}/>
+
+            {/*Submit button */}
+            <button className="button">Submit</button>
+        </div>)}
+
+{areCommentsVisible && (<div>
+        {ratingDetails.replies.map((item,index) => (
+            <CommentItem key={index} commentDetails={item}/>
+        ))}
+        
+</div>)}
+</div>
+        
+    );
+
+
+}
+
+const CommentItem = ({commentDetails}) =>{
+    if (!commentDetails){
+        return null;
+    }
+    return(
+        <div className="comment" style={{
+            height: "fit-content",
+            minWidth: "75%",
+            borderRadius: "50px", 
+            padding: "24px 12px",
+            color: "black",
+            textAlign: "left",
+            display: "flex",
+            flexDirection: "column",
+            marginBlock: "12px"
+            }}>
+            {/*User */}
+            
+                {/*PFP and name */}
+            <div className="row-container" style={{justifyContent: "space-between", alignContent: "flex-start"}}>
+                <div className="row-container" style={{alignItems: "center"}}>
+                <div style={{
+                height: "50px",
+                width: "50px",
+                backgroundImage: `url(${sampleImg})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                borderRadius: "100%", 
+                boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
+                marginInline: "12px",
+                }}/>
+            <h3 style={{
+                color: "#f5e1c8"}}>{commentDetails.user}<span>{" "}</span> <span style={{color: "#5a3e2b"}}>commented: </span></h3>
+            </div>
+                {/*view profile */}
+            <button className="button" style={{height: "fit-content"}}>View Profile</button>
+            </div>
+            {/*comment */}
+            <p style={{
+                color: "#5a3e2b"}}>{commentDetails.text}</p>
+
+            {/*reply button */}
+            <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Reply</button>
+        </div>
+    )
+}
 
 
 const friendList = [
@@ -65,10 +394,13 @@ const FriendItem = ({friendDetails}) => {
 }
 
 
-
-
-
 const Settings = () => {
+
+    const[isRatingHistoryOpen, setRatingHistoryOpen] = useState(false)
+
+    const toggleRatingHistory = () => {
+        setRatingHistoryOpen(!isRatingHistoryOpen)
+    }
 
     const navigate = useNavigate();
 
@@ -138,7 +470,7 @@ const Settings = () => {
 {/*Section */}
             <div id="ProfileInfo" style={{
             backgroundColor: "rgba(245, 225, 200, 0.5)",
-            padding: "5%",
+            padding: "2% 5%",
             borderRadius: "24px",
             }} >
 
@@ -220,7 +552,6 @@ const Settings = () => {
                 </input>
                 
 
-
             {/*UserName*/}
 
             <label style={{alignSelf: "flex-start", color: "#A2845E"}}>Username:</label>
@@ -242,7 +573,7 @@ const Settings = () => {
 </div>
         <div className="column-container" id="Friends"  style={{
             backgroundColor: "rgba(245, 225, 200, 0.5)",
-            padding: "5%",
+            padding: "2% 5%",
             borderRadius: "24px",
             marginTop: "12px",
             height: "fit-content"
@@ -257,7 +588,7 @@ const Settings = () => {
         <div className="FriendItem" 
             style={{
             width: "95%",
-            height: "200px",
+            height: "150px",
             overflowX: "hidden",
             overflowY: "scroll", 
             display: "flex",
@@ -274,14 +605,14 @@ const Settings = () => {
         
 
             {/*Add or delete friends*/}  
-            {/*Search for friends*/}<div className="button" style={{backgroundColor: "#5a3e2b",height: "fit-content", width: "50%", justifyContent: "space-between", alignSelf: "center", margin: "24px"}}>
+            {/*Search for friends*/}<div className="button" style={{backgroundColor: "#5a3e2b",height: "fit-content", width: "50%", justifyContent: "space-between", alignSelf: "center", margin: "12px"}}>
             <input style={{color: "#f5e1c8", marginInline: "12px",height: "100%",backgroundColor: "transparent", fontSize: "14px", fontFamily: "inherit", width: "75%", border: "0"}} placeholder="Input username to add friend"/>
         <button className="button">Add</button>
         </div>
         </div>
-        {/*Review History*/}
+        {/*Rating History*/}
 
-        <div id="ReviewHistory" style={{
+        <div id="RatingHistory" style={{
             backgroundColor: "rgba(245, 225, 200, 0.5)",
             padding: "5%",
             borderRadius: "24px",
@@ -289,12 +620,22 @@ const Settings = () => {
             height: "fit-content"
             }} >
 
+<h2 style={{
+                fontSize: "2em",
+                textShadow: "0 2px 2px rgb(0,0,0,0.2)"}}>Rating History</h2>
+
+        <button className="button" onClick={toggleRatingHistory} style={{backgroundColor: "#A2845E"}}>View and Edit Past Ratings.</button>
+        
+        {isRatingHistoryOpen && (sampleRatings.map((item,index) => (
+            <RatingItem key={index} ratingDetails={item}/>
+        )))}
+
         </div>
             {/*Edit*/} 
             {/*Clear*/}
 
         {/*Log Out*/}   
-        <div id="LogOut" style={{paddingBlock: "5%"}}>
+        <div id="LogOut" style={{paddingBlock: "2%"}}>
 
             <button className="button" onClick={handleLogOut} style={{backgroundColor: "#A2845E"}}>Log Out</button>
 
