@@ -100,11 +100,7 @@ const Ratings = () => {
       <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>{shop.name}</h2>
 
       <img
-        src={
-          shop.photos?.[0]?.photo_reference
-            ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${shop.photos[0].photo_reference}&key=YOUR_GOOGLE_API_KEY`
-            : "https://via.placeholder.com/300x150"
-        }
+        src={`https://sip-snob-backend.onrender.com/api/photo?ref=${photo_reference}`}
         alt="Coffee Shop"
         style={{
           width: "100%",
