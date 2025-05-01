@@ -277,3 +277,10 @@ input[type="radio"]:checked::before {
   width: fit-content;
   
 }
+.setting-section{
+  background-color: rgba(245, 225, 200, 0.5);
+  padding: 2% 5%;
+  border-radius: 24px;
+  margin-top: 12px;
+  height: fit-content;
+}

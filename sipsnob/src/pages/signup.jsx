@@ -73,7 +73,10 @@ function SignUp() {
             fontSize: "24px",
             margin: "12px",
             textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+            cursor: "pointer"
           }}
+
+          onClick={() => navigate("/")}
         >
           SipSnob
         </p>
@@ -149,7 +152,7 @@ function SignUp() {
 const inputStyle = {
   margin: "10px",
   color: "black",
-  height: "20px",
+  height: "25px",
   width: "80%",
   borderRadius: "5px",
   border: "0px",

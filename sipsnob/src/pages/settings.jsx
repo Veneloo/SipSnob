@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import CommentItem from "../components/CommentItem";
 import ViewProfileButton from "../components/ViewProfileButton";
 import FriendItem from "../components/FriendItem";
+import BookmarkItem from "../components/BookmarkItem";
 
 const sampleRatings = [{
     shopName: "Ground & Grind",
@@ -308,6 +309,23 @@ const Settings = () => {
         navigate("/");
     }
 
+    const bookmarkedShops = [
+        {name:"Blank Street (71st & Lex)" },
+        {name: "Coffee"},
+        {name: "new coffee!"},
+        {name: "java chip"},
+        {name: "latte at 91st"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+        {name: "another coffe shop"},
+    ]
+
     return(
         <div className="page-container"
         style={{
@@ -347,11 +365,7 @@ const Settings = () => {
         </div>
         </div>
 {/*Section */}
-            <div id="ProfileInfo" style={{
-            backgroundColor: "rgba(245, 225, 200, 0.5)",
-            padding: "2% 5%",
-            borderRadius: "24px",
-            }} >
+            <div className="setting-section" id="ProfileInfo">
 
             <h2 style={{
                 fontSize: "2em",
@@ -450,13 +464,7 @@ const Settings = () => {
             </form> 
         {/*Friend Add*/}
 </div>
-        <div className="column-container" id="Friends"  style={{
-            backgroundColor: "rgba(245, 225, 200, 0.5)",
-            padding: "2% 5%",
-            borderRadius: "24px",
-            marginTop: "12px",
-            height: "fit-content"
-            }} >
+        <div className="column-container setting-section" id="Friends">
 
             <h2 style={{
                 fontSize: "2em",
@@ -472,6 +480,13 @@ const Settings = () => {
         </div>
         </div>
         {/* Full Bookmark List*/}
+        <div className="setting-section" id="Bookmarks" style={{maxWidth: "90%"}}>
+            <div className="row-container" style={{padding: "auto",overflowX: "scroll", borderRadius: "42px"}}>
+        {bookmarkedShops.map((item,index) => (
+            <BookmarkItem key={index} bookmarkDetails={item}/>
+        ))}
+            </div>
+        </div>
 
         {/*Log Out*/}   
         <div id="LogOut" style={{paddingBlock: "2%"}}>

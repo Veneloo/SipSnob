@@ -5,21 +5,10 @@ import sampleImg from "../assets/sampleimg.png"
 import RatingItem from "../components/RatingItem";
 import CommentItem from "../components/CommentItem";
 import BookmarkItem from "../components/BookmarkItem";
+import { useNavigate } from "react-router-dom";
+import Settings from "./settings";
 
-const bookmarkedShops = [
-    {name:"Blank Street (71st & Lex)" },
-    {name: "Coffee"},
-    {name: "new coffee!"},
-    {name: "java chip"},
-    {name: "latte at 91st"},
-    {name: "another coffe shop"}
-]
-
-const handlePostDetails = () => {
-
-}
-
-const sampleRatings = [
+const sampleFeed = [
     {
       shopName: "Blank Street (71st & Lex)",
       user: "Axel",
@@ -98,6 +87,8 @@ const sampleRatings = [
 
 
 const HomePage = () =>{
+
+  const navigate = useNavigate();
     return (
 
         <div className="page-container" style={{
@@ -130,13 +121,11 @@ const HomePage = () =>{
             overflowY: "hidden", 
             display: "flex"
             }}>
-        {bookmarkedShops.map((item,index) => (
+        {bookmarkedShops.slice(0,10).map((item,index) => (
             <BookmarkItem key={index} bookmarkDetails={item}/>
         ))}
-
-
-
-        </div>
+    </div>
+    <button className="button" onClick={() => navigate("/settings#Bookmarks")}>View All Bookmarks</button>
 
 
 
@@ -153,7 +142,7 @@ const HomePage = () =>{
         {/*Feed*/}
 
         <div className="feed">
-        {sampleRatings.map((rating,index) => (
+        {sampleFeed.map((rating,index) => (
             <RatingItem key={index} ratingDetails={rating}/>
         ))}
     
