@@ -11,6 +11,7 @@ import Discover from './pages/discover';
 import Ratings from './pages/ratings'; 
 import Settings from './pages/settings';
 import ShopDetails from './pages/shop_details';
+import ProfilePage from './pages/profile';
 
 function App() {
   return (
@@ -33,6 +34,8 @@ function App() {
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
         <Route path="/ratings/:shopId" element={<><Navbar /><Ratings /></>} />
         <Route path="/shop_details/:shopId" element={<ShopDetails />} />
+        <Route path="/profile" element={<><Navbar/><ProfilePage /></>} />
+
       </Routes>
     </BrowserRouter>
   );

@@ -4,6 +4,9 @@ import sampleImg from "../assets/sampleimg.png"
 import { useState } from "react";
 import Launch from './launch';
 import { useNavigate } from 'react-router-dom';
+import CommentItem from "../components/CommentItem";
+import ViewProfileButton from "../components/ViewProfileButton";
+import FriendItem from "../components/FriendItem";
 
 const sampleRatings = [{
     shopName: "Ground & Grind",
@@ -182,7 +185,7 @@ const sampleRatings = [{
 
         <button className="button" onClick={togglePostActions} style={{boxShadow: "0px 0px",right: "0", backgroundColor: "transparent", color: "#59290A"}}>...</button>
         {arePostActionsVisible && <div>
-            <button className="button" style={{right: "0", backgroundColor: "transparent", color: "#5a3e2b"}}> View Profile</button>
+            <ViewProfileButton/>
             <button className="button" style={{right: "0", backgroundColor: "transparent", color: "#5a3e2b"}}> Shop Details</button>
 
             </div>}
@@ -289,109 +292,6 @@ const sampleRatings = [{
 
 }
 
-const CommentItem = ({commentDetails}) =>{
-    if (!commentDetails){
-        return null;
-    }
-    return(
-        <div className="comment" style={{
-            height: "fit-content",
-            minWidth: "75%",
-            borderRadius: "50px", 
-            padding: "24px 12px",
-            color: "black",
-            textAlign: "left",
-            display: "flex",
-            flexDirection: "column",
-            marginBlock: "12px"
-            }}>
-            {/*User */}
-            
-                {/*PFP and name */}
-            <div className="row-container" style={{justifyContent: "space-between", alignContent: "flex-start"}}>
-                <div className="row-container" style={{alignItems: "center"}}>
-                <div style={{
-                height: "50px",
-                width: "50px",
-                backgroundImage: `url(${sampleImg})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                borderRadius: "100%", 
-                boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
-                marginInline: "12px",
-                }}/>
-            <h3 style={{
-                color: "#f5e1c8"}}>{commentDetails.user}<span>{" "}</span> <span style={{color: "#5a3e2b"}}>commented: </span></h3>
-            </div>
-                {/*view profile */}
-            <button className="button" style={{height: "fit-content"}}>View Profile</button>
-            </div>
-            {/*comment */}
-            <p style={{
-                color: "#5a3e2b"}}>{commentDetails.text}</p>
-
-            {/*reply button */}
-            <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Reply</button>
-        </div>
-    )
-}
-
-
-const friendList = [
-    {name: "Jane Doe", username: "jdoe25", photo_url: "sampleImg" },
-    {name: "Jane Doe", username: "jdoe25", photo_url: "sampleImg" },
-    {name: "Jane Doe", username: "jdoe25", photo_url: "sampleImg" },
-    {name: "Jane Doe", username: "jdoe25", photo_url: "sampleImg" },
-    {name: "Jane Doe", username: "jdoe25", photo_url: "sampleImg" },
-    {name: "Jane Doe", username: "jdoe25", photo_url: "sampleImg" }
-]
-
-const FriendItem = ({friendDetails}) => {
-    if (!friendDetails){
-        return null;
-    }
-
-    return (
-        <div className="row-container" style={{
-            width: "100%",
-            height: "fit-content",
-            alignItems: "center",
-            flexWrap: "wrap",
-            margin: "24px",
-            justifyContent: "space-between"
-
-        }}> 
-            {/*Profile Picture*/}
-        <div className="row-container" style={{}}>
-            <div style={{
-                height: "80px",
-                width: "80px",
-                backgroundImage: `url(${sampleImg})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                borderRadius: "100%", 
-                boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
-            }}/>
-
-            <div className="column-container" style={{ 
-            flexWrap: "wrap", gap: "0"}}>
-            {/*Name*/}
-            <p style={{fontWeight: "bolder"}}>{friendDetails.name}</p>
-
-            {/*Username*/}
-            <p style={{color: "#A2845E"}}>{friendDetails.username}</p>
-            </div>  
-            </div>
-
-            <div className="column-container" >
-            <button className="button">View Profile</button>
-            <button className="button">Remove</button>
-            </div>
-        </div>
-    );
-
-
-}
 
 
 const Settings = () => {
@@ -412,7 +312,8 @@ const Settings = () => {
         <div className="page-container"
         style={{
             overflowY: "scroll",
-            maxWidth: "100%"
+            maxWidth: "100%",
+            paddingBlock: "24px"
         }}> 
 
         
@@ -422,29 +323,7 @@ const Settings = () => {
             marginTop: "64px",
             
         }}>
-        {/*Page Table Content*/}
-        <div className="settings-menu" style={{
-            height: "fit-content",            
-            backgroundColor: "#d7b898",
-            display: "flex",
-            flexDirection: "row",
-            textAlign: "left",
-            padding: "2%",
-            position: "absolute",
-            top: "10%",
-            left: "0",
-            boxShadow: "2px 2px 2px 2px rgb(0,0,0,0.1)",
-            
-        }}>   
-
-        <div className="column-container">
         
-         <p onClick={() => window.location.replace("/settings/#ProfileInfo")} >Profile Details</p> 
-         <p onClick={() => window.location.replace("/settings/#Friends")} >Friends List</p>
-         <p onClick={() => window.location.replace("/settings/#BookmarkHistory")} >Bookmark History</p>    
-         <p onClick={() => window.location.replace("/settings/#LogOut")} >Log Out</p>        
-        </div>
-        </div>
         {/*Item Content*/}
         <div style={{
             display: "flex",
@@ -569,7 +448,7 @@ const Settings = () => {
 
            </div>         
             </form> 
-        {/*Friends List*/}
+        {/*Friend Add*/}
 </div>
         <div className="column-container" id="Friends"  style={{
             backgroundColor: "rgba(245, 225, 200, 0.5)",
@@ -581,58 +460,18 @@ const Settings = () => {
 
             <h2 style={{
                 fontSize: "2em",
-                textShadow: "0 2px 2px rgb(0,0,0,0.2)"}}>Friend List</h2>
-            <p style={{ color: "#A2845E", marginTop: "-12px"}}>View, Add, or Remove your friends.</p>   
+                textShadow: "0 2px 2px rgb(0,0,0,0.2)"}}>Add a Friend</h2>
+            <p style={{ color: "#A2845E", marginTop: "-12px"}}>Input username to add friend.</p>   
             
 
-        <div className="FriendItem" 
-            style={{
-            width: "95%",
-            height: "150px",
-            overflowX: "hidden",
-            overflowY: "scroll", 
-            display: "flex",
-            flexDirection: "column",
-            paddingInline: "24px",
-            scrollSnapAlign: "center"
-            }}>
-        {friendList.map((item,index) => (
-            <FriendItem key={index} friendDetails={item}/>
-        ))}
-
-
-        </div>   
-        
-
-            {/*Add or delete friends*/}  
-            {/*Search for friends*/}<div className="button" style={{backgroundColor: "#5a3e2b",height: "fit-content", width: "50%", justifyContent: "space-between", alignSelf: "center", margin: "12px"}}>
-            <input style={{color: "#f5e1c8", marginInline: "12px",height: "100%",backgroundColor: "transparent", fontSize: "14px", fontFamily: "inherit", width: "75%", border: "0"}} placeholder="Input username to add friend"/>
+        {/*Search for friends*/}
+        <div className="button" style={{backgroundColor: "#5a3e2b",height: "fit-content", width: "50%", justifyContent: "space-between", alignSelf: "center", margin: "12px"}}>
+        <input style={{color: "#5a3e2b", marginInline: "12px",height: "100%",backgroundColor: "transparent", fontSize: "14px", fontFamily: "inherit", width: "75%", border: "0"}} placeholder="jdoe25"/>
         <button className="button">Add</button>
-        </div>
-        </div>
-        {/*Rating History*/}
-
-        <div id="RatingHistory" style={{
-            backgroundColor: "rgba(245, 225, 200, 0.5)",
-            padding: "5%",
-            borderRadius: "24px",
-            marginTop: "12px",
-            height: "fit-content"
-            }} >
-
-<h2 style={{
-                fontSize: "2em",
-                textShadow: "0 2px 2px rgb(0,0,0,0.2)"}}>Rating History</h2>
-
-        <button className="button" onClick={toggleRatingHistory} style={{backgroundColor: "#A2845E"}}>View and Edit Past Ratings.</button>
-        
-        {isRatingHistoryOpen && (sampleRatings.map((item,index) => (
-            <RatingItem key={index} ratingDetails={item}/>
-        )))}
 
         </div>
-            {/*Edit*/} 
-            {/*Clear*/}
+        </div>
+        {/* Full Bookmark List*/}
 
         {/*Log Out*/}   
         <div id="LogOut" style={{paddingBlock: "2%"}}>
