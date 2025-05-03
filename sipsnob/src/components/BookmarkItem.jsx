@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import sampleImg from "../assets/sampleimg.png"
 
+
 const handleUnfavorite = (shopname) => {
     console.log(`Unfavorite ${shopname}`)
 }

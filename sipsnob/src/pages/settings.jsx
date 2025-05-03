@@ -9,6 +9,23 @@ import ViewProfileButton from "../components/ViewProfileButton";
 import FriendItem from "../components/FriendItem";
 import BookmarkItem from "../components/BookmarkItem";
 
+const bookmarkedShops = [
+    {name:"Blank Street (71st & Lex)" },
+    {name: "Coffee"},
+    {name: "new coffee!"},
+    {name: "java chip"},
+    {name: "latte at 91st"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+    {name: "another coffe shop"},
+]
+
 const sampleRatings = [{
     shopName: "Ground & Grind",
     user: "You",
@@ -294,7 +311,6 @@ const sampleRatings = [{
 }
 
 
-
 const Settings = () => {
 
     const[isRatingHistoryOpen, setRatingHistoryOpen] = useState(false)
@@ -309,22 +325,7 @@ const Settings = () => {
         navigate("/");
     }
 
-    const bookmarkedShops = [
-        {name:"Blank Street (71st & Lex)" },
-        {name: "Coffee"},
-        {name: "new coffee!"},
-        {name: "java chip"},
-        {name: "latte at 91st"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-        {name: "another coffe shop"},
-    ]
+    
 
     return(
         <div className="page-container"
@@ -480,7 +481,16 @@ const Settings = () => {
         </div>
         </div>
         {/* Full Bookmark List*/}
+
+
         <div className="setting-section" id="Bookmarks" style={{maxWidth: "90%"}}>
+        <h2 style={{
+                fontSize: "2em",
+                textShadow: "0 2px 2px rgb(0,0,0,0.2)"
+                }}>Bookmarked Shops</h2>
+            <p style={{ color: "#A2845E", marginTop: "-12px"}}>View and remove shops from bookmark list</p>   
+            
+        
             <div className="row-container" style={{padding: "auto",overflowX: "scroll", borderRadius: "42px"}}>
         {bookmarkedShops.map((item,index) => (
             <BookmarkItem key={index} bookmarkDetails={item}/>

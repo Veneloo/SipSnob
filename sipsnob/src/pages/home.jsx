@@ -8,6 +8,23 @@ import BookmarkItem from "../components/BookmarkItem";
 import { useNavigate } from "react-router-dom";
 import Settings from "./settings";
 
+const bookmarkedShops = [
+  {name:"Blank Street (71st & Lex)" },
+  {name: "Coffee"},
+  {name: "new coffee!"},
+  {name: "java chip"},
+  {name: "latte at 91st"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+  {name: "another coffe shop"},
+]
+
 const sampleFeed = [
     {
       shopName: "Blank Street (71st & Lex)",
@@ -121,7 +138,7 @@ const HomePage = () =>{
             overflowY: "hidden", 
             display: "flex"
             }}>
-        {bookmarkedShops.slice(0,10).map((item,index) => (
+        {bookmarkedShops?.slice(0,10).map((item,index) => (
             <BookmarkItem key={index} bookmarkDetails={item}/>
         ))}
     </div>
