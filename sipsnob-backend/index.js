@@ -3,6 +3,7 @@ import axios from 'axios';
 import express from 'express';
 import cors from 'cors';
 import admin from 'firebase-admin';
+import fetch from 'node-fetch';
 
 
 dotenv.config();
@@ -63,4 +64,22 @@ app.get("/api/coffee-shops", async (req, res) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
+});
+
+
+app.get('/api/photo', async (req, res) => {
+  const { ref } = req.query;
+  if (!ref) return res.status(400).send("Missing photo reference");
+
+  const googleUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${ref}&key=${process.env.GOOGLE_API_KEY}`;
+
+  try {
+    const response = await fetch(googleUrl);
+    const contentType = response.headers.get('content-type');
+    res.setHeader('Content-Type', contentType);
+    response.body.pipe(res); // stream directly
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Failed to fetch photo");
+  }
 });

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./pages.css";
 
 const Discover = () => {
+  const navigate = useNavigate();
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(false);
   const [geoError, setGeoError] = useState("");
@@ -13,7 +15,7 @@ const Discover = () => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/coffee-shops?lat=${lat}&lng=${lng}`
+        `https://sip-snob-backend.onrender.com/api/coffee-shops?lat=${lat}&lng=${lng}`
       );
       setShops(response.data);
     } catch (error) {
@@ -108,21 +110,47 @@ const Discover = () => {
               </h2>
               <p style={{ fontSize: "0.875rem" }}>{shop.address}</p>
               <p style={{ fontSize: "0.875rem" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
-              <button
-                style={{
-                  marginTop: "0.5rem",
-                  backgroundColor: "#5a3e2b",
-                  color: "#fff",
-                  padding: "0.25rem 0.75rem",
-                  borderRadius: "0.25rem",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: "0.9rem",
-                  fontFamily: "'Young Serif', serif",
-                }}
-              >
+              {/* Buttons: Shop Details + Rate */}
+              <div style={{ display: "flex", gap: "10px", marginTop: "0.5rem" }}>
+                <button
+                onClick={() => {
+                  localStorage.setItem("selectedShop", JSON.stringify(shop));
+                  navigate(`/shop_details/${shop.place_id}`, { state: { shop } });
+                }}                            
+                  style={{
+                    backgroundColor: "#5a3e2b",
+                    color: "#fff",
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "0.25rem",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "0.9rem",
+                    fontFamily: "'Young Serif', serif",
+                    flex: 1,
+                  }}
+                >
                 Shop Details
               </button>
+              
+              <button
+                  onClick={() =>
+                    navigate(`/ratings/${shop.place_id}`, { state: { shop } })
+                  }
+                  style={{
+                    backgroundColor: "#8B5E3C",
+                    color: "#fff",
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "0.25rem",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "0.9rem",
+                    fontFamily: "'Young Serif', serif",
+                    flex: 1,
+                  }}
+                >
+                  Rate
+                </button>
+              </div>
             </div>
           ))
         )}

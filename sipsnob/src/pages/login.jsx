@@ -6,8 +6,13 @@ function LogIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
 
   const navigate = useNavigate();
+
+  const handleForgotPassword = () => {
+    setForgotPasswordOpen(!setForgotPasswordOpen)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -53,7 +58,9 @@ function LogIn() {
             fontSize: "24px",
             margin: "12px",
             textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+            cursor: "pointer"
           }}
+          onClick={() => navigate("/")}
         >
           SipSnob
         </p>
@@ -84,7 +91,7 @@ function LogIn() {
             style={{
               margin: "10px",
               color: "black",
-              height: "20px",
+              height: "25px",
               width: "80%",
               borderRadius: "5px",
               border: "0px",
@@ -104,7 +111,7 @@ function LogIn() {
             style={{
               margin: "10px",
               color: "black",
-              height: "20px",
+              height: "25px",
               width: "80%",
               borderRadius: "5px",
               border: "0px",
@@ -152,10 +159,27 @@ function LogIn() {
               fontFamily: "YoungSerif",
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
             }}
-            onClick={() => alert("Password reset coming soon!")}
-          >
-            Forgot Password
-          </button>
+            onClick={() => handleForgotPassword()}
+          >Forgot Password</button>
+
+          {forgotPasswordOpen && (<div style={{width: "inherit", height: "fit-content"}}>
+
+              <label>Enter your email address</label>
+              <input style={{
+              margin: "10px",
+              color: "black",
+              height: "25px",
+              width: "80%",
+              borderRadius: "5px",
+              border: "0px",
+              boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+              backgroundColor: "#f5e1c89b",
+            }}
+            type="email"
+            id="reset-email"
+            value={email}></input>
+
+          </div>)}
         </form>
       </div>
     </div>

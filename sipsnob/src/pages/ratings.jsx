@@ -1,7 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import "./pages.css";
 
 const Ratings = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const shop = location.state?.shop || {};
+
+  useEffect(() => {
+    if (!shop?.name) {
+      navigate("/discover");
+    }
+  }, [shop, navigate]);
+
   const [ratings, setRatings] = useState({
     drinkConsistency: 5,
     ambiance: 5,
@@ -20,39 +31,87 @@ const Ratings = () => {
 
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-    setMilkOptions(checked
-      ? [...milkOptions, value]
-      : milkOptions.filter((item) => item !== value)
+    setMilkOptions(
+      checked ? [...milkOptions, value] : milkOptions.filter((item) => item !== value)
     );
+  };
+
+  const handleSubmit = async () => {
+    const payload = {
+      shopId: shop.place_id,
+      shopName: shop.name,
+      ratings,
+      milkOptions,
+      foodAvailable,
+      sugarFree,
+      timestamp: new Date().toISOString(),
+    };
+
+    try {
+      await fetch("https://sip-snob-backend.onrender.com/api/ratings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      alert("Rating submitted successfully!");
+      navigate("/home");
+    } catch (err) {
+      console.error("Error submitting rating:", err);
+      alert("Something went wrong. Try again.");
+    }
   };
 
   return (
     <div
       className="page-container"
       style={{
-        maxWidth: "600px",
-        margin: "0 auto",
+        maxWidth: "700px",
+        margin: "2rem auto",
+        padding: "2rem",
+        backgroundColor: "#f5e1c8",
         borderRadius: "12px",
         border: "2px solid #8B5E3C",
-        padding: "40px",
-        backgroundColor: "#f5e1c8",
+        minHeight: "100vh",
+        boxSizing: "border-box",
       }}
     >
       <h1 className="rating-header">Rate Shop</h1>
-      <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>Blank Street (71st & Lex)</h2>
 
-      <img
-        src="https://via.placeholder.com/300x150"
-        alt="Coffee Shop"
+      <button
+        onClick={() => navigate("/discover")}
         style={{
+          backgroundColor: "#d7b899",
+          border: "1px solid #5a3e2b",
+          padding: "6px 12px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontFamily: "'Young Serif', serif",
+          marginBottom: "1rem",
+          color: "#5a3e2b",
+          fontWeight: "bold",
+        }}
+      >
+        ← Back to Discover
+      </button>
+
+      <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>{shop.name}</h2>
+
+      {shop.photos?.[0]?.photo_reference && (
+        <img
+          src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
+          alt="Coffee Shop"
+          style={{
           width: "100%",
           borderRadius: "8px",
           border: "1px solid #8B5E3C",
           marginBottom: "2rem",
         }}
       />
+    )}
 
-      {/* Ratings sliders */}
       {Object.entries(ratings).map(([category, value]) => (
         <div key={category} style={{ marginBottom: "1.5rem", textAlign: "left" }}>
           <label className="rating-label">
@@ -71,25 +130,28 @@ const Ratings = () => {
         </div>
       ))}
 
-      {/* Alternative Milk Options */}
       <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
         <label className="rating-label">Alternative Milk Options:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
-          {["Oat", "Almond", "Coconut", "Soy"].map((option) => (
+          {[
+            "Oat",
+            "Almond",
+            "Coconut",
+            "Soy",
+            "Skim"
+          ].map((option) => (
             <label key={option}>
               <input
                 type="checkbox"
                 value={option}
                 checked={milkOptions.includes(option)}
                 onChange={handleCheckboxChange}
-              />{" "}
-              {option}
+              /> {option}
             </label>
           ))}
         </div>
       </div>
 
-      {/* Food Available */}
       <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
         <label className="rating-label">Food Items Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
@@ -100,14 +162,12 @@ const Ratings = () => {
                 name="food"
                 checked={foodAvailable === val}
                 onChange={() => setFoodAvailable(val)}
-              />{" "}
-              {val}
+              /> {val}
             </label>
           ))}
         </div>
       </div>
 
-      {/* Sugar-Free Syrup Options */}
       <div style={{ marginBottom: "2rem", textAlign: "left" }}>
         <label className="rating-label">Sugar-Free Syrup Options Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
@@ -118,17 +178,16 @@ const Ratings = () => {
                 name="sugarFree"
                 checked={sugarFree === val}
                 onChange={() => setSugarFree(val)}
-              />{" "}
-              {val}
+              /> {val}
             </label>
           ))}
         </div>
       </div>
 
-      {/* Submit Button */}
       <button
         className="button"
         style={{ backgroundColor: "#8B5E3C", color: "white", fontWeight: "bold" }}
+        onClick={handleSubmit}
       >
         Submit Rating
       </button>

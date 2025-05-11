@@ -20,7 +20,13 @@
   border-radius: 5px;
   border: 0;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  width: fit-content;
 }
+.button.view-profile{
+  background-color: #d7b898;
+  color: #5a3e2b;
+}
+
 
 .bookmark-button {
   text-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -202,6 +208,7 @@ input[type="radio"]:checked::before {
   height: fit-content;
   justify-content: center;
   padding-bottom: 24px;
+  width: 100%;
 }
 
 .review{
@@ -216,10 +223,18 @@ input[type="radio"]:checked::before {
   margin-left: 24px;
   width: max-content;
   height: fit-content;
-  background-color: #a2845e87;
+  background-color: rgba(162, 132, 94, 0.529);
   display: flex;
   flex-wrap: wrap;
-  box-shadow: inset 0 0 5px rgba(90, 62, 43, 0.5);
+  box-shadow: inset 0 0 5px rgba(162, 132, 94, 0.529);
+  min-width: 75%;
+  border-radius: 50px; 
+  padding: 24px 12px;
+  color: black;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  margin-block: 12px;
 }
 
 .rating-detail{
@@ -233,7 +248,39 @@ input[type="radio"]:checked::before {
   flex-wrap: wrap;
 }
 
-.reply{
+
+.profile-info{
+  background-color: rgba(89, 41, 10,0.5);
+
+  width: fit-content;
+  height: fit-content;
+  padding: 24px 81px;
+
+  margin: 32px;
+  align-self: center;
+  border-radius: 24px;
+  box-shadow: 0 2px 2px 2px rgb(0,0,0,0.1);
+
 
 }
 
+.button-profile-section{
+  background-color:#d7b899; 
+  font-size: x-large;
+  color: #f5e1c8;
+
+  font-family: YoungSerif;
+  margin: 10px;
+  text-align: center;
+  padding: 8px 24px;
+  border: 0;
+  width: fit-content;
+  
+}
+.setting-section{
+  background-color: rgba(245, 225, 200, 0.5);
+  padding: 2% 5%;
+  border-radius: 24px;
+  margin-top: 12px;
+  height: fit-content;
+}

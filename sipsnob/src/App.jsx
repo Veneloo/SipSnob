@@ -11,6 +11,7 @@ import Discover from './pages/discover';
 import Ratings from './pages/ratings'; 
 import Settings from './pages/settings';
 import ShopDetails from './pages/shop_details';
+import ProfilePage from './pages/profile';
 
 function App() {
   return (
@@ -22,7 +23,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/pages/discover" element={<Discover />} />
         <Route path="/pages/ratings" element={<Ratings />} />
-        <Route path="/shop_details" element={<ShopDetails />} />
+        
 
       
 
@@ -31,7 +32,10 @@ function App() {
         <Route path="/home" element={<><Navbar/><HomePage /></>} />
         <Route path="/settings" element={<><Navbar/><Settings /></>} />
         <Route path="/discover" element={<><Navbar/><Discover /></>} />
-        <Route path="/ratings" element={<><Navbar/><Ratings /></>} />
+        <Route path="/ratings/:shopId" element={<><Navbar /><Ratings /></>} />
+        <Route path="/shop_details/:shopId" element={<ShopDetails />} />
+        <Route path="/profile" element={<><Navbar/><ProfilePage /></>} />
+
       </Routes>
     </BrowserRouter>
   );
