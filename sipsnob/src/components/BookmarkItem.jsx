@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import sampleImg from "../assets/sampleimg.png"; 
 import { db } from "../firebaseConfig"; 
-import { doc, onSnapshot } from "firebase/firestore"; 
-import { saveBookmark } from "../user"; 
-import { removeBookmark } from "../user";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore"; 
 
 const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -14,22 +12,33 @@ const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
       (docSnapshot) => {
         if (docSnapshot.exists()) {
           const bookmarks = docSnapshot.data().bookmarks || [];
-          setIsBookmarked(bookmarks.some((shop) => shop.name === bookmarkDetails.name));
+          setIsBookmarked(bookmarks.some((shop) => shop.name === bookmarkDetails.name)); 
         }
       }
     );
 
-    return () => unsubscribe();
+    return () => unsubscribe(); 
   }, [currentUser.uid, bookmarkDetails.name]);
 
-  const handleUnfavorite = () => {
+  const handleUnfavorite = async () => {
     console.log(`Unfavorite ${bookmarkDetails.name}`);
-    removeBookmark(currentUser.uid, bookmarkDetails); 
+    const userRef = doc(db, "users", currentUser.uid);
+    const userSnap = await getDoc(userRef);
+    const bookmarks = userSnap.data().bookmarks || [];
+    const updatedBookmarks = bookmarks.filter((shop) => shop.name !== bookmarkDetails.name);
+
+    await updateDoc(userRef, { bookmarks: updatedBookmarks }); 
+    setIsBookmarked(false); 
   };
 
-  const handleFavorite = () => {
+  const handleFavorite = async () => {
     console.log(`Favorite ${bookmarkDetails.name}`);
-    saveBookmark(currentUser.uid, bookmarkDetails); 
+    const userRef = doc(db, "users", currentUser.uid);
+    const userSnap = await getDoc(userRef);
+    const bookmarks = userSnap.data().bookmarks || [];
+    bookmarks.push(bookmarkDetails);
+
+    await updateDoc(userRef, { bookmarks }); 
     setIsBookmarked(true); 
   };
 
@@ -45,10 +54,9 @@ const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
         flexShrink: "0",
         alignContent: "center",
         position: "relative",
-        boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
+        boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
       }}
     >
-      {/* Shop Photo */}
       <div
         style={{
           position: "absolute",
@@ -62,11 +70,10 @@ const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
           borderRadius: "50px",
           opacity: "0.4",
           zIndex: "1",
-          boxShadow: "0 1px 1px rgb(0,0,0,0.1)",
+          boxShadow: "0 1px 1px rgb(0,0,0,0.1)"
         }}
       ></div>
 
-      {/* Unfavorite/ Favorite Button */}
       <button
         onClick={isBookmarked ? handleUnfavorite : handleFavorite}
         className="bookmark-button"
@@ -82,7 +89,6 @@ const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
         {isBookmarked ? "★" : "☆"} {/* Toggle between filled and empty star */}
       </button>
 
-      {/* Shop Name */}
       <h2
         style={{
           textShadow: "0 2px 2px rgb(0,0,0,0.2)",

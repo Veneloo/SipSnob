@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext"; 
 import { db } from "../firebaseConfig"; 
-import { collection, addDoc, serverTimestamp, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, onSnapshot } from "firebase/firestore"; 
 import "./pages.css";
 
 const Ratings = () => {
