@@ -5,6 +5,7 @@ import sampleImg from "../assets/sampleimg.png"
 import RatingItem from "../components/RatingItem";
 import CommentItem from "../components/CommentItem";
 import BookmarkItem from "../components/BookmarkItem";
+import BookmarksList from "../components/BookmarksList";
 import { useNavigate } from "react-router-dom";
 import Settings from "./settings";
 

@@ -1,22 +1,25 @@
 {
-    "name": "SipSnob - Coffee Reviews",
+    "name": "SipSnob – Coffee Reviews",
     "short_name": "SipSnob",
-    "description": "Rate and review coffee shops",
+    "description": "Rate and review coffee shops with ease.",
+    "start_url": ".",
+    "display": "standalone",
     "theme_color": "#a77c51",
     "background_color": "#ffffff",
-    "display": "standalone",
-    "start_url": "/",
     "icons": [
       {
         "src": "/icons/icon-192x192.png",
         "sizes": "192x192",
-        "type": "image/png"
+        "type": "image/png",
+        "purpose": "any maskable"
       },
       {
         "src": "/icons/icon-512x512.png",
         "sizes": "512x512",
-        "type": "image/png"
+        "type": "image/png",
+        "purpose": "any maskable"
       }
     ]
   }
+  
   
