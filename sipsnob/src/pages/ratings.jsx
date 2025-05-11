@@ -58,7 +58,7 @@ const Ratings = () => {
       setError("You must be logged in to submit a review.");
       return;
     }
-
+  
     const payload = {
       shopId: shop.place_id,
       shopName: shop.name,
@@ -69,7 +69,7 @@ const Ratings = () => {
       timestamp: serverTimestamp(),
       userId: currentUser.uid, 
     };
-
+  
     try {
       await addDoc(collection(db, "reviews"), payload);
       alert("Rating submitted successfully!");
@@ -79,6 +79,7 @@ const Ratings = () => {
       setError("Something went wrong. Try again.");
     }
   };
+  
 
   return (
     <div
