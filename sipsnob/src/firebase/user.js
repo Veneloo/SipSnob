@@ -12,14 +12,14 @@ export const saveUserData = async (uid, email, fullName) => {
 };
 
 export const saveBookmark = async (uid, coffeeShop) => {
-  const userRef = doc(db, "users", uid);
-  const userSnap = await getDoc(userRef);
-
-  if (userSnap.exists()) {
-    const bookmarks = userSnap.data().bookmarks || [];
-    bookmarks.push(coffeeShop); 
-    await setDoc(userRef, { bookmarks }, { merge: true });
-  }
+    const userRef = doc(db, "users", uid);
+    const userSnap = await getDoc(userRef);
+  
+    if (userSnap.exists()) {
+      const bookmarks = userSnap.data().bookmarks || [];
+      bookmarks.push(coffeeShop);
+      await setDoc(userRef, { bookmarks }, { merge: true });
+    }
 };
 
 export const removeBookmark = async (uid, shopName) => {

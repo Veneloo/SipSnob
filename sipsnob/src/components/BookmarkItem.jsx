@@ -1,16 +1,37 @@
 import React, { useState, useEffect } from "react";
 import sampleImg from "../assets/sampleimg.png"; 
-import { removeBookmark } from "../user"; 
-
-const handleUnfavorite = async (uid, shopname) => {
-  console.log(`Unfavorite ${shopname}`);
-  await removeBookmark(uid, shopname);
-};
+import { db } from "../firebaseConfig"; 
+import { doc, onSnapshot } from "firebase/firestore"; 
+import { saveBookmark } from "../user"; 
+import { removeBookmark } from "../user";
 
 const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
-  if (!bookmarkDetails) {
-    return null; 
-  }
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      doc(db, "users", currentUser.uid),
+      (docSnapshot) => {
+        if (docSnapshot.exists()) {
+          const bookmarks = docSnapshot.data().bookmarks || [];
+          setIsBookmarked(bookmarks.some((shop) => shop.name === bookmarkDetails.name));
+        }
+      }
+    );
+
+    return () => unsubscribe();
+  }, [currentUser.uid, bookmarkDetails.name]);
+
+  const handleUnfavorite = () => {
+    console.log(`Unfavorite ${bookmarkDetails.name}`);
+    removeBookmark(currentUser.uid, bookmarkDetails); 
+  };
+
+  const handleFavorite = () => {
+    console.log(`Favorite ${bookmarkDetails.name}`);
+    saveBookmark(currentUser.uid, bookmarkDetails); 
+    setIsBookmarked(true); 
+  };
 
   return (
     <div
@@ -45,9 +66,9 @@ const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
         }}
       ></div>
 
-      {/* Unfavorite Button */}
+      {/* Unfavorite/ Favorite Button */}
       <button
-        onClick={() => handleUnfavorite(currentUser.uid, bookmarkDetails.name)} 
+        onClick={isBookmarked ? handleUnfavorite : handleFavorite}
         className="bookmark-button"
         style={{
           zIndex: "2",
@@ -58,7 +79,7 @@ const BookmarkItem = ({ bookmarkDetails, currentUser }) => {
           cursor: "pointer",
         }}
       >
-        ★
+        {isBookmarked ? "★" : "☆"} {/* Toggle between filled and empty star */}
       </button>
 
       {/* Shop Name */}
