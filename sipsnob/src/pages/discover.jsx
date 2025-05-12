@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./pages.css";
-import { db, auth } from "../firebaseConfig";
+import { db, auth } from "../fireBaseConfig";
 import {
   doc,
   setDoc,
@@ -20,18 +20,18 @@ const Discover = () => {
   const [bookmarkedShops, setBookmarkedShops] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Load user from Firebase auth
+  // Load user and their bookmarks
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
-        loadBookmarks(user.uid);
+        await loadBookmarks(user.uid);
       }
     });
     return () => unsubscribe();
   }, []);
 
-  // Load bookmarks from Firestore
+  // Fetch user-specific bookmarks
   const loadBookmarks = async (uid) => {
     try {
       const snapshot = await getDocs(collection(db, `users/${uid}/bookmarks`));
@@ -42,7 +42,7 @@ const Discover = () => {
     }
   };
 
-  // Toggle bookmark
+  // Add or remove bookmark in Firestore
   const toggleBookmark = async (shop) => {
     if (!currentUser) return;
 
@@ -56,7 +56,11 @@ const Discover = () => {
           prev.filter((s) => s.place_id !== shop.place_id)
         );
       } else {
-        await setDoc(ref, shop);
+        await setDoc(ref, {
+          ...shop,
+          user_id: currentUser.uid,
+          place_id: shop.place_id,
+        });
         setBookmarkedShops((prev) => [...prev, shop]);
       }
     } catch (error) {
@@ -64,7 +68,6 @@ const Discover = () => {
     }
   };
 
-  // Fetch coffee shops from backend
   const fetchShops = async (lat, lng) => {
     setLoading(true);
     setGeoError("");
@@ -81,7 +84,6 @@ const Discover = () => {
     }
   };
 
-  // Get user location
   const getUserLocationAndFetch = () => {
     if (!navigator.geolocation) {
       setGeoError("Geolocation is not supported by your browser.");
