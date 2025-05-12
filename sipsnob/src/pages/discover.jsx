@@ -21,10 +21,12 @@ const Discover = () => {
   const [bookmarkedShops, setBookmarkedShops] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Ensures user doc exists at users/{uid}
+  // Ensure user document exists only under correct UID
   const ensureUserDocumentExists = async (user) => {
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
+
+    console.log("Checking if user doc exists for UID:", user.uid);
 
     if (!userSnap.exists()) {
       await setDoc(userRef, {
@@ -33,7 +35,7 @@ const Discover = () => {
         createdAt: new Date(),
         user_id: user.uid,
       });
-      console.log("Created new user doc for:", user.uid);
+      console.log("✅ Created user doc for:", user.uid);
     }
   };
 
@@ -41,15 +43,18 @@ const Discover = () => {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        console.log("🧾 Logged in as:", user.email);
+        console.log("🆔 UID:", user.uid);
         setCurrentUser(user);
         await ensureUserDocumentExists(user);
         await loadBookmarks(user.uid);
+      } else {
+        console.warn("Not signed in.");
       }
     });
     return () => unsubscribe();
   }, []);
 
-  // Fetch user-specific bookmarks
   const loadBookmarks = async (uid) => {
     try {
       const snapshot = await getDocs(collection(db, `users/${uid}/bookmarks`));
@@ -60,7 +65,6 @@ const Discover = () => {
     }
   };
 
-  // Add or remove bookmark in Firestore
   const toggleBookmark = async (shop) => {
     if (!currentUser) {
       console.warn("No user logged in");
@@ -76,7 +80,7 @@ const Discover = () => {
         setBookmarkedShops((prev) =>
           prev.filter((s) => s.place_id !== shop.place_id)
         );
-        console.log("Removed bookmark:", shop.place_id);
+        console.log("❌ Removed bookmark:", shop.place_id);
       } else {
         await setDoc(ref, {
           ...shop,
@@ -84,7 +88,7 @@ const Discover = () => {
           place_id: shop.place_id,
         });
         setBookmarkedShops((prev) => [...prev, shop]);
-        console.log("Added bookmark:", shop.place_id);
+        console.log("✅ Added bookmark:", shop.place_id);
       }
     } catch (error) {
       console.error("Error updating bookmark:", error);
