@@ -43,7 +43,6 @@ function SignUp() {
       await setDoc(userRef, {
         email,
         full_name: username,
-        user_id: user.uid,
         createdAt: new Date(),
       });
 
