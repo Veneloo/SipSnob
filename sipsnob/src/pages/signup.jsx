@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUpUser } from "../firebase/auth"; 
+import { signUpUser } from "../firebase/auth";
+import { db } from "../firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 function SignUp() {
   const [error, setError] = useState('');
@@ -34,7 +36,17 @@ function SignUp() {
     }
 
     try {
-      await signUpUser(email, password, username);
+      const user = await signUpUser(email, password, username);
+
+      //Save user to Firestore
+      const userRef = doc(db, "users", user.uid);
+      await setDoc(userRef, {
+        email,
+        full_name: username,
+        user_id: user.uid,
+        createdAt: new Date(),
+      });
+
       navigate("/home");
     } catch (err) {
       console.error(err);
@@ -73,9 +85,8 @@ function SignUp() {
             fontSize: "24px",
             margin: "12px",
             textShadow: "0 2px 2px rgb(0,0,0,0.2)",
-            cursor: "pointer"
+            cursor: "pointer",
           }}
-
           onClick={() => navigate("/")}
         >
           SipSnob
@@ -93,7 +104,7 @@ function SignUp() {
           alignItems: "center",
           textAlign: "center",
           padding: "25px",
-          boxShadow: " 0 0 2px 2px rgb(0,0,0,0.1)",
+          boxShadow: "0 0 2px 2px rgb(0,0,0,0.1)",
           borderRadius: "10px",
         }}
       >
@@ -137,9 +148,7 @@ function SignUp() {
             style={inputStyle}
           />
           <br />
-          {error && (
-            <p style={{ color: "red", margin: "25px" }}>{error}</p>
-          )}
+          {error && <p style={{ color: "red", margin: "25px" }}>{error}</p>}
           <button type="submit" style={buttonStyle}>
             Sign Up
           </button>
