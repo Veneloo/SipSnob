@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./pages.css";
-import { db, auth } from "../fireBaseConfig";
+import { db, auth } from "../firebaseConfig";
 import {
   doc,
   setDoc,
