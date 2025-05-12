@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './pages.css';
 import RatingItem from "../components/RatingItem";
 import BookmarkItem from "../components/BookmarkItem";
-import { auth, db } from "../firebase";
+import { auth, db } from "../src";
 import { onAuthStateChanged } from "firebase/auth";
 import { collection, getDocs } from "firebase/firestore";
 
