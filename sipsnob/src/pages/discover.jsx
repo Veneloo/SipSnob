@@ -7,6 +7,7 @@ import {
   doc,
   setDoc,
   deleteDoc,
+  getDoc,
   getDocs,
   collection,
 } from "firebase/firestore";
@@ -20,11 +21,28 @@ const Discover = () => {
   const [bookmarkedShops, setBookmarkedShops] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
+  // Ensures user doc exists at users/{uid}
+  const ensureUserDocumentExists = async (user) => {
+    const userRef = doc(db, "users", user.uid);
+    const userSnap = await getDoc(userRef);
+
+    if (!userSnap.exists()) {
+      await setDoc(userRef, {
+        email: user.email || "",
+        full_name: user.displayName || "Anonymous",
+        createdAt: new Date(),
+        user_id: user.uid,
+      });
+      console.log("Created new user doc for:", user.uid);
+    }
+  };
+
   // Load user and their bookmarks
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
+        await ensureUserDocumentExists(user);
         await loadBookmarks(user.uid);
       }
     });
@@ -44,7 +62,10 @@ const Discover = () => {
 
   // Add or remove bookmark in Firestore
   const toggleBookmark = async (shop) => {
-    if (!currentUser) return;
+    if (!currentUser) {
+      console.warn("No user logged in");
+      return;
+    }
 
     const ref = doc(db, `users/${currentUser.uid}/bookmarks`, shop.place_id);
     const isBookmarked = bookmarkedShops.some((s) => s.place_id === shop.place_id);
@@ -55,6 +76,7 @@ const Discover = () => {
         setBookmarkedShops((prev) =>
           prev.filter((s) => s.place_id !== shop.place_id)
         );
+        console.log("Removed bookmark:", shop.place_id);
       } else {
         await setDoc(ref, {
           ...shop,
@@ -62,6 +84,7 @@ const Discover = () => {
           place_id: shop.place_id,
         });
         setBookmarkedShops((prev) => [...prev, shop]);
+        console.log("Added bookmark:", shop.place_id);
       }
     } catch (error) {
       console.error("Error updating bookmark:", error);
