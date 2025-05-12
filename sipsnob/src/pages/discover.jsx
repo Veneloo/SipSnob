@@ -2,13 +2,70 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./pages.css";
+import { db } from "../firebase"; // adjust path as needed
+import { auth } from "../firebase";
+import {
+  doc,
+  setDoc,
+  deleteDoc,
+  getDocs,
+  collection,
+} from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Discover = () => {
   const navigate = useNavigate();
   const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(false);
   const [geoError, setGeoError] = useState("");
+  const [bookmarkedShops, setBookmarkedShops] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
+  // Load user from Firebase auth
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+        loadBookmarks(user.uid);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
+  // Load bookmarks from Firestore
+  const loadBookmarks = async (uid) => {
+    try {
+      const snapshot = await getDocs(collection(db, `users/${uid}/bookmarks`));
+      const bookmarks = snapshot.docs.map((doc) => doc.data());
+      setBookmarkedShops(bookmarks);
+    } catch (error) {
+      console.error("Failed to load bookmarks:", error);
+    }
+  };
+
+  // Toggle bookmark
+  const toggleBookmark = async (shop) => {
+    if (!currentUser) return;
+
+    const ref = doc(db, `users/${currentUser.uid}/bookmarks`, shop.place_id);
+    const isBookmarked = bookmarkedShops.some((s) => s.place_id === shop.place_id);
+
+    try {
+      if (isBookmarked) {
+        await deleteDoc(ref);
+        setBookmarkedShops((prev) =>
+          prev.filter((s) => s.place_id !== shop.place_id)
+        );
+      } else {
+        await setDoc(ref, shop);
+        setBookmarkedShops((prev) => [...prev, shop]);
+      }
+    } catch (error) {
+      console.error("Error updating bookmark:", error);
+    }
+  };
+
+  // Fetch coffee shops from backend
   const fetchShops = async (lat, lng) => {
     setLoading(true);
     setGeoError("");
@@ -25,6 +82,7 @@ const Discover = () => {
     }
   };
 
+  // Get user location
   const getUserLocationAndFetch = () => {
     if (!navigator.geolocation) {
       setGeoError("Geolocation is not supported by your browser.");
@@ -48,7 +106,6 @@ const Discover = () => {
     );
   };
 
-  // Run once on component mount
   useEffect(() => {
     getUserLocationAndFetch();
   }, []);
@@ -78,20 +135,21 @@ const Discover = () => {
         Refresh Selection
       </button>
 
-      {/* Errors */}
       {geoError && (
         <p style={{ color: "red", textAlign: "center", marginTop: "1rem" }}>{geoError}</p>
       )}
 
-      {/* Loading */}
       {loading && (
-        <p style={{ textAlign: "center", color: "#5a3e2b" }}>Finding the best cafés near you...</p>
+        <p style={{ textAlign: "center", color: "#5a3e2b" }}>
+          Finding the best cafés near you...
+        </p>
       )}
 
-      {/* Coffee Shop List */}
       <div style={{ marginTop: "1rem" }}>
         {!loading && shops.length === 0 && !geoError ? (
-          <p style={{ textAlign: "center", color: "#5a3e2b" }}>No coffee shops found.</p>
+          <p style={{ textAlign: "center", color: "#5a3e2b" }}>
+            No coffee shops found.
+          </p>
         ) : (
           shops.map((shop) => (
             <div
@@ -110,13 +168,12 @@ const Discover = () => {
               </h2>
               <p style={{ fontSize: "0.875rem" }}>{shop.address}</p>
               <p style={{ fontSize: "0.875rem" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
-              {/* Buttons: Shop Details + Rate */}
-              <div style={{ display: "flex", gap: "10px", marginTop: "0.5rem" }}>
+              <div style={{ display: "flex", gap: "10px", marginTop: "0.5rem", flexWrap: "wrap" }}>
                 <button
-                onClick={() => {
-                  localStorage.setItem("selectedShop", JSON.stringify(shop));
-                  navigate(`/shop_details/${shop.place_id}`, { state: { shop } });
-                }}                            
+                  onClick={() => {
+                    localStorage.setItem("selectedShop", JSON.stringify(shop));
+                    navigate(`/shop_details/${shop.place_id}`, { state: { shop } });
+                  }}
                   style={{
                     backgroundColor: "#5a3e2b",
                     color: "#fff",
@@ -129,13 +186,11 @@ const Discover = () => {
                     flex: 1,
                   }}
                 >
-                Shop Details
-              </button>
-              
-              <button
-                  onClick={() =>
-                    navigate(`/ratings/${shop.place_id}`, { state: { shop } })
-                  }
+                  Shop Details
+                </button>
+
+                <button
+                  onClick={() => navigate(`/ratings/${shop.place_id}`, { state: { shop } })}
                   style={{
                     backgroundColor: "#8B5E3C",
                     color: "#fff",
@@ -149,6 +204,29 @@ const Discover = () => {
                   }}
                 >
                   Rate
+                </button>
+
+                <button
+                  onClick={() => toggleBookmark(shop)}
+                  style={{
+                    backgroundColor: bookmarkedShops.some(
+                      (s) => s.place_id === shop.place_id
+                    )
+                      ? "#b03e2f"
+                      : "#A67B5B",
+                    color: "#fff",
+                    padding: "0.25rem 0.75rem",
+                    borderRadius: "0.25rem",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "0.9rem",
+                    fontFamily: "'Young Serif', serif",
+                    flex: 1,
+                  }}
+                >
+                  {bookmarkedShops.some((s) => s.place_id === shop.place_id)
+                    ? "Bookmarked"
+                    : "Bookmark"}
                 </button>
               </div>
             </div>
