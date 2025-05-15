@@ -119,7 +119,7 @@ const HomePage = () => {
       <h1 style={{
         marginTop: "5%",
         textShadow: "0 2px 2px rgb(0,0,0,0.2)",
-        textAlign: "left",
+        textAlign: "left"
       }}>
         Welcome, {fullName}
       </h1>
@@ -137,7 +137,7 @@ const HomePage = () => {
 
         <div className="bookmarkItem" style={{
           borderRadius: "50px",
-          height: "250px",
+          height: "fit-content",
           width: "95%",
           overflowX: "scroll",
           overflowY: "hidden",
@@ -146,14 +146,25 @@ const HomePage = () => {
           {bookmarkedShops?.slice(0, 10).map((item, index) => (
             <BookmarkItem key={index} bookmarkDetails={item} />
           ))}
+                {/* If bookmarklist is empty, display message */}
+
+        {bookmarkedShops.length == 0 && (<div style={{width: "inherit", height: "fit-content", margin: "0", color: "#572e05"}}>
+        <h3> There are no bookmarks to display.{<br/>}Go to the Discover & Search tab to find shops!</h3>
+        
+        <button className="button" onClick={() => navigate("/discover")} style={{backgroundColor: "#A2845E"}}>
+          Discover Coffee Shops
+        </button>
+        </div>)}
         </div>
 
-        <button className="button" onClick={() => navigate("/settings#Bookmarks")}>
+
+        {bookmarkedShops.length != 0 && (<button className="button" onClick={() => navigate("/settings#Bookmarks")}>
           View All Bookmarks
-        </button>
+        </button>)}
       </div>
 
       <br />
+
 
       {/* Feed */}
       <h2 style={{
@@ -164,11 +175,20 @@ const HomePage = () => {
         Your Feed:
       </h2>
 
-      <div className="feed">
+      <div className="feed" style={{width: "95%"}}>
         {sampleFeed.map((rating, index) => (
           <RatingItem key={index} ratingDetails={rating} />
         ))}
-      </div>
+      
+      
+      {/* If feed is empty, display message */}
+      {sampleFeed.length != 0 && (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
+        <h3> There is no friend activity to display. {<br/>}Go to the settings tab to follow friends!</h3>
+        <button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#A2845E"}}>
+          Add Friends
+        </button>
+        </div>)}
+    </div>
     </div>
   );
 };

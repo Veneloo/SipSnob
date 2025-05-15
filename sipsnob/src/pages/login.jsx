@@ -11,7 +11,7 @@ function LogIn() {
   const navigate = useNavigate();
 
   const handleForgotPassword = () => {
-    setForgotPasswordOpen(!setForgotPasswordOpen)
+    setForgotPasswordOpen(!forgotPasswordOpen)
   }
 
   const handleSubmit = async (e) => {
@@ -51,6 +51,7 @@ function LogIn() {
           textAlign: "center",
           boxShadow: "0 2px 2px rgb(0,0,0,0.1)",
           zIndex: "1000",
+          backgroundColor: "#d7b898"
         }}
       >
         <p
@@ -71,8 +72,9 @@ function LogIn() {
           marginTop: "10%",
           width: "fit-content",
           padding: "25px",
-          boxShadow: "0 0 2px 2px rgb(0,0,0,0.1)",
+          boxShadow: "0 0 4px 4px rgb(0,0,0,0.1)",
           borderRadius: "10px",
+          backgroundColor: "#d7b898"
         }}
       >
         <h1
@@ -136,15 +138,15 @@ function LogIn() {
               fontFamily: "YoungSerif",
               margin: "10px",
               fontSize: "medium",
-              backgroundColor: "#8B5E3C",
+              backgroundColor: "#572e05",
               padding: "8px 24px",
               borderRadius: "5px",
               border: "0",
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-              color: "#fff",
+              color: "#d7b898",
             }}
           >
-            Log In
+            Log in
           </button>
 
           <br />
@@ -155,15 +157,15 @@ function LogIn() {
               padding: "8px 24px",
               borderRadius: "5px",
               border: "0",
-              color: "#fff",
+              color: "#d7b898",
               fontFamily: "YoungSerif",
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
             }}
             onClick={() => handleForgotPassword()}
           >Forgot Password</button>
 
-          {forgotPasswordOpen && (<div style={{width: "inherit", height: "fit-content"}}>
-
+          {forgotPasswordOpen && (<div className="column" style={{width: "inherit", height: "fit-content", padding: "24px"}}>
+              <form>
               <label>Enter your email address</label>
               <input style={{
               margin: "10px",
@@ -179,7 +181,25 @@ function LogIn() {
             id="reset-email"
             value={email}></input>
 
-          </div>)}
+<button
+            type="submit"
+            style={{
+              fontFamily: "YoungSerif",
+              margin: "10px",
+              fontSize: "medium",
+              backgroundColor: "#572e05",
+              padding: "8px 24px",
+              borderRadius: "5px",
+              border: "0",
+              boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+              color: "#f5e1c89b",
+            }}
+          >
+            Send Password Reset
+          </button>
+          </form>
+          </div>
+          )}
         </form>
       </div>
     </div>

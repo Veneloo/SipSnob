@@ -10,7 +10,7 @@ const CommentItem = ({commentDetails}) =>{
     return(
         <div className="comment" style={{
             height: "fit-content",
-            minWidth: "75%",
+            width: "95%",
             borderRadius: "50px", 
             padding: "24px 12px",
             color: "black",

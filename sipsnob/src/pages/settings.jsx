@@ -15,6 +15,12 @@ const Settings = () => {
     location: "",
   });
 
+  const [changePassword, setChangePassword] = useState(false)
+
+  const handleChangePassword = () => {
+    setChangePassword(!changePassword)
+  }
+
   const [bookmarkedShops, setBookmarkedShops] = useState([]);
 
   const fetchUserData = async () => {
@@ -154,6 +160,10 @@ const Settings = () => {
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Email Address:</label>
                 <input className="profile-input" value={profileData.email} disabled />
 
+                <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Username:</label>
+                <input className="profile-input" />
+
+
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Location:</label>
                 <input
                   className="profile-input"
@@ -161,9 +171,15 @@ const Settings = () => {
                   onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
                 />
 
-                <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }}>
+                <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }} onClick={() => handleChangePassword()}>
                   Change Password
                 </button>
+                {changePassword && (<div style={{width: "inherit", height: "fit-content"}}>        
+                
+                <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>New Password:</label>
+                <input className="profile-input"/>
+
+                </div>)}
               </div>
             </form>
           </div>

@@ -9,14 +9,15 @@ const FriendItem = ({friendDetails}) => {
 
     return (
         <div className="row-container" style={{
-            width: "inherit",
+            width: "100%",
             height: "fit-content",
             alignItems: "center",
             margin: "12px",
             justifyContent: "space-between",
             backgroundColor: "#d7b899",
             padding: "12px",
-            borderRadius: "24px"
+            borderRadius: "24px",
+            flexWrap: "wrap"
 
         }}> 
             {/*Profile Picture*/}

@@ -28,7 +28,8 @@ export default function BookmarkItem({ bookmarkDetails }) {
         borderRadius: 50,
         marginRight: 24,
         overflow: 'hidden',
-        boxShadow: '0 1px 2px rgba(0,0,0,0.1)'
+        boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+        backgroundColor: "#572e05"
       }}
     >
       {/* background image */}
@@ -68,7 +69,8 @@ export default function BookmarkItem({ bookmarkDetails }) {
           position: 'absolute',
           bottom: 8,
           left: 8,
-          margin: 0,
+          right: 8,
+          margin: 4,
           zIndex: 2,
           color: '#f5e1c8',
           textShadow: '0 2px 2px rgba(0,0,0,0.2)'
