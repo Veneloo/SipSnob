@@ -37,9 +37,8 @@ body {
   margin: 0;
   display: block;
   min-width: 320px;
-  height: 100vh;
+  height: 100%;
   color: #572e05;
-  overflow: hidden;
 }
 
 h1 {

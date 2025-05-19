@@ -99,6 +99,7 @@ function LogIn() {
               border: "0px",
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
               backgroundColor: "#f5e1c89b",
+              fontSize: "1rem"
             }}
             type="email"
             id="email"
@@ -119,6 +120,7 @@ function LogIn() {
               border: "0px",
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
               backgroundColor: "#f5e1c89b",
+              fontSize: "1rem"
             }}
             type="password"
             id="password"
@@ -177,6 +179,7 @@ function LogIn() {
               border: "0px",
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
               backgroundColor: "#f5e1c89b",
+              fontSize: "1rem"
             }}
             type="email"
             id="reset-email"

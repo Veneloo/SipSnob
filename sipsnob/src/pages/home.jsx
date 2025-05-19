@@ -117,32 +117,24 @@ const HomePage = () => {
   return (
     <div className="page-container">
       <h1 style={{
-        marginTop: "5%",
+        marginBlock: "64px 32px",
         textShadow: "0 2px 2px rgb(0,0,0,0.2)",
         textAlign: "left"
       }}>
-        Welcome, {fullName}
+        Welcome, <span style={{color: "#8B5E3C"}}>{fullName}</span>
       </h1>
 
       {/* Bookmarked Shops */}
       <div>
         <h2 style={{
-          marginTop: "0",
-          textAlign: "left",
+          
           color: "#A2845E",
           textShadow: "0 1px 1px rgb(0,0,0,0.1)",
         }}>
-          Bookmarked shops near you:
+          Bookmarked shops near you
         </h2>
 
-        <div className="bookmarkItem" style={{
-          borderRadius: "50px",
-          height: "fit-content",
-          width: "95%",
-          overflowX: "scroll",
-          overflowY: "hidden",
-          display: "flex"
-        }}>
+        <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', scrollBehavior: 'smooth', width: '75vw', margin: "24px", justifyContent: "center", borderRadius: "50px", textAlign: "center"}}>
           {bookmarkedShops?.slice(0, 10).map((item, index) => (
             <BookmarkItem key={index} bookmarkDetails={item} />
           ))}
@@ -158,7 +150,7 @@ const HomePage = () => {
         </div>
 
 
-        {bookmarkedShops.length != 0 && (<button className="button" onClick={() => navigate("/settings#Bookmarks")}>
+        {bookmarkedShops.length != 0 && (<button className="button" onClick={() => navigate("/settings#Bookmarks")} style={{color: "#f5e1c8", backgroundColor: "#A2845E"}}>
           View All Bookmarks
         </button>)}
       </div>
@@ -168,11 +160,10 @@ const HomePage = () => {
 
       {/* Feed */}
       <h2 style={{
-        textAlign: "left",
         color: "#A2845E",
-        textShadow: "0 1px 1px rgb(0,0,0,0.1)"
+        textShadow: "0 1px 1px rgb(0,0,0,0.1)",
       }}>
-        Your Feed:
+        Your Feed
       </h2>
 
       <div className="feed" style={{width: "95%"}}>

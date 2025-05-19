@@ -8,7 +8,7 @@ const FriendItem = ({friendDetails}) => {
     }
 
     return (
-        <div className="row-container" style={{
+        <div className="row-container friend" style={{
             width: "100%",
             height: "fit-content",
             alignItems: "center",
@@ -21,7 +21,7 @@ const FriendItem = ({friendDetails}) => {
 
         }}> 
             {/*Profile Picture*/}
-        <div className="row-container" style={{marginInline: "24px"}}>
+        <div className="row-container" style={{marginInline: "24px", flexWrap: "wrap"}}>
             <div style={{
                 height: "100px",
                 width: "100px",
@@ -29,10 +29,11 @@ const FriendItem = ({friendDetails}) => {
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 borderRadius: "100%", 
-                boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
+                boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
+                flexWrap: "wrap"
             }}/>
 
-            <div className="column-container" style={{ marginInline: "12px", marginBlock: "0"}}>
+            <div className="column-container" style={{ marginInline: "12px", marginBlock: "0", flexWrap: "wrap"}}>
             {/*Name*/}
             <h3 style={{fontWeight: "bolder", marginBottom: "0"}}>{friendDetails.name}</h3>
 

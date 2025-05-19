@@ -147,11 +147,11 @@ const ProfilePage = () =>{
 
     return (
 
- <div className="page-container">
+  <div className="page-container">
 
 
 
-<div className="profile-info column-container" style={{justifySelf: "center", justifyContent: "center", alignItems: "center", }}>
+<div className="profile-info column-container" style={{justifySelf: "center", justifyContent: "center", alignItems: "center", boxSizing: "border-box"}}>
 
     {/* User Info*/}
 
@@ -170,7 +170,7 @@ const ProfilePage = () =>{
             }}
             />
 
-     <div>
+    <div>
     {/* Name*/}
     <h2 style={{color: "#f5e1c8", marginBottom: "0px", textShadow: "0 1px 1px rgba(0, 0, 0, 0.2)"}}>{sampleUserDetails.fullName}</h2>
     {/* UserName*/}
@@ -183,7 +183,7 @@ const ProfilePage = () =>{
 </div>
 
 </div>
-<div className="column-container ">
+<div className="column-container " style={{ width: "100vw"}}>
 
 
 <div className="row-container" style={{justifyContent: "center"}}>
@@ -192,27 +192,30 @@ const ProfilePage = () =>{
     <button className="button-profile-section" onClick={() => sectionSelect("friends")} style={{ color: sectionOpen === "friends" ? "#5a3e2b" : "#8B5E3C" }}>{sampleRatingHistory.length} Friends </button>
 
 </div>
-<div style={{backgroundColor: "rgba(89, 41, 10,0.1)", width: "fit-content", borderRadius: "24px", marginBottom: "81px", padding: "24px", height: "fit-content", alignSelf: "center"}}>
+<div style={{backgroundColor: "rgba(89, 41, 10,0.1)", display: "flex",borderRadius: "24px", marginBlock: "24px", height: "fit-content", alignSelf: "center", width: "90vw", justifyContent: "center",}}>
 
-{sectionOpen === "ratings" &&  (sampleRatingHistory.length == 0 ? (<div style={{ margin: "auto",padding: "24px", overflow: "scroll", width: "90%"}}> {sampleRatingHistory.map((item,index) => (
-            <RatingItem key={index} ratingDetails={item}/>
-        ))}</div>)
-        :
+{sectionOpen === "ratings" &&  (sampleRatingHistory.length == 0 ? 
         (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
         <h3> There are no ratings to display. {<br/>} Go to the Discover & Search tab to start rating!</h3>
         <button className="button" onClick={() => navigate("/discover")} style={{backgroundColor: "#A2845E"}}>
           Discover & Rate Shops
         </button>
         </div>)
+        :
+        (<div style={{ padding: "32px", overflowY: "scroll", width: "75%"}}> 
+
+        {sampleRatingHistory.map((item,index) => (
+            <RatingItem key={index} ratingDetails={item}/>
+        ))}</div>)
         )}
 
-{sectionOpen === "comments" && (sampleCommentHistory.length == 0 ? (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
+{sectionOpen === "comments" && (sampleCommentHistory.length != 0 ? (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
         <h3> There are no comments to display. {<br/>} Go to your feed to interact with friends!</h3>
         <button className="button" onClick={() => navigate("/home")} style={{backgroundColor: "#A2845E"}}>
           Home
         </button>
         </div>)
-        :(<div style={{ margin: "auto",padding: "24px", overflow: "scroll", width: "90%"}}> {sampleCommentHistory.map((item,index) => (
+        :(<div style={{padding: "32px", overflowY: "scroll", width: "75%", justifyContent: "center"}}> {sampleCommentHistory.map((item,index) => (
             <CommentItem key={index} commentDetails={item}/>
         ))}</div>))}
 
@@ -221,7 +224,7 @@ const ProfilePage = () =>{
         <button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#A2845E"}}>
           Add Friends
         </button>
-        </div>)) || (<div className="column-container" style={{width: "90%", padding: "12px"}}> {sampleFriendList.map((item,index) => (
+        </div>)) || (<div className="column-container" style={{padding: "32px", overflowY: "scroll", width: "75%", justifyContent: "center"}}> {sampleFriendList.map((item,index) => (
             <FriendItem key={index} friendDetails={item}/>
         ))}</div>))}
 

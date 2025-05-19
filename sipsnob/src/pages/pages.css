@@ -1,17 +1,17 @@
 .page-container {
   padding: 64px ;
-  height: 100vh;
-  max-width: 100%;
+  height: 95%;
+  max-width: 100vw;
   background-color: #d7b898;
   font-family: YoungSerif;
   font-weight: bold;
   display: flex;
   flex-direction: column;
   text-align: center;
-  overflow-y: auto;
+  overflow-x: hidden;
+  align-items: center;
   @media(max-width: 768px) {
     justify-content: flex-start;
-    padding-top: 64px;
   }
 }
 
@@ -24,7 +24,9 @@
   border-radius: 5px;
   border: 0;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
-  width: fit-content;
+  width: max-content;
+  color: #d7b898;
+  background-color: #5a3e2b;
 }
 .button.view-profile{
   background-color: #d7b898;
@@ -54,6 +56,8 @@
   width: 100%;
   height: 24px;
   margin-bottom: 24px;
+  color: #8B5E3C;
+  font-size: 1rem;
 }
 
 .row-container{
@@ -65,22 +69,10 @@
   flex-direction: column;
 }
 
-.settings-menu{
-  width: fit-content;
-  transition: 0.5s;
-  transform: translateX(-90%);
-}
-
-.settings-menu:hover{
-  transform: translateX(0%);
-}
-
-
 body {
   background-color: #f5e1c8;
   margin: 0;
 }
-
 
 input[type="range"] {
   accent-color: #8B5E3C;
@@ -116,8 +108,12 @@ input[type="radio"] {
 
 html, body {
   height: 100%;
-  overflow-y: auto;
+  width: 100%;
+  overflow-y: visible;
   background-color: #f5e1c8;
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 }
 
 
@@ -225,20 +221,23 @@ input[type="radio"]:checked::before {
 
 .comment{
   margin-left: 24px;
-  width: max-content;
+  width: 95%;
   height: fit-content;
   background-color: rgba(162, 132, 94, 0.529);
   display: flex;
-  flex-wrap: wrap;
   box-shadow: inset 0 0 5px rgba(162, 132, 94, 0.529);
   min-width: 75%;
   border-radius: 50px; 
   padding: 24px 12px;
   color: black;
   text-align: left;
-  display: flex;
   flex-direction: column;
   margin-block: 12px;
+  @media (max-width: 768px) {
+    max-width: 100vw;
+    padding: auto;
+    margin-left: 0;
+  }
 }
 
 .rating-detail{
@@ -254,7 +253,7 @@ input[type="radio"]:checked::before {
 
 
 .profile-info{
-  background-color: rgba(89, 41, 10,0.5);
+  background-color: #5a3e2b;
 
   width: fit-content;
   height: fit-content;
@@ -279,6 +278,11 @@ input[type="radio"]:checked::before {
   padding: 8px 24px;
   border: 0;
   width: fit-content;
+  @media (max-width: 768px) {
+    margin: 0;
+    padding: 0 12px;
+    
+  }
   
 }
 .setting-section{
@@ -293,7 +297,16 @@ div{
   @media(max-width: 768px) {
     justify-content: center;
     text-align: center;
+    align-items: center;
   }
 }
 
 
+.friend{
+  @media (max-width: 768px) {
+    display:flex;
+    flex-direction: column;
+    width: fit-content;
+    padding: 0;
+  }
+}

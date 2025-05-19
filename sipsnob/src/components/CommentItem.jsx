@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import sampleImg from "../assets/sampleimg.png"
 import ViewProfileButton from "../components/ViewProfileButton";
+import { waitForPendingWrites } from "firebase/firestore";
 
 
 const CommentItem = ({commentDetails}) =>{
@@ -8,21 +9,11 @@ const CommentItem = ({commentDetails}) =>{
         return null;
     }
     return(
-        <div className="comment" style={{
-            height: "fit-content",
-            width: "95%",
-            borderRadius: "50px", 
-            padding: "24px 12px",
-            color: "black",
-            textAlign: "left",
-            display: "flex",
-            flexDirection: "column",
-            marginBlock: "12px"
-            }}>
+        <div className="comment" >
             {/*User */}
             
                 {/*PFP and name */}
-            <div className="row-container" style={{justifyContent: "space-between", alignContent: "flex-start"}}>
+            <div className="row-container" style={{justifyContent: "space-between", alignContent: "flex-start", flexWrap: "wrap"}}>
                 <div className="row-container" style={{alignItems: "center"}}>
                 <div style={{
                 height: "50px",

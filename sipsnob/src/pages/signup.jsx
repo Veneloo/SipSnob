@@ -57,7 +57,7 @@ function SignUp() {
     <div
       style={{
         padding: "10px",
-        height: "100vh",
+        height: "100%",
         width: "100vw",
         backgroundColor: "#d7b898",
         fontFamily: "YoungSerif",
@@ -66,7 +66,6 @@ function SignUp() {
         justifyContent: "flex-start",
         alignItems: "center",
         flexDirection: "column",
-        flexWrap: "wrap",
       }}
     >
       <div
@@ -166,6 +165,7 @@ const inputStyle = {
   border: "0px",
   boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
   backgroundColor: "#f5e1c89b",
+  fontSize: "1rem",
 };
 
 const buttonStyle = {

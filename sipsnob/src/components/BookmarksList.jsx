@@ -24,7 +24,7 @@ export default function BookmarksList() {
   if (!currentUser) return <p>Loading your bookmarks…</p>;
 
   return (
-    <div style={{ display: 'flex', overflowX: 'auto' }}>
+    <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', scrollBehavior: 'smooth', width: '100%', maxWidth: '100%', textAlign: "left"}}>
       {bookmarks.map((shop, i) => (
         <BookmarkItem key={i} bookmarkDetails={shop} />
       ))}

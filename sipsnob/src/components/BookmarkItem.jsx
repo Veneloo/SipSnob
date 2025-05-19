@@ -27,9 +27,10 @@ export default function BookmarkItem({ bookmarkDetails }) {
         height: 200,
         borderRadius: 50,
         marginRight: 24,
-        overflow: 'hidden',
         boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
-        backgroundColor: "#572e05"
+        backgroundColor: "#572e05",
+        overflow: "hidden",
+        flexShrink: "0"
       }}
     >
       {/* background image */}

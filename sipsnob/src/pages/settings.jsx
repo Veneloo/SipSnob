@@ -73,15 +73,14 @@ const Settings = () => {
   const lastName = profileData.fullName.split(" ")[1] || "";
 
   return (
-    <div className="page-container" style={{ overflowY: "scroll", maxWidth: "100%", paddingBlock: "24px" }}>
-      <div style={{ display: "flex", flexDirection: "row", marginTop: "64px" }}>
+    <div className="page-container">
         <div style={{
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-around",
-          width: "100%",
-          flexWrap: "wrap",
-          textAlign: "left"
+          textAlign: "left",
+          margin: "12px",
+          width: "100%"
         }}>
           <div className="row-container" style={{
             width: "100%",
@@ -92,7 +91,7 @@ const Settings = () => {
           }}>
             <h1>Settings</h1>
             <div>
-              <button className="button" style={{ maxHeight: "fit-content", color: "#5a3e2b" }}>Cancel</button>
+              <button className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b", maxHeight: "fit-content" }}>Cancel</button>
               <button
                 className="button"
                 style={{ maxHeight: "fit-content", backgroundColor: "#5a3e2b" }}
@@ -121,13 +120,13 @@ const Settings = () => {
                 borderRadius: "100%",
                 boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
               }} />
-              <div className="column-container" style={{ lineHeight: "0.1", marginInline: "32px" }}>
+              <div className="column-container" style={{ lineHeight: "0.1", marginInline: "32px"}}>
                 <p style={{ fontWeight: "bolder" }}>{profileData.fullName}</p>
                 <p style={{ color: "#A2845E" }}>{profileData.email}</p>
                 <p style={{ color: "#A2845E" }}>{profileData.location || "Add Location"}</p>
               </div>
-              <button className="button" style={{ backgroundColor: "#A2845E", maxHeight: "fit-content" }}>Upload Photo</button>
-              <button className="button" style={{ color: "#A2845E", maxHeight: "fit-content" }}>Delete</button>
+              <button className="button" style={{  maxHeight: "fit-content" }}>Upload Photo</button>
+              <button className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b", maxHeight: "fit-content" }}>Delete</button>
             </div>
 
             {/* Editable Form */}
@@ -151,8 +150,7 @@ const Settings = () => {
                     value={lastName}
                     onChange={(e) =>
                       setProfileData({ ...profileData, fullName: `${firstName} ${e.target.value}` })
-                    }
-                  />
+                    }/>
                 </div>
               </div>
 
@@ -185,11 +183,11 @@ const Settings = () => {
           </div>
 
           {/* Bookmarked Shops */}
-          <div className="setting-section" id="Bookmarks" style={{ maxWidth: "90%" }}>
+          <div className="setting-section" id="Bookmarks" style={{width: "100%"}}>
             <h2 style={{ fontSize: "2em", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>Bookmarked Shops</h2>
             <p style={{ color: "#A2845E", marginTop: "-12px" }}>View and remove shops from bookmark list</p>
 
-            <div className="row-container" style={{ padding: "auto", overflowX: "scroll", borderRadius: "42px" }}>
+            <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', scrollBehavior: 'smooth', width: '85%', margin: "24px", justifyContent: "center", borderRadius: "50px", textAlign: "center"}}>
               {bookmarkedShops.map((item, index) => (
                 <BookmarkItem key={index} bookmarkDetails={item} />
               ))}
@@ -203,7 +201,6 @@ const Settings = () => {
             </button>
           </div>
         </div>
-      </div>
     </div>
   );
 };
