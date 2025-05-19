@@ -160,6 +160,7 @@ function LogIn() {
               color: "#d7b898",
               fontFamily: "YoungSerif",
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+              fontSize: "medium"
             }}
             onClick={() => handleForgotPassword()}
           >Forgot Password</button>

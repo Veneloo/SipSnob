@@ -35,11 +35,11 @@ body {
   font-family: 'YoungSerif', sans-serif;
 
   margin: 0;
-  display: flex;
-  place-items: center;
+  display: block;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100vh;
   color: #572e05;
+  overflow: hidden;
 }
 
 h1 {

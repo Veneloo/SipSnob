@@ -182,7 +182,7 @@ const HomePage = () => {
       
       
       {/* If feed is empty, display message */}
-      {sampleFeed.length != 0 && (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
+      {sampleFeed.length == 0 && (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
         <h3> There is no friend activity to display. {<br/>}Go to the settings tab to follow friends!</h3>
         <button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#A2845E"}}>
           Add Friends
