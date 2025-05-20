@@ -8,6 +8,7 @@ import {
   where,
   onSnapshot,
   doc,
+  getDoc,
   setDoc,
   deleteDoc
 } from "firebase/firestore";
@@ -34,6 +35,7 @@ const Ratings = () => {
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState([]);
   const [editingReviewId, setEditingReviewId] = useState(null);
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (!shop?.name || !currentUser?.uid) return;
@@ -43,13 +45,31 @@ const Ratings = () => {
       where("shopId", "==", shop.place_id)
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const reviewsData = snapshot.docs.map((doc) => ({
-        id: doc.data().id,
-        firestoreId: doc.id,
-        ...doc.data(),
-      }));
-      setReviews(reviewsData);
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      const fetchedReviews = await Promise.all(
+        snapshot.docs.map(async (docSnap) => {
+          const data = docSnap.data();
+          let displayName = data.userId;
+
+          try {
+            const userDoc = await getDoc(doc(db, "users", data.userId));
+            if (userDoc.exists()) {
+              displayName = userDoc.data().displayName || userDoc.data().email || data.userId;
+            }
+          } catch (e) {
+            console.error("Failed to fetch display name:", e);
+          }
+
+          return {
+            id: data.id,
+            displayName,
+            timestamp: data.timestamp,
+            ...data,
+          };
+        })
+      );
+
+      setReviews(fetchedReviews);
     });
 
     return () => unsubscribe();
@@ -143,6 +163,14 @@ const Ratings = () => {
     }
   };
 
+  const formatDate = (iso) => {
+    const date = new Date(iso);
+    return date.toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+
   return (
     <div className="page-container">
       <h1 className="rating-header">{editingReviewId ? "Edit Review" : "Rate Shop"}</h1>
@@ -227,8 +255,10 @@ const Ratings = () => {
         {editingReviewId ? "Update Review" : "Submit Rating"}
       </button>
 
-      <h3 style={{ marginTop: "2rem" }}>Recent Reviews:</h3>
-      {reviews.map((review) => (
+      <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
+      {reviews.length === 0 && <p>No reviews yet. Be the first to rate this coffee shop!</p>}
+
+      {(expanded ? reviews : reviews.slice(0, 2)).map((review) => (
         <div
           key={review.id}
           style={{
@@ -240,10 +270,12 @@ const Ratings = () => {
             boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
           }}
         >
-          <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.userId}</strong>
-          <p style={{ marginTop: "8px", fontStyle: "italic" }}>
-            {review.comment || "(No comment provided)"}
-          </p>
+          <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.displayName}</strong>
+          <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "8px" }}>
+            Reviewed on {formatDate(review.timestamp)}
+          </div>
+
+          <p style={{ fontStyle: "italic" }}>{review.comment || "(No comment provided)"}</p>
 
           <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
             {Object.entries(review.ratings || {}).map(([key, val]) => (
@@ -254,35 +286,17 @@ const Ratings = () => {
           </div>
 
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
-            <button
-              onClick={() => handleEdit(review)}
-              style={{
-                backgroundColor: "#d7b899",
-                color: "#5a3e2b",
-                padding: "6px 12px",
-                borderRadius: "6px",
-                border: "1px solid #5a3e2b",
-                cursor: "pointer",
-              }}
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => handleDelete(review.id)}
-              style={{
-                backgroundColor: "#f3c4b4",
-                color: "#5a3e2b",
-                padding: "6px 12px",
-                borderRadius: "6px",
-                border: "1px solid #5a3e2b",
-                cursor: "pointer",
-              }}
-            >
-              Delete
-            </button>
+            <button onClick={() => handleEdit(review)}>Edit</button>
+            <button onClick={() => handleDelete(review.id)}>Delete</button>
           </div>
         </div>
       ))}
+
+      {reviews.length > 2 && (
+        <button onClick={() => setExpanded(!expanded)} style={{ marginBottom: "2rem" }}>
+          {expanded ? "Show Less" : "Show More Reviews"}
+        </button>
+      )}
     </div>
   );
 };
