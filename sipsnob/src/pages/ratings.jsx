@@ -117,9 +117,12 @@ const Ratings = () => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await deleteDoc(userReviewRef);
-
-      setEditingReviewId(null);
+  
+      const publicReviewRef = doc(db, "reviews", reviewId);
+      await deleteDoc(publicReviewRef);
+  
       setError("");
+      setEditingReviewId(null);
       setRatings({
         drinkConsistency: 5,
         ambiance: 5,
@@ -131,11 +134,13 @@ const Ratings = () => {
       setFoodAvailable(null);
       setSugarFree(null);
       setComment("");
+  
     } catch (err) {
       console.error("Error deleting review:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
+  
 
   return (
     <div className="page-container">
