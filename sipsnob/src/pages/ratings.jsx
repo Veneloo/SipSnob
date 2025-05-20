@@ -92,19 +92,26 @@ const Ratings = () => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await setDoc(userReviewRef, payload);
+      console.log("Saved to user subcollection");
   
-      const publicReviewRef = doc(db, "reviews", reviewId);
-      await setDoc(publicReviewRef, payload);
+      try {
+        const publicReviewRef = doc(db, "reviews", reviewId);
+        await setDoc(publicReviewRef, payload);
+        console.log("Public review saved successfully.");
+      } catch (publicErr) {
+        console.error("Public review write failed:", publicErr.code, publicErr.message);
+      }
   
       setError("");
       alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
       setEditingReviewId(null);
       navigate("/home");
     } catch (err) {
-      console.error("Error submitting review:", err.message);
+      console.error("Submission error:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
+  
   
 
   const handleEdit = (review) => {
