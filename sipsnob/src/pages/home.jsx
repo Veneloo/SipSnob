@@ -5,7 +5,7 @@ import RatingItem from "../components/RatingItem";
 import BookmarkItem from "../components/BookmarkItem";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebaseConfig";
-import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
 import { motion } from "framer-motion"; 
 
 const HomePage = () => {
@@ -106,7 +106,7 @@ const HomePage = () => {
       const user = auth.currentUser;
       if (user) {
         const snapshot = await getDocs(collection(db, `users/${user.uid}/bookmarks`));
-        const bookmarks = snapshot.docs.map((doc) => doc.data());
+        const bookmarks = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
         setBookmarkedShops(bookmarks);
       }
     };
@@ -114,6 +114,21 @@ const HomePage = () => {
     fetchUserData();
     fetchBookmarks();
   }, []);
+
+  const handleRemoveBookmark = async (bookmarkDetails) => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const confirmed = window.confirm("Do you want to remove this bookmark?");
+    if (!confirmed) return;
+
+    try {
+      await deleteDoc(doc(db, `users/${user.uid}/bookmarks`, bookmarkDetails.id));
+      setBookmarkedShops(prev => prev.filter(shop => shop.id !== bookmarkDetails.id));
+    } catch (error) {
+      console.error("Error removing bookmark:", error);
+    }
+  };
 
   return (
     <motion.div
@@ -137,10 +152,7 @@ const HomePage = () => {
 
       {/* Bookmarked Shops */}
       <div>
-        <h2 style={{
-          color: "#A2845E",
-          textShadow: "0 1px 1px rgb(0,0,0,0.1)",
-        }}>
+        <h2 style={{ color: "#A2845E", textShadow: "0 1px 1px rgb(0,0,0,0.1)" }}>
           Bookmarked shops near you
         </h2>
 
@@ -161,18 +173,21 @@ const HomePage = () => {
           transition={{ duration: 0.6 }}
           viewport={{ once: true, amount: 0.2 }}
         >
-          {bookmarkedShops?.slice(0, 10).map((item, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
-            >
-              <BookmarkItem bookmarkDetails={item} />
-            </motion.div>
-          ))}
-
-          {bookmarkedShops.length === 0 && (
+          {bookmarkedShops.length > 0 ? (
+            bookmarkedShops.slice(0, 10).map((item, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
+              >
+                <BookmarkItem
+                  bookmarkDetails={item}
+                  onRemove={handleRemoveBookmark}
+                />
+              </motion.div>
+            ))
+          ) : (
             <div style={{ width: "inherit", height: "fit-content", margin: "0", color: "#572e05" }}>
               <h3>
                 There are no bookmarks to display.
