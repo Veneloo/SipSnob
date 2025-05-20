@@ -65,7 +65,7 @@ const ShopDetails = () => {
         <p style={{ color: "red" }}>{error}</p>
       ) : (
         shop && (
-          <div className="shop-details-container">
+          <div className="shop-details-container responsive-details">
             <h2>{shop.name}</h2>
             <p>
               <strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐
