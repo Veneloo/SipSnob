@@ -117,10 +117,12 @@ const Ratings = () => {
   const handleDelete = async (reviewId) => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
-      const publicReviewRef = doc(db, "reviews", reviewId);
-
       await deleteDoc(userReviewRef);
+  
+      const publicReviewRef = doc(db, "reviews", reviewId);
       await deleteDoc(publicReviewRef);
+  
+      console.log(`Review ${reviewId} deleted from both locations.`);
     } catch (err) {
       console.error("Error deleting review:", err.message);
     }
