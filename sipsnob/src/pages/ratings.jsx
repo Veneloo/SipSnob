@@ -93,8 +93,8 @@ const Ratings = () => {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       const publicReviewRef = doc(db, "reviews", reviewId);
 
-      await setDoc(userReviewRef, payload); // user-specific
-      await setDoc(publicReviewRef, payload); // public
+      await setDoc(userReviewRef, payload);
+      await setDoc(publicReviewRef, payload);
 
       alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
       setEditingReviewId(null);
@@ -205,9 +205,17 @@ const Ratings = () => {
       <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
       {reviews.map((review) => (
         <div key={review.id} style={{ padding: "12px", borderBottom: "1px solid #ccc" }}>
-          <strong>{review.userId}</strong>
-          <p>{review.comment || "(No comment provided)"}</p>
-          <p><small>Review ID: {review.id}</small></p>
+          <strong>{review.shopName}</strong>
+          <p><strong>Ratings:</strong></p>
+          {Object.entries(review.ratings || {}).map(([category, value]) => (
+            <p key={category} style={{ marginLeft: "10px" }}>
+              {category.replace(/([A-Z])/g, " $1")}: {value}/10
+            </p>
+          ))}
+          <p><strong>Milk Options:</strong> {(review.milkOptions || []).join(", ") || "None"}</p>
+          <p><strong>Food Available:</strong> {review.foodAvailable || "Unknown"}</p>
+          <p><strong>Sugar-Free:</strong> {review.sugarFree || "Unknown"}</p>
+          <p><strong>Comment:</strong> {review.comment || "(No comment provided)"}</p>
           <button onClick={() => handleEdit(review)} style={{ marginRight: "8px" }}>Edit</button>
           <button onClick={() => handleDelete(review.id)}>Delete</button>
         </div>
