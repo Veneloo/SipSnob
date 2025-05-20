@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { db } from "../firebaseConfig";
+import { v4 as uuidv4 } from 'uuid';
 import {
   collection,
   addDoc,
@@ -68,6 +69,7 @@ const Ratings = () => {
     }
 
     const payload = {
+      id: uuidv4(),
       shopId: shop.place_id,
       shopName: shop.name,
       ratings,
