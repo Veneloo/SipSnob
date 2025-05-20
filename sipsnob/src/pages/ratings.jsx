@@ -31,11 +31,8 @@ const Ratings = () => {
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState([]);
 
-  // 🔁 Fetch reviews from users/{userId}/reviews subcollection
   useEffect(() => {
     if (!shop?.name || !currentUser?.uid) return;
-
-    console.log("Setting up real-time listener for user reviews...");
 
     const q = query(
       collection(db, "users", currentUser.uid, "reviews"),
@@ -47,7 +44,6 @@ const Ratings = () => {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log("Fetched reviews from Firestore:", reviewsData);
       setReviews(reviewsData);
     });
 
@@ -71,10 +67,6 @@ const Ratings = () => {
       return;
     }
 
-    console.log("Submitting review...");
-    console.log("currentUser.uid:", currentUser.uid);
-    console.log("shop.place_id:", shop.place_id);
-
     const payload = {
       shopId: shop.place_id,
       shopName: shop.name,
@@ -89,13 +81,11 @@ const Ratings = () => {
 
     try {
       const userReviewsRef = collection(db, "users", currentUser.uid, "reviews");
-      const docRef = await addDoc(userReviewsRef, payload);
-      console.log("✅ Review saved with ID:", docRef.id);
-
+      await addDoc(userReviewsRef, payload);
       alert("Rating submitted successfully!");
       navigate("/home");
     } catch (err) {
-      console.error("🔥 Error saving review:", err.message);
+      console.error("Error submitting rating:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
@@ -158,7 +148,7 @@ const Ratings = () => {
         </div>
       </div>
 
-      {/* Sugar Free */}
+      {/* Sugar Free Syrup Option*/}
       <div style={{ marginBottom: "2rem", textAlign: "left" }}>
         <label className="rating-label">Sugar-Free Syrup Options Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
