@@ -494,5 +494,65 @@ div{
 }
 
 
+/* === Mobile Optimizations for ShopDetails Page === */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 32px 12px;
+    text-align: center;
+    align-items: center;
+  }
 
+  h1, h2 {
+    font-size: 1.5rem;
+  }
 
+  .slick-slider {
+    width: 100vw;
+  }
+
+  .slick-slide img {
+    max-height: 250px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin: 0 auto;
+  }
+
+  .slick-prev, .slick-next {
+    top: 35% !important;
+    transform: scale(0.8);
+  }
+
+  .slick-prev {
+    left: 5px !important;
+    z-index: 3;
+  }
+
+  .slick-next {
+    right: 5px !important;
+    z-index: 3;
+  }
+
+  button {
+    font-size: 0.9rem;
+    padding: 6px 16px;
+  }
+
+  .review, .comment, .setting-section {
+    width: 100% !important;
+    padding-inline: 12px;
+    font-size: 0.9rem;
+  }
+
+  ul {
+    padding-left: 0;
+  }
+
+  li {
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+}
