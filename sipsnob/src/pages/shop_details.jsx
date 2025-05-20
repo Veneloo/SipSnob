@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useLocation, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./pages.css";
 
 const ShopDetails = () => {
   const { shopId } = useParams();
-  const location = useLocation();
   const navigate = useNavigate();
   const [shop, setShop] = useState(null);
   const [error, setError] = useState(null);
@@ -25,7 +24,7 @@ const ShopDetails = () => {
       }
     };
 
-    fetchDetails(); // Always fetch from backend, not from state
+    fetchDetails();
   }, [shopId]);
 
   if (!shop && !error) return null;
@@ -35,6 +34,7 @@ const ShopDetails = () => {
       <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>
         Shop Details
       </h1>
+
       <button
         onClick={() => navigate("/discover")}
         style={{
@@ -46,7 +46,7 @@ const ShopDetails = () => {
           fontFamily: "'Young Serif', serif",
           marginBottom: "1rem",
           color: "#5a3e2b",
-          fontWeight: "bold"
+          fontWeight: "bold",
         }}
       >
         ← Back to Discover
@@ -56,61 +56,64 @@ const ShopDetails = () => {
         <p style={{ color: "red" }}>{error}</p>
       ) : (
         shop && (
-          <>
-            <h2 style={{ textAlign: "center" }}>{shop.name}</h2>
-            <p style={{ textAlign: "center" }}>
-              <strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐
-            </p>
+          <div style={{ maxWidth: "600px", margin: "0 auto", textAlign: "center" }}>
+            <h2>{shop.name}</h2>
+            <p><strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐</p>
 
-            <div style={{ maxWidth: 500, margin: "1rem auto" }}>
-              {shop.photos?.[0]?.photo_reference && (
-                <img
-                  src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
-                  alt={shop.name}
-                  style={{ width: "100%", borderRadius: 8 }}
-                />
-              )}
+            {shop.photos?.[0]?.photo_reference && (
+              <img
+                src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
+                alt={shop.name}
+                style={{
+                  width: "100%",
+                  borderRadius: "12px",
+                  boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                  marginBottom: "1rem",
+                }}
+              />
+            )}
 
-              {shop.formatted_address && (
-                <p style={{ marginTop: "1rem" }}>
-                  <strong>Address:</strong> {shop.formatted_address}
-                </p>
-              )}
+            {shop.formatted_address && (
+              <p>
+                <strong>Address:</strong> {shop.formatted_address}
+              </p>
+            )}
 
-              {shop.formatted_phone_number && (
-                <p>
-                  <strong>Phone:</strong> {shop.formatted_phone_number}
-                </p>
-              )}
+            {shop.formatted_phone_number && (
+              <p>
+                <strong>Phone:</strong> {shop.formatted_phone_number}
+              </p>
+            )}
 
-              {shop.opening_hours?.weekday_text && (
-                <div>
-                  <strong>Opening Hours:</strong>
-                  <ul style={{ marginTop: "0.5rem" }}>
-                    {shop.opening_hours.weekday_text.map((line, index) => (
-                      <li key={index}>{line}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+            {shop.opening_hours?.weekday_text && (
+              <div style={{ marginTop: "1rem" }}>
+                <strong>Opening Hours:</strong>
+                <ul style={{ listStyleType: "none", paddingLeft: 0, marginTop: "0.5rem" }}>
+                  {shop.opening_hours.weekday_text.map((line, index) => (
+                    <li key={index} style={{ fontStyle: "italic" }}>{line}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-              {shop.reviews?.length > 0 && (
-                <div style={{ marginTop: "1.5rem" }}>
-                  <strong>Recent Reviews:</strong>
-                  <ul style={{ marginTop: "0.5rem" }}>
-                    {shop.reviews.slice(0, 3).map((review, index) => (
-                      <li key={index} style={{ marginBottom: "0.5rem" }}>
-                        <p style={{ marginBottom: "0.25rem" }}>
-                          <strong>{review.author_name}</strong> ({review.rating}⭐)
-                        </p>
-                        <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>{review.text}</p>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </>
+            {shop.reviews?.length > 0 && (
+              <div style={{ marginTop: "1.5rem", textAlign: "left" }}>
+                <strong>Recent Reviews:</strong>
+                <ul style={{ marginTop: "0.5rem", paddingLeft: 0 }}>
+                  {shop.reviews.slice(0, 3).map((review, index) => (
+                    <li key={index} style={{ marginBottom: "1rem", listStyle: "none" }}>
+                      <p style={{ fontWeight: "bold", marginBottom: "0.25rem" }}>
+                        {review.author_name} ({review.rating}⭐)
+                      </p>
+                      <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>
+                        {review.text || "No review text provided."}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
         )
       )}
     </div>
