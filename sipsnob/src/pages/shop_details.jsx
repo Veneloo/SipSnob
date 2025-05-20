@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Slider from "react-slick";
 import "./pages.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const ShopDetails = () => {
   const { shopId } = useParams();
@@ -26,6 +29,18 @@ const ShopDetails = () => {
 
     fetchDetails();
   }, [shopId]);
+
+  const sliderSettings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    arrows: true,
+    adaptiveHeight: true
+  };
 
   if (!shop && !error) return null;
 
@@ -60,17 +75,26 @@ const ShopDetails = () => {
             <h2>{shop.name}</h2>
             <p><strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐</p>
 
-            {shop.photos?.[0]?.photo_reference && (
-              <img
-                src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
-                alt={shop.name}
-                style={{
-                  width: "100%",
-                  borderRadius: "12px",
-                  boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-                  marginBottom: "1rem",
-                }}
-              />
+            {/* Photo Carousel */}
+            {shop.photos?.length > 0 && (
+              <Slider {...sliderSettings}>
+                {shop.photos.map((photo, index) => (
+                  <div key={index}>
+                    <img
+                      src={`https://sip-snob-backend.onrender.com/api/photo?ref=${photo.photo_reference}`}
+                      alt={`${shop.name} ${index + 1}`}
+                      style={{
+                        width: "100%",
+                        borderRadius: "12px",
+                        boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+                        marginBottom: "1rem",
+                        maxHeight: "400px",
+                        objectFit: "cover"
+                      }}
+                    />
+                  </div>
+                ))}
+              </Slider>
             )}
 
             {shop.formatted_address && (

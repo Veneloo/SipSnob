@@ -12,6 +12,9 @@ import Ratings from './pages/ratings';
 import Settings from './pages/settings';
 import ShopDetails from './pages/shop_details';
 import ProfilePage from './pages/profile';
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 
 function App() {
   return (
