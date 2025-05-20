@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import sampleImg from '../assets/sampleimg.png';
 import { auth, db } from '../firebaseConfig';
 import { doc, deleteDoc } from 'firebase/firestore';
+import { FaStar } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 export default function BookmarkItem({ bookmarkDetails, onRemove }) {
+  const [isVisible, setIsVisible] = useState(true);
   if (!bookmarkDetails || !auth.currentUser) return null;
 
   const handleUnfavorite = async () => {
@@ -14,16 +17,20 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
       const userId = auth.currentUser.uid;
       const ref = doc(db, `users/${userId}/bookmarks`, bookmarkDetails.id || bookmarkDetails.place_id);
       await deleteDoc(ref);
-      if (onRemove) {
-        onRemove(bookmarkDetails);
-      }
+      setIsVisible(false); // Trigger fade-out animation
+      setTimeout(() => {
+        if (onRemove) onRemove(bookmarkDetails);
+      }, 300); // Delay state removal until animation finishes
     } catch (err) {
       console.error('Failed to remove bookmark', err);
     }
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 1, scale: 1 }}
+      animate={isVisible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+      transition={{ duration: 0.3 }}
       style={{
         position: 'relative',
         width: 250,
@@ -50,23 +57,19 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
       />
 
       {/* unfavorite button */}
-      <button
+      <FaStar
         onClick={handleUnfavorite}
         style={{
           position: 'absolute',
           top: 8,
           right: 8,
           zIndex: 2,
-          background: 'none',
-          border: 'none',
-          fontSize: 24,
           cursor: 'pointer',
-          color: '#fff'
+          fontSize: '1.5rem',
+          color: '#FFD700',
         }}
         title="Remove Bookmark"
-      >
-        ★
-      </button>
+      />
 
       {/* shop name */}
       <h2
@@ -83,6 +86,6 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
       >
         {bookmarkDetails.name}
       </h2>
-    </div>
+    </motion.div>
   );
 }
