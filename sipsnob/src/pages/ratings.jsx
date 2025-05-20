@@ -91,11 +91,9 @@ const Ratings = () => {
 
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
-      const publicReviewRef = doc(db, "reviews", reviewId);
-
       await setDoc(userReviewRef, payload);
-      await setDoc(publicReviewRef, payload);
 
+      setError("");
       alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
       setEditingReviewId(null);
       navigate("/home");
@@ -112,46 +110,51 @@ const Ratings = () => {
     setFoodAvailable(review.foodAvailable);
     setSugarFree(review.sugarFree);
     setComment(review.comment || "");
+    setError("");
   };
 
   const handleDelete = async (reviewId) => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await deleteDoc(userReviewRef);
-  
-      const publicReviewRef = doc(db, "reviews", reviewId);
-      await deleteDoc(publicReviewRef);
-  
-      console.log(`Review ${reviewId} deleted from both locations.`);
+
+      setEditingReviewId(null);
+      setError("");
+      setRatings({
+        drinkConsistency: 5,
+        ambiance: 5,
+        waitTime: 5,
+        pricing: 5,
+        customerService: 5,
+      });
+      setMilkOptions([]);
+      setFoodAvailable(null);
+      setSugarFree(null);
+      setComment("");
     } catch (err) {
       console.error("Error deleting review:", err.message);
+      setError("Something went wrong. Try again.");
     }
   };
 
   return (
-    <div className="page-container" style={{ maxWidth: "700px", margin: "2rem auto", padding: "2rem", backgroundColor: "#f5e1c8", borderRadius: "12px", border: "2px solid #8B5E3C", minHeight: "100vh", boxSizing: "border-box" }}>
+    <div className="page-container">
       <h1 className="rating-header">{editingReviewId ? "Edit Review" : "Rate Shop"}</h1>
-      <button onClick={() => navigate("/discover")} style={{ backgroundColor: "#d7b899", border: "1px solid #5a3e2b", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontFamily: "'Young Serif', serif", marginBottom: "1rem", color: "#5a3e2b", fontWeight: "bold" }}>
-        ← Back to Discover
-      </button>
+      <button onClick={() => navigate("/discover")}>← Back to Discover</button>
 
-      <h2 style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>{shop.name}</h2>
-
-      {shop.photos?.[0]?.photo_reference && (
-        <img
-          src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
-          alt="Coffee Shop"
-          style={{ width: "100%", borderRadius: "8px", border: "1px solid #8B5E3C", marginBottom: "2rem" }}
-        />
-      )}
+      <h2>{shop.name}</h2>
 
       {Object.entries(ratings).map(([category, value]) => (
-        <div key={category} style={{ marginBottom: "1.5rem", textAlign: "left" }}>
-          <label className="rating-label">{category.replace(/([A-Z])/g, " $1")}:</label>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <input type="range" min="1" max="10" value={value} onChange={(e) => handleRatingChange(e, category)} />
-            <span>{value}</span>
-          </div>
+        <div key={category}>
+          <label>{category.replace(/([A-Z])/g, " $1")}:</label>
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={value}
+            onChange={(e) => handleRatingChange(e, category)}
+          />
+          <span>{value}</span>
         </div>
       ))}
 
@@ -159,66 +162,65 @@ const Ratings = () => {
         placeholder="Write your review here..."
         value={comment}
         onChange={(e) => setComment(e.target.value)}
-        style={{ width: "100%", height: "80px", marginBottom: "1rem" }}
       />
 
-      {/* Milk Options */}
-      <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
-        <label className="rating-label">Alternative Milk Options:</label>
-        <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
-          {["Oat", "Almond", "Coconut", "Soy", "Skim"].map((option) => (
-            <label key={option}>
-              <input type="checkbox" value={option} checked={milkOptions.includes(option)} onChange={handleCheckboxChange} /> {option}
-            </label>
-          ))}
-        </div>
-      </div>
+      <label>Alternative Milk Options:</label>
+      {["Oat", "Almond", "Coconut", "Soy", "Skim"].map((option) => (
+        <label key={option}>
+          <input
+            type="checkbox"
+            value={option}
+            checked={milkOptions.includes(option)}
+            onChange={handleCheckboxChange}
+          />
+          {option}
+        </label>
+      ))}
 
-      {/* Food Options */}
-      <div style={{ marginBottom: "1.5rem", textAlign: "left" }}>
-        <label className="rating-label">Food Items Available:</label>
-        <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
-          {["Yes", "No"].map((val) => (
-            <label key={val}>
-              <input type="radio" name="food" checked={foodAvailable === val} onChange={() => setFoodAvailable(val)} /> {val}
-            </label>
-          ))}
-        </div>
-      </div>
+      <label>Food Items Available:</label>
+      {["Yes", "No"].map((val) => (
+        <label key={val}>
+          <input
+            type="radio"
+            name="food"
+            checked={foodAvailable === val}
+            onChange={() => setFoodAvailable(val)}
+          />
+          {val}
+        </label>
+      ))}
 
-      {/* Sugar Free */}
-      <div style={{ marginBottom: "2rem", textAlign: "left" }}>
-        <label className="rating-label">Sugar-Free Syrup Options Available:</label>
-        <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
-          {["Yes", "No"].map((val) => (
-            <label key={val}>
-              <input type="radio" name="sugarFree" checked={sugarFree === val} onChange={() => setSugarFree(val)} /> {val}
-            </label>
-          ))}
-        </div>
-      </div>
+      <label>Sugar-Free Syrup Options Available:</label>
+      {["Yes", "No"].map((val) => (
+        <label key={val}>
+          <input
+            type="radio"
+            name="sugarFree"
+            checked={sugarFree === val}
+            onChange={() => setSugarFree(val)}
+          />
+          {val}
+        </label>
+      ))}
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <button className="button" style={{ backgroundColor: "#8B5E3C", color: "white", fontWeight: "bold" }} onClick={handleSubmit}>
+      <button onClick={handleSubmit}>
         {editingReviewId ? "Update Review" : "Submit Rating"}
       </button>
 
-      <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
+      <h3>Your Reviews for this Shop:</h3>
       {reviews.map((review) => (
-        <div key={review.id} style={{ padding: "12px", borderBottom: "1px solid #ccc" }}>
+        <div key={review.id}>
           <strong>{review.shopName}</strong>
-          <p><strong>Ratings:</strong></p>
           {Object.entries(review.ratings || {}).map(([category, value]) => (
-            <p key={category} style={{ marginLeft: "10px" }}>
-              {category.replace(/([A-Z])/g, " $1")}: {value}/10
-            </p>
+            <p key={category}>{category.replace(/([A-Z])/g, " $1")}: {value}/10</p>
           ))}
-          <p><strong>Milk Options:</strong> {(review.milkOptions || []).join(", ") || "None"}</p>
-          <p><strong>Food Available:</strong> {review.foodAvailable || "Unknown"}</p>
-          <p><strong>Sugar-Free:</strong> {review.sugarFree || "Unknown"}</p>
-          <p><strong>Comment:</strong> {review.comment || "(No comment provided)"}</p>
-          <button onClick={() => handleEdit(review)} style={{ marginRight: "8px" }}>Edit</button>
+          <p>Milk Options: {(review.milkOptions || []).join(", ") || "None"}</p>
+          <p>Food Available: {review.foodAvailable || "Unknown"}</p>
+          <p>Sugar-Free: {review.sugarFree || "Unknown"}</p>
+          <p>Comment: {review.comment || "(No comment provided)"}</p>
+          <button onClick={() => handleEdit(review)}>Edit</button>
           <button onClick={() => handleDelete(review.id)}>Delete</button>
         </div>
       ))}
