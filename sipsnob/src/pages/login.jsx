@@ -90,17 +90,7 @@ function LogIn() {
         <form onSubmit={handleSubmit}>
           <label style={{ textAlign: "left", margin: "10px" }}>Email:</label>
           <input
-            style={{
-              margin: "10px",
-              color: "black",
-              height: "25px",
-              width: "80%",
-              borderRadius: "5px",
-              border: "0px",
-              boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-              backgroundColor: "#f5e1c89b",
-              fontSize: "1rem"
-            }}
+            className="input"
             type="email"
             id="email"
             value={email}
@@ -111,17 +101,7 @@ function LogIn() {
 
           <label>Password:</label>
           <input
-            style={{
-              margin: "10px",
-              color: "black",
-              height: "25px",
-              width: "80%",
-              borderRadius: "5px",
-              border: "0px",
-              boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-              backgroundColor: "#f5e1c89b",
-              fontSize: "1rem"
-            }}
+            className="input"
             type="password"
             id="password"
             value={password}

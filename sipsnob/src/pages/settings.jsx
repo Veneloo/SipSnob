@@ -106,11 +106,11 @@ const Settings = () => {
           <div className="setting-section" id="ProfileInfo">
             <h2 style={{ fontSize: "2em", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>Profile Details</h2>
             <p style={{ color: "#A2845E", marginTop: "-12px" }}>Edit your personal information</p>
-            <hr style={{ height: "1px", width: "100%", border: "0", backgroundColor: "#5a3e2b" }} />
+            <hr style={{ height: "1px", width: "100%", border: "0", backgroundColor: "rgba(90, 62, 43, 0.4)" }} />
 
             {/* Profile Picture (placeholder only) */}
             <h3>Change Profile Picture</h3>
-            <div className="row-container" style={{ alignItems: "center", flexWrap: "wrap" }}>
+            <div className="row-container" style={{ alignItems: "center", flexWrap: "wrap", backgroundColor: "rgba(90, 62, 43, 0.05)", padding: "12px", width: "fit-content", borderRadius: "24px" }}>
               <div style={{
                 height: "120px",
                 width: "120px",
@@ -131,12 +131,12 @@ const Settings = () => {
 
             {/* Editable Form */}
             <h3>User Information</h3>
-            <form style={{ flexWrap: "wrap" }}>
+            <form style={{ flexWrap: "wrap",backgroundColor: "rgba(90, 62, 43, 0.05)", padding: "12px 12px 1px 12px", borderRadius: "24px" }}>
               <div className="row-container" style={{ margin: "24px" }}>
                 <div className="column-container" style={{ marginRight: "24px", width: "100%" }}>
                   <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>First Name:</label>
                   <input
-                    className="profile-input"
+                    className="input settings"
                     value={firstName}
                     onChange={(e) =>
                       setProfileData({ ...profileData, fullName: `${e.target.value} ${lastName}` })
@@ -146,7 +146,7 @@ const Settings = () => {
                 <div className="column-container" style={{ marginLeft: "24px", width: "100%" }}>
                   <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Last Name:</label>
                   <input
-                    className="profile-input"
+                    className="input settings"
                     value={lastName}
                     onChange={(e) =>
                       setProfileData({ ...profileData, fullName: `${firstName} ${e.target.value}` })
@@ -156,15 +156,15 @@ const Settings = () => {
 
               <div className="column-container" style={{ margin: "24px" }}>
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Email Address:</label>
-                <input className="profile-input" value={profileData.email} disabled />
+                <input className="input settings" style={{color: "rgba(90, 62, 43, 0.5)"}} value={profileData.email} disabled />
 
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Username:</label>
-                <input className="profile-input" />
+                <input className="input settings" />
 
 
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Location:</label>
                 <input
-                  className="profile-input"
+                  className="input settings"
                   value={profileData.location}
                   onChange={(e) => setProfileData({ ...profileData, location: e.target.value })}
                 />
@@ -175,7 +175,7 @@ const Settings = () => {
                 {changePassword && (<div style={{width: "inherit", height: "fit-content"}}>        
                 
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>New Password:</label>
-                <input className="profile-input"/>
+                <input className="input settings"/>
 
                 </div>)}
               </div>
@@ -183,11 +183,12 @@ const Settings = () => {
           </div>
 
           {/* Bookmarked Shops */}
-          <div className="setting-section" id="Bookmarks" style={{width: "100%"}}>
+          <div className="setting-section" id="Bookmarks" style={{width: '90%'}}>
             <h2 style={{ fontSize: "2em", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>Bookmarked Shops</h2>
             <p style={{ color: "#A2845E", marginTop: "-12px" }}>View and remove shops from bookmark list</p>
+            <hr style={{ height: "1px", width: "100%", border: "0", backgroundColor: "rgba(90, 62, 43, 0.4)" }} />
 
-            <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', scrollBehavior: 'smooth', width: '85%', margin: "24px", justifyContent: "center", borderRadius: "50px", textAlign: "center"}}>
+            <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', scrollBehavior: 'smooth', margin: "24px", justifyContent: "center", borderRadius: "50px", textAlign: "center" }}>
               {bookmarkedShops.map((item, index) => (
                 <BookmarkItem key={index} bookmarkDetails={item} />
               ))}

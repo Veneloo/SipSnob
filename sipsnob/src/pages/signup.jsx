@@ -116,34 +116,34 @@ function SignUp() {
         </h1>
 
         <form onSubmit={handleSignUp}>
-          <label>Email: </label>
+          <label>Entert an email </label>
           <input
             type="email"
             placeholder="johnsmith@email.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            style={inputStyle}
+            className="input"
           />
           <br />
-          <label>Username: </label>
+          <label>Create a username </label>
           <input
+            className="input"
             type="text"
             placeholder="jsmith25"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            style={inputStyle}
           />
           <br />
-          <label>Password: </label>
+          <label>Create a password </label>
           <input
             type="password"
             placeholder="mypassword@"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            style={inputStyle}
+            className="input"
           />
           <br />
           {error && <p style={{ color: "red", margin: "25px" }}>{error}</p>}
@@ -156,18 +156,6 @@ function SignUp() {
   );
 }
 
-const inputStyle = {
-  margin: "10px",
-  color: "black",
-  height: "25px",
-  width: "80%",
-  borderRadius: "5px",
-  border: "0px",
-  boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-  backgroundColor: "#f5e1c89b",
-  fontSize: "1rem",
-};
-
 const buttonStyle = {
   fontFamily: "YoungSerif",
   margin: "10px",
@@ -178,7 +166,7 @@ const buttonStyle = {
   borderRadius: "5px",
   border: "0",
   boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-  color: "#fff",
+  color: "#f5e1c8"
 };
 
 export default SignUp;
