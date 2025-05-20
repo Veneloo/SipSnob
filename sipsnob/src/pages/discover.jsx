@@ -4,14 +4,10 @@ import axios from "axios";
 import "./pages.css";
 import { db, auth } from "../firebaseConfig";
 import {
-  doc,
-  setDoc,
-  deleteDoc,
-  getDoc,
-  getDocs,
-  collection,
+  doc, setDoc, deleteDoc, getDoc, getDocs, collection
 } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import { motion } from "framer-motion"; // ✅ Framer Motion
 
 const Discover = () => {
   const navigate = useNavigate();
@@ -21,12 +17,9 @@ const Discover = () => {
   const [bookmarkedShops, setBookmarkedShops] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
 
-  // Ensure user document exists only under correct UID
   const ensureUserDocumentExists = async (user) => {
     const userRef = doc(db, "users", user.uid);
     const userSnap = await getDoc(userRef);
-
-    console.log("Checking if user doc exists for UID:", user.uid);
 
     if (!userSnap.exists()) {
       await setDoc(userRef, {
@@ -35,21 +28,15 @@ const Discover = () => {
         createdAt: new Date(),
         user_id: user.uid,
       });
-      console.log("✅ Created user doc for:", user.uid);
     }
   };
 
-  // Load user and their bookmarks
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        console.log("🧾 Logged in as:", user.email);
-        console.log("🆔 UID:", user.uid);
         setCurrentUser(user);
         await ensureUserDocumentExists(user);
         await loadBookmarks(user.uid);
-      } else {
-        console.warn("Not signed in.");
       }
     });
     return () => unsubscribe();
@@ -66,10 +53,7 @@ const Discover = () => {
   };
 
   const toggleBookmark = async (shop) => {
-    if (!currentUser) {
-      console.warn("No user logged in");
-      return;
-    }
+    if (!currentUser) return;
 
     const ref = doc(db, `users/${currentUser.uid}/bookmarks`, shop.place_id);
     const isBookmarked = bookmarkedShops.some((s) => s.place_id === shop.place_id);
@@ -77,18 +61,10 @@ const Discover = () => {
     try {
       if (isBookmarked) {
         await deleteDoc(ref);
-        setBookmarkedShops((prev) =>
-          prev.filter((s) => s.place_id !== shop.place_id)
-        );
-        console.log("❌ Removed bookmark:", shop.place_id);
+        setBookmarkedShops((prev) => prev.filter((s) => s.place_id !== shop.place_id));
       } else {
-        await setDoc(ref, {
-          ...shop,
-          user_id: currentUser.uid,
-          place_id: shop.place_id,
-        });
+        await setDoc(ref, { ...shop, user_id: currentUser.uid });
         setBookmarkedShops((prev) => [...prev, shop]);
-        console.log("✅ Added bookmark:", shop.place_id);
       }
     } catch (error) {
       console.error("Error updating bookmark:", error);
@@ -98,7 +74,6 @@ const Discover = () => {
   const fetchShops = async (lat, lng) => {
     setLoading(true);
     setGeoError("");
-
     try {
       const response = await axios.get(
         `https://sip-snob-backend.onrender.com/api/coffee-shops?lat=${lat}&lng=${lng}`
@@ -116,21 +91,13 @@ const Discover = () => {
       setGeoError("Geolocation is not supported by your browser.");
       return;
     }
-
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        fetchShops(latitude, longitude);
-      },
+      ({ coords }) => fetchShops(coords.latitude, coords.longitude),
       (error) => {
-        console.error("Geolocation error:", error.message);
         setGeoError("Unable to retrieve your location.");
+        console.error("Geolocation error:", error.message);
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   };
 
@@ -139,12 +106,22 @@ const Discover = () => {
   }, []);
 
   return (
-    <div className="page-container">
-      <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>
+    <motion.div
+      className="page-container"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.h1
+        style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+      >
         Discover Coffee Shops
-      </h1>
+      </motion.h1>
 
-      <button
+      <motion.button
         onClick={getUserLocationAndFetch}
         style={{
           backgroundColor: "#5a3e2b",
@@ -159,9 +136,11 @@ const Discover = () => {
           display: "block",
           fontFamily: "'Young Serif', serif",
         }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
       >
         Refresh Selection
-      </button>
+      </motion.button>
 
       {geoError && (
         <p style={{ color: "red", textAlign: "center", marginTop: "1rem" }}>{geoError}</p>
@@ -179,9 +158,12 @@ const Discover = () => {
             No coffee shops found.
           </p>
         ) : (
-          shops.map((shop) => (
-            <div
+          shops.map((shop, index) => (
+            <motion.div
               key={shop.place_id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
               style={{
                 backgroundColor: "#d7b899",
                 padding: "1rem",
@@ -196,8 +178,11 @@ const Discover = () => {
               </h2>
               <p style={{ fontSize: "0.875rem" }}>{shop.address}</p>
               <p style={{ fontSize: "0.875rem" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
+
               <div style={{ display: "flex", gap: "10px", marginTop: "0.5rem", flexWrap: "wrap" }}>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     localStorage.setItem("selectedShop", JSON.stringify(shop));
                     navigate(`/shop_details/${shop.place_id}`, { state: { shop } });
@@ -215,9 +200,11 @@ const Discover = () => {
                   }}
                 >
                   Shop Details
-                </button>
+                </motion.button>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => navigate(`/ratings/${shop.place_id}`, { state: { shop } })}
                   style={{
                     backgroundColor: "#8B5E3C",
@@ -232,14 +219,14 @@ const Discover = () => {
                   }}
                 >
                   Rate
-                </button>
+                </motion.button>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => toggleBookmark(shop)}
                   style={{
-                    backgroundColor: bookmarkedShops.some(
-                      (s) => s.place_id === shop.place_id
-                    )
+                    backgroundColor: bookmarkedShops.some((s) => s.place_id === shop.place_id)
                       ? "#b03e2f"
                       : "#A67B5B",
                     color: "#fff",
@@ -255,13 +242,13 @@ const Discover = () => {
                   {bookmarkedShops.some((s) => s.place_id === shop.place_id)
                     ? "Bookmarked"
                     : "Bookmark"}
-                </button>
+                </motion.button>
               </div>
-            </div>
+            </motion.div>
           ))
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

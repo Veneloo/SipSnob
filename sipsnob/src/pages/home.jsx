@@ -6,6 +6,7 @@ import BookmarkItem from "../components/BookmarkItem";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebaseConfig";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { motion } from "framer-motion"; // ✅ Framer Motion
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -115,48 +116,90 @@ const HomePage = () => {
   }, []);
 
   return (
-    <div className="page-container">
-      <h1 style={{
-        marginBlock: "64px 32px",
-        textShadow: "0 2px 2px rgb(0,0,0,0.2)",
-        textAlign: "left"
-      }}>
-        Welcome, <span style={{color: "#8B5E3C"}}>{fullName}</span>
-      </h1>
+    <motion.div
+      className="page-container"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.h1
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        style={{
+          marginBlock: "64px 32px",
+          textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+          textAlign: "left"
+        }}
+      >
+        Welcome, <span style={{ color: "#8B5E3C" }}>{fullName}</span>
+      </motion.h1>
 
       {/* Bookmarked Shops */}
       <div>
         <h2 style={{
-          
           color: "#A2845E",
           textShadow: "0 1px 1px rgb(0,0,0,0.1)",
         }}>
           Bookmarked shops near you
         </h2>
 
-        <div style={{ display: 'flex', overflowX: 'auto', overflowY: 'hidden', scrollBehavior: 'smooth', width: '75vw', margin: "24px", justifyContent: "center", borderRadius: "50px", textAlign: "center"}}>
+        <motion.div
+          style={{
+            display: 'flex',
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            scrollBehavior: 'smooth',
+            width: '75vw',
+            margin: "24px",
+            justifyContent: "center",
+            borderRadius: "50px",
+            textAlign: "center"
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
           {bookmarkedShops?.slice(0, 10).map((item, index) => (
-            <BookmarkItem key={index} bookmarkDetails={item} />
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
+            >
+              <BookmarkItem bookmarkDetails={item} />
+            </motion.div>
           ))}
-                {/* If bookmarklist is empty, display message */}
 
-        {bookmarkedShops.length == 0 && (<div style={{width: "inherit", height: "fit-content", margin: "0", color: "#572e05"}}>
-        <h3> There are no bookmarks to display.{<br/>}Go to the Discover & Search tab to find shops!</h3>
-        
-        <button className="button" onClick={() => navigate("/discover")} style={{backgroundColor: "#A2845E"}}>
-          Discover Coffee Shops
-        </button>
-        </div>)}
-        </div>
+          {bookmarkedShops.length === 0 && (
+            <div style={{ width: "inherit", height: "fit-content", margin: "0", color: "#572e05" }}>
+              <h3>
+                There are no bookmarks to display.
+                <br />
+                Go to the Discover & Search tab to find shops!
+              </h3>
+              <button className="button" onClick={() => navigate("/discover")} style={{ backgroundColor: "#A2845E" }}>
+                Discover Coffee Shops
+              </button>
+            </div>
+          )}
+        </motion.div>
 
-
-        {bookmarkedShops.length != 0 && (<button className="button" onClick={() => navigate("/settings#Bookmarks")} style={{color: "#f5e1c8", backgroundColor: "#A2845E"}}>
-          View All Bookmarks
-        </button>)}
+        {bookmarkedShops.length !== 0 && (
+          <motion.button
+            className="button"
+            onClick={() => navigate("/settings#Bookmarks")}
+            style={{ color: "#f5e1c8", backgroundColor: "#A2845E" }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View All Bookmarks
+          </motion.button>
+        )}
       </div>
 
       <br />
-
 
       {/* Feed */}
       <h2 style={{
@@ -166,21 +209,39 @@ const HomePage = () => {
         Your Feed
       </h2>
 
-      <div className="feed" style={{width: "95%"}}>
+      <motion.div
+        className="feed"
+        style={{ width: "95%" }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
         {sampleFeed.map((rating, index) => (
-          <RatingItem key={index} ratingDetails={rating} />
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+          >
+            <RatingItem ratingDetails={rating} />
+          </motion.div>
         ))}
-      
-      
-      {/* If feed is empty, display message */}
-      {sampleFeed.length == 0 && (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
-        <h3> There is no friend activity to display. {<br/>}Go to the settings tab to follow friends!</h3>
-        <button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#A2845E"}}>
-          Add Friends
-        </button>
-        </div>)}
-    </div>
-    </div>
+
+        {sampleFeed.length === 0 && (
+          <div style={{ width: "inherit", height: "fit-content", color: "#572e05" }}>
+            <h3>
+              There is no friend activity to display.
+              <br />
+              Go to the settings tab to follow friends!
+            </h3>
+            <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E" }}>
+              Add Friends
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
   );
 };
 
