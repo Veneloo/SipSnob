@@ -1,18 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUser } from "../firebase/auth"; 
+import { loginUser } from "../firebase/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ Icons
 
 function LogIn() {
   const [email, setEmail] = useState("");
+  const [resetEmail, setResetEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); // 👁️ Toggle state
   const [error, setError] = useState("");
-  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false)
+  const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
   const navigate = useNavigate();
 
   const handleForgotPassword = () => {
-    setForgotPasswordOpen(!forgotPasswordOpen)
-  }
+    setForgotPasswordOpen(!forgotPasswordOpen);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -93,6 +96,8 @@ function LogIn() {
             className="input"
             type="email"
             id="email"
+            name="email"
+            autoComplete="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -100,14 +105,36 @@ function LogIn() {
           <br />
 
           <label>Password:</label>
-          <input
-            className="input"
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
+          <div style={{ position: "relative", width: "100%" }}>
+            <input
+              className="input"
+              type={showPassword ? "text" : "password"}
+              id="password"
+              name="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ paddingRight: "40px" }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: "10px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "transparent",
+                border: "none",
+                cursor: "pointer",
+                color: "#5a3e2b",
+              }}
+              title={showPassword ? "Hide Password" : "Show Password"}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
           <br />
 
           {error && (
@@ -144,45 +171,55 @@ function LogIn() {
               boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
               fontSize: "medium"
             }}
-            onClick={() => handleForgotPassword()}
-          >Forgot Password</button>
-
-          {forgotPasswordOpen && (<div className="column" style={{width: "inherit", height: "fit-content", padding: "24px"}}>
-              <form>
-              <label>Enter your email address</label>
-              <input style={{
-              margin: "10px",
-              color: "black",
-              height: "25px",
-              width: "80%",
-              borderRadius: "5px",
-              border: "0px",
-              boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-              backgroundColor: "#f5e1c89b",
-              fontSize: "1rem"
-            }}
-            type="email"
-            id="reset-email"
-            value={email}></input>
-
-<button
-            type="submit"
-            style={{
-              fontFamily: "YoungSerif",
-              margin: "10px",
-              fontSize: "medium",
-              backgroundColor: "#572e05",
-              padding: "8px 24px",
-              borderRadius: "5px",
-              border: "0",
-              boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-              color: "#f5e1c89b",
-            }}
+            onClick={handleForgotPassword}
           >
-            Send Password Reset
+            Forgot Password
           </button>
-          </form>
-          </div>
+
+          {forgotPasswordOpen && (
+            <div
+              className="column"
+              style={{ width: "inherit", height: "fit-content", padding: "24px" }}
+            >
+              <form>
+                <label>Enter your email address</label>
+                <input
+                  type="email"
+                  id="reset-email"
+                  name="reset-email"
+                  autoComplete="email"
+                  value={resetEmail}
+                  onChange={(e) => setResetEmail(e.target.value)}
+                  style={{
+                    margin: "10px",
+                    color: "black",
+                    height: "25px",
+                    width: "80%",
+                    borderRadius: "5px",
+                    border: "0px",
+                    boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+                    backgroundColor: "#f5e1c89b",
+                    fontSize: "1rem"
+                  }}
+                />
+                <button
+                  type="submit"
+                  style={{
+                    fontFamily: "YoungSerif",
+                    margin: "10px",
+                    fontSize: "medium",
+                    backgroundColor: "#572e05",
+                    padding: "8px 24px",
+                    borderRadius: "5px",
+                    border: "0",
+                    boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+                    color: "#f5e1c89b",
+                  }}
+                >
+                  Send Password Reset
+                </button>
+              </form>
+            </div>
           )}
         </form>
       </div>
