@@ -6,29 +6,27 @@ const ShopDetails = () => {
   const { shopId } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const [shop, setShop] = useState(location.state?.shop || null);
+  const [shop, setShop] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!shop && shopId) {
-      const fetchDetails = async () => {
-        try {
-          const response = await fetch(`https://sip-snob-backend.onrender.com/api/shop-details/${shopId}`);
-          const data = await response.json();
-          if (data) {
-            setShop(data);
-          } else {
-            setError("No details found for this shop.");
-          }
-        } catch (err) {
-          console.error("Error fetching shop details:", err);
-          setError("Failed to fetch shop details.");
+    const fetchDetails = async () => {
+      try {
+        const response = await fetch(`https://sip-snob-backend.onrender.com/api/shop-details/${shopId}`);
+        const data = await response.json();
+        if (data && data.name) {
+          setShop(data);
+        } else {
+          setError("No details found for this shop.");
         }
-      };
+      } catch (err) {
+        console.error("Error fetching shop details:", err);
+        setError("Failed to fetch shop details.");
+      }
+    };
 
-      fetchDetails();
-    }
-  }, [shop, shopId]);
+    fetchDetails(); // Always fetch from backend, not from state
+  }, [shopId]);
 
   if (!shop && !error) return null;
 
@@ -60,9 +58,11 @@ const ShopDetails = () => {
         shop && (
           <>
             <h2 style={{ textAlign: "center" }}>{shop.name}</h2>
-            <p style={{ textAlign: "center" }}>Rating: {shop.rating ?? "N/A"} ⭐</p>
+            <p style={{ textAlign: "center" }}>
+              <strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐
+            </p>
 
-            <div style={{ maxWidth: 400, margin: "1rem auto" }}>
+            <div style={{ maxWidth: 500, margin: "1rem auto" }}>
               {shop.photos?.[0]?.photo_reference && (
                 <img
                   src={`https://sip-snob-backend.onrender.com/api/photo?ref=${shop.photos[0].photo_reference}`}
@@ -71,9 +71,11 @@ const ShopDetails = () => {
                 />
               )}
 
-              <p style={{ marginTop: "1rem" }}>
-                <strong>Address:</strong> {shop.formatted_address}
-              </p>
+              {shop.formatted_address && (
+                <p style={{ marginTop: "1rem" }}>
+                  <strong>Address:</strong> {shop.formatted_address}
+                </p>
+              )}
 
               {shop.formatted_phone_number && (
                 <p>
@@ -92,13 +94,16 @@ const ShopDetails = () => {
                 </div>
               )}
 
-              {shop.reviews && (
+              {shop.reviews?.length > 0 && (
                 <div style={{ marginTop: "1.5rem" }}>
                   <strong>Recent Reviews:</strong>
                   <ul style={{ marginTop: "0.5rem" }}>
                     {shop.reviews.slice(0, 3).map((review, index) => (
-                      <li key={index}>
-                        <p><strong>{review.author_name}</strong> ({review.rating}⭐): {review.text}</p>
+                      <li key={index} style={{ marginBottom: "0.5rem" }}>
+                        <p style={{ marginBottom: "0.25rem" }}>
+                          <strong>{review.author_name}</strong> ({review.rating}⭐)
+                        </p>
+                        <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>{review.text}</p>
                       </li>
                     ))}
                   </ul>
