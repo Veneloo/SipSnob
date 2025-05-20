@@ -7,10 +7,8 @@ import {
   query,
   where,
   onSnapshot,
-  getDocs,
-  setDoc,
   doc,
-  updateDoc,
+  setDoc,
   deleteDoc
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
@@ -73,9 +71,9 @@ const Ratings = () => {
       setError("You must be logged in to submit a review.");
       return;
     }
-  
+
     const reviewId = editingReviewId || uuidv4();
-  
+
     const payload = {
       id: reviewId,
       shopId: shop.place_id,
@@ -88,20 +86,16 @@ const Ratings = () => {
       timestamp: new Date().toISOString(),
       userId: currentUser.uid,
     };
-  
+
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await setDoc(userReviewRef, payload);
       console.log("Saved to user subcollection");
-  
-      try {
-        const publicReviewRef = doc(db, "reviews", reviewId);
-        await setDoc(publicReviewRef, payload);
-        console.log("Public review saved successfully.");
-      } catch (publicErr) {
-        console.error("Public review write failed:", publicErr.code, publicErr.message);
-      }
-  
+
+      const publicReviewRef = doc(db, "reviews", reviewId);
+      await setDoc(publicReviewRef, payload);
+      console.log("Public review saved successfully.");
+
       setError("");
       alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
       setEditingReviewId(null);
@@ -111,8 +105,6 @@ const Ratings = () => {
       setError("Something went wrong. Try again.");
     }
   };
-  
-  
 
   const handleEdit = (review) => {
     setEditingReviewId(review.id);
@@ -128,12 +120,12 @@ const Ratings = () => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await deleteDoc(userReviewRef);
-  
+
       const publicReviewRef = doc(db, "reviews", reviewId);
       await deleteDoc(publicReviewRef);
-  
-      setError("");
+
       setEditingReviewId(null);
+      setError("");
       setRatings({
         drinkConsistency: 5,
         ambiance: 5,
@@ -145,13 +137,11 @@ const Ratings = () => {
       setFoodAvailable(null);
       setSugarFree(null);
       setComment("");
-  
     } catch (err) {
       console.error("Error deleting review:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
-  
 
   return (
     <div className="page-container">
@@ -237,19 +227,60 @@ const Ratings = () => {
         {editingReviewId ? "Update Review" : "Submit Rating"}
       </button>
 
-      <h3>Your Reviews for this Shop:</h3>
+      <h3 style={{ marginTop: "2rem" }}>Recent Reviews:</h3>
       {reviews.map((review) => (
-        <div key={review.id}>
-          <strong>{review.shopName}</strong>
-          {Object.entries(review.ratings || {}).map(([category, value]) => (
-            <p key={category}>{category.replace(/([A-Z])/g, " $1")}: {value}/10</p>
-          ))}
-          <p>Milk Options: {(review.milkOptions || []).join(", ") || "None"}</p>
-          <p>Food Available: {review.foodAvailable || "Unknown"}</p>
-          <p>Sugar-Free: {review.sugarFree || "Unknown"}</p>
-          <p>Comment: {review.comment || "(No comment provided)"}</p>
-          <button onClick={() => handleEdit(review)}>Edit</button>
-          <button onClick={() => handleDelete(review.id)}>Delete</button>
+        <div
+          key={review.id}
+          style={{
+            border: "1px solid #8B5E3C",
+            borderRadius: "12px",
+            padding: "16px",
+            marginBottom: "16px",
+            backgroundColor: "#fffaf5",
+            boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+          }}
+        >
+          <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.userId}</strong>
+          <p style={{ marginTop: "8px", fontStyle: "italic" }}>
+            {review.comment || "(No comment provided)"}
+          </p>
+
+          <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
+            {Object.entries(review.ratings || {}).map(([key, val]) => (
+              <p key={key} style={{ margin: "2px 0" }}>
+                <strong>{key.replace(/([A-Z])/g, " $1")}:</strong> {val}/10
+              </p>
+            ))}
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
+            <button
+              onClick={() => handleEdit(review)}
+              style={{
+                backgroundColor: "#d7b899",
+                color: "#5a3e2b",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                border: "1px solid #5a3e2b",
+                cursor: "pointer",
+              }}
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => handleDelete(review.id)}
+              style={{
+                backgroundColor: "#f3c4b4",
+                color: "#5a3e2b",
+                padding: "6px 12px",
+                borderRadius: "6px",
+                border: "1px solid #5a3e2b",
+                cursor: "pointer",
+              }}
+            >
+              Delete
+            </button>
+          </div>
         </div>
       ))}
     </div>
