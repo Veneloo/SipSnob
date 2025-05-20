@@ -171,12 +171,12 @@ const HomePage = () => {
           viewport={{ once: true, amount: 0.2 }}
         >
           {bookmarkedShops.length > 0 ? (
-            bookmarkedShops.slice(0, 10).map((item, index) => (
+            bookmarkedShops.slice(0, 10).map((item) => (
               <motion.div
-                key={index}
+                key={item.id} // ✅ Unique key fix
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + index * 0.1, duration: 0.4 }}
+                transition={{ duration: 0.4 }}
               >
                 <BookmarkItem
                   bookmarkDetails={item}
