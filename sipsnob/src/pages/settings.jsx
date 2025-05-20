@@ -13,6 +13,7 @@ const Settings = () => {
     fullName: "",
     email: "",
     location: "",
+    username: ""
   });
 
   const [changePassword, setChangePassword] = useState(false)
@@ -34,6 +35,7 @@ const Settings = () => {
         fullName: data.full_name || "",
         email: data.email || "",
         location: data.location || "",
+        username: data.username || ""
       });
     }
   };
@@ -59,6 +61,7 @@ const Settings = () => {
       full_name: profileData.fullName,
       email: profileData.email,
       location: profileData.location,
+      username: profileData.username.toLowerCase(),
       user_id: user.uid,
     }, { merge: true });
 
@@ -159,8 +162,11 @@ const Settings = () => {
                 <input className="input settings" style={{color: "rgba(90, 62, 43, 0.5)"}} value={profileData.email} disabled />
 
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Username:</label>
-                <input className="input settings" />
-
+                <input
+                  className="input settings"
+                  value={profileData.username}
+                  onChange={(e) => setProfileData({ ...profileData, username: e.target.value })}
+                />
 
                 <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Location:</label>
                 <input
@@ -207,3 +213,4 @@ const Settings = () => {
 };
 
 export default Settings;
+
