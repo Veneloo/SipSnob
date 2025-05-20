@@ -164,44 +164,56 @@ const Ratings = () => {
         onChange={(e) => setComment(e.target.value)}
       />
 
-      <label>Alternative Milk Options:</label>
-      {["Oat", "Almond", "Coconut", "Soy", "Skim"].map((option) => (
-        <label key={option}>
-          <input
-            type="checkbox"
-            value={option}
-            checked={milkOptions.includes(option)}
-            onChange={handleCheckboxChange}
-          />
-          {option}
-        </label>
-      ))}
+      <div style={{ marginTop: "1rem" }}>
+        <label>Alternative Milk Options:</label>
+        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "4px" }}>
+          {["Oat", "Almond", "Coconut", "Soy", "Skim"].map((option) => (
+            <label key={option}>
+              <input
+                type="checkbox"
+                value={option}
+                checked={milkOptions.includes(option)}
+                onChange={handleCheckboxChange}
+              />
+              {option}
+            </label>
+          ))}
+        </div>
+      </div>
 
-      <label>Food Items Available:</label>
-      {["Yes", "No"].map((val) => (
-        <label key={val}>
-          <input
-            type="radio"
-            name="food"
-            checked={foodAvailable === val}
-            onChange={() => setFoodAvailable(val)}
-          />
-          {val}
-        </label>
-      ))}
+      <div style={{ marginTop: "1rem" }}>
+        <label>Food Items Available:</label>
+        <div style={{ display: "flex", gap: "16px", marginTop: "4px" }}>
+          {["Yes", "No"].map((val) => (
+            <label key={val}>
+              <input
+                type="radio"
+                name="food"
+                checked={foodAvailable === val}
+                onChange={() => setFoodAvailable(val)}
+              />
+              {val}
+            </label>
+          ))}
+        </div>
+      </div>
 
-      <label>Sugar-Free Syrup Options Available:</label>
-      {["Yes", "No"].map((val) => (
-        <label key={val}>
-          <input
-            type="radio"
-            name="sugarFree"
-            checked={sugarFree === val}
-            onChange={() => setSugarFree(val)}
-          />
-          {val}
-        </label>
-      ))}
+      <div style={{ marginTop: "1rem" }}>
+        <label>Sugar-Free Syrup Options Available:</label>
+        <div style={{ display: "flex", gap: "16px", marginTop: "4px" }}>
+          {["Yes", "No"].map((val) => (
+            <label key={val}>
+              <input
+                type="radio"
+                name="sugarFree"
+                checked={sugarFree === val}
+                onChange={() => setSugarFree(val)}
+              />
+              {val}
+            </label>
+          ))}
+        </div>
+      </div>
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
