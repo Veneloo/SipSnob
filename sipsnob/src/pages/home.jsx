@@ -119,9 +119,6 @@ const HomePage = () => {
     const user = auth.currentUser;
     if (!user) return;
 
-    const confirmed = window.confirm("Do you want to remove this bookmark?");
-    if (!confirmed) return;
-
     try {
       await deleteDoc(doc(db, `users/${user.uid}/bookmarks`, bookmarkDetails.id));
       setBookmarkedShops(prev => prev.filter(shop => shop.id !== bookmarkDetails.id));
@@ -250,7 +247,7 @@ const HomePage = () => {
               <br />
               Go to the settings tab to follow friends!
             </h3>
-            <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8"  }}>
+            <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
               Add Friends
             </button>
           </div>
