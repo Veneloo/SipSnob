@@ -2,14 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { db } from "../firebaseConfig";
-import { v4 as uuidv4 } from 'uuid';
 import {
   collection,
-  addDoc,
-  onSnapshot,
   query,
-  where
+  where,
+  onSnapshot,
+  getDocs,
+  setDoc,
+  doc,
+  updateDoc,
+  deleteDoc
 } from "firebase/firestore";
+import { v4 as uuidv4 } from "uuid";
 import "./pages.css";
 
 const Ratings = () => {
@@ -31,6 +35,7 @@ const Ratings = () => {
   const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState([]);
+  const [editingReviewId, setEditingReviewId] = useState(null);
 
   useEffect(() => {
     if (!shop?.name || !currentUser?.uid) return;
@@ -42,7 +47,8 @@ const Ratings = () => {
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const reviewsData = snapshot.docs.map((doc) => ({
-        id: doc.id,
+        id: doc.data().id,
+        firestoreId: doc.id,
         ...doc.data(),
       }));
       setReviews(reviewsData);
@@ -68,8 +74,10 @@ const Ratings = () => {
       return;
     }
 
+    const reviewId = editingReviewId || uuidv4();
+
     const payload = {
-      id: uuidv4(),
+      id: reviewId,
       shopId: shop.place_id,
       shopName: shop.name,
       ratings,
@@ -82,19 +90,45 @@ const Ratings = () => {
     };
 
     try {
-      const userReviewsRef = collection(db, "users", currentUser.uid, "reviews");
-      await addDoc(userReviewsRef, payload);
-      alert("Rating submitted successfully!");
+      const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
+      const publicReviewRef = doc(db, "reviews", reviewId);
+
+      await setDoc(userReviewRef, payload); // user-specific
+      await setDoc(publicReviewRef, payload); // public
+
+      alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
+      setEditingReviewId(null);
       navigate("/home");
     } catch (err) {
-      console.error("Error submitting rating:", err.message);
+      console.error("Error submitting review:", err.message);
       setError("Something went wrong. Try again.");
+    }
+  };
+
+  const handleEdit = (review) => {
+    setEditingReviewId(review.id);
+    setRatings(review.ratings);
+    setMilkOptions(review.milkOptions || []);
+    setFoodAvailable(review.foodAvailable);
+    setSugarFree(review.sugarFree);
+    setComment(review.comment || "");
+  };
+
+  const handleDelete = async (reviewId) => {
+    try {
+      const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
+      const publicReviewRef = doc(db, "reviews", reviewId);
+
+      await deleteDoc(userReviewRef);
+      await deleteDoc(publicReviewRef);
+    } catch (err) {
+      console.error("Error deleting review:", err.message);
     }
   };
 
   return (
     <div className="page-container" style={{ maxWidth: "700px", margin: "2rem auto", padding: "2rem", backgroundColor: "#f5e1c8", borderRadius: "12px", border: "2px solid #8B5E3C", minHeight: "100vh", boxSizing: "border-box" }}>
-      <h1 className="rating-header">Rate Shop</h1>
+      <h1 className="rating-header">{editingReviewId ? "Edit Review" : "Rate Shop"}</h1>
       <button onClick={() => navigate("/discover")} style={{ backgroundColor: "#d7b899", border: "1px solid #5a3e2b", padding: "6px 12px", borderRadius: "6px", cursor: "pointer", fontFamily: "'Young Serif', serif", marginBottom: "1rem", color: "#5a3e2b", fontWeight: "bold" }}>
         ← Back to Discover
       </button>
@@ -150,7 +184,7 @@ const Ratings = () => {
         </div>
       </div>
 
-      {/* Sugar Free Syrup Option*/}
+      {/* Sugar Free */}
       <div style={{ marginBottom: "2rem", textAlign: "left" }}>
         <label className="rating-label">Sugar-Free Syrup Options Available:</label>
         <div className="row-container" style={{ gap: "16px", marginTop: "8px" }}>
@@ -165,15 +199,17 @@ const Ratings = () => {
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       <button className="button" style={{ backgroundColor: "#8B5E3C", color: "white", fontWeight: "bold" }} onClick={handleSubmit}>
-        Submit Rating
+        {editingReviewId ? "Update Review" : "Submit Rating"}
       </button>
 
-      {/* Display Real-Time Reviews */}
       <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
       {reviews.map((review) => (
         <div key={review.id} style={{ padding: "12px", borderBottom: "1px solid #ccc" }}>
           <strong>{review.userId}</strong>
           <p>{review.comment || "(No comment provided)"}</p>
+          <p><small>Review ID: {review.id}</small></p>
+          <button onClick={() => handleEdit(review)} style={{ marginRight: "8px" }}>Edit</button>
+          <button onClick={() => handleDelete(review.id)}>Delete</button>
         </div>
       ))}
     </div>
