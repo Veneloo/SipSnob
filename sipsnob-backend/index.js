@@ -5,7 +5,6 @@ import cors from 'cors';
 import admin from 'firebase-admin';
 import fetch from 'node-fetch';
 
-
 dotenv.config();
 
 const API_KEY = process.env.GOOGLE_PLACES_API_KEY;
@@ -50,6 +49,7 @@ async function saveCoffeeShopsToFirestore(coffeeShops) {
   await batch.commit();
 }
 
+// Route: Nearby coffee shops
 app.get("/api/coffee-shops", async (req, res) => {
   const { lat, lng } = req.query;
   if (!lat || !lng) {
@@ -61,12 +61,7 @@ app.get("/api/coffee-shops", async (req, res) => {
   res.json(coffeeShops);
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Backend server running on port ${PORT}`);
-});
-
-
+// Route: Get photo by photo reference
 app.get('/api/photo', async (req, res) => {
   const { ref } = req.query;
   if (!ref) return res.status(400).send("Missing photo reference");
@@ -82,4 +77,45 @@ app.get('/api/photo', async (req, res) => {
     console.error(err);
     res.status(500).send("Failed to fetch photo");
   }
+});
+
+
+app.get('/api/shop-details/:placeId', async (req, res) => {
+  const { placeId } = req.params;
+
+  if (!placeId) {
+    return res.status(400).json({ error: "Missing placeId" });
+  }
+
+  const fields = [
+    "name",
+    "rating",
+    "formatted_phone_number",
+    "formatted_address",
+    "opening_hours",
+    "reviews",
+    "photos",
+    "geometry"
+  ].join(",");
+
+  const detailsUrl = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=${fields}&key=${API_KEY}`;
+
+  try {
+    const response = await axios.get(detailsUrl);
+    const result = response.data.result;
+
+    if (!result) {
+      return res.status(404).json({ error: "Details not found for this placeId" });
+    }
+
+    res.json(result);
+  } catch (err) {
+    console.error("Error fetching place details:", err.message);
+    res.status(500).json({ error: "Failed to fetch place details" });
+  }
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Backend server running on port ${PORT}`);
 });

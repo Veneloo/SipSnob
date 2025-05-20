@@ -70,7 +70,16 @@ const ShopDetails = () => {
                   style={{ width: "100%", borderRadius: 8 }}
                 />
               )}
-              <p style={{ marginTop: "1rem" }}><strong>Address:</strong> {shop.vicinity || shop.formatted_address}</p>
+
+              <p style={{ marginTop: "1rem" }}>
+                <strong>Address:</strong> {shop.formatted_address}
+              </p>
+
+              {shop.formatted_phone_number && (
+                <p>
+                  <strong>Phone:</strong> {shop.formatted_phone_number}
+                </p>
+              )}
 
               {shop.opening_hours?.weekday_text && (
                 <div>
