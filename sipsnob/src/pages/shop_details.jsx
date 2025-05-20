@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./pages.css";
 import Slider from "react-slick";
+import "./pages.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -14,9 +14,7 @@ const ShopDetails = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const response = await fetch(
-          `https://sip-snob-backend.onrender.com/api/shop-details/${shopId}`
-        );
+        const response = await fetch(`https://sip-snob-backend.onrender.com/api/shop-details/${shopId}`);
         const data = await response.json();
         if (data && data.name) {
           setShop(data);
@@ -38,7 +36,7 @@ const ShopDetails = () => {
     speed: 400,
     slidesToShow: 1,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
     adaptiveHeight: true,
   };
 
@@ -46,16 +44,20 @@ const ShopDetails = () => {
 
   return (
     <div className="page-container">
-      <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>
-        Shop Details
-      </h1>
+      <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>Shop Details</h1>
+
       <button
         onClick={() => navigate("/discover")}
-        className="button"
         style={{
           backgroundColor: "#d7b899",
-          color: "#5a3e2b",
           border: "1px solid #5a3e2b",
+          padding: "6px 12px",
+          borderRadius: "6px",
+          cursor: "pointer",
+          fontFamily: "'Young Serif', serif",
+          marginBottom: "1rem",
+          color: "#5a3e2b",
+          fontWeight: "bold"
         }}
       >
         ← Back to Discover
@@ -67,13 +69,12 @@ const ShopDetails = () => {
         shop && (
           <div className="shop-details-container responsive-details">
             <h2>{shop.name}</h2>
-            <p>
-              <strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐
-            </p>
+            <p><strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐</p>
 
+            {/* Carousel */}
             {shop.photos?.length > 0 && (
               <Slider {...sliderSettings}>
-                {shop.photos.slice(0, 5).map((photo, index) => (
+                {shop.photos.slice(0, 10).map((photo, index) => (
                   <div key={index}>
                     <img
                       src={`https://sip-snob-backend.onrender.com/api/photo?ref=${photo.photo_reference}`}
@@ -83,7 +84,7 @@ const ShopDetails = () => {
                         maxHeight: "400px",
                         width: "100%",
                         objectFit: "cover",
-                        margin: "0 auto",
+                        margin: "0 auto"
                       }}
                     />
                   </div>
@@ -91,6 +92,7 @@ const ShopDetails = () => {
               </Slider>
             )}
 
+            {/* Info */}
             {shop.formatted_address && (
               <p style={{ marginTop: "1rem" }}>
                 <strong>Address:</strong> {shop.formatted_address}
@@ -106,7 +108,7 @@ const ShopDetails = () => {
             {shop.opening_hours?.weekday_text && (
               <div>
                 <strong>Opening Hours:</strong>
-                <ul style={{ marginTop: "0.5rem" }}>
+                <ul style={{ marginTop: "0.5rem", listStyle: "none", paddingLeft: 0 }}>
                   {shop.opening_hours.weekday_text.map((line, index) => (
                     <li key={index}>{line}</li>
                   ))}
@@ -117,11 +119,11 @@ const ShopDetails = () => {
             {shop.reviews?.length > 0 && (
               <div style={{ marginTop: "1.5rem" }}>
                 <strong>Recent Reviews:</strong>
-                <ul style={{ marginTop: "0.5rem" }}>
+                <ul style={{ marginTop: "0.5rem", paddingLeft: 0, listStyle: "none" }}>
                   {shop.reviews.slice(0, 3).map((review, index) => (
-                    <li key={index} style={{ marginBottom: "0.5rem" }}>
+                    <li key={index} style={{ marginBottom: "0.75rem" }}>
                       <p style={{ marginBottom: "0.25rem" }}>
-                        <strong>{review.author_name}</strong> ({review.rating}⭐)
+                        <strong>{review.author_name}</strong> ({review.rating} ⭐)
                       </p>
                       <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>{review.text}</p>
                     </li>

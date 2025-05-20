@@ -529,28 +529,7 @@ div{
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
 
-  .slick-prev,
-  .slick-next {
-    top: 42% !important;
-    width: 28px;
-    height: 28px;
-    background-color: #8B5E3C !important;
-    border-radius: 50%;
-    color: white !important;
-    font-size: 16px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
-  }
 
-  .slick-prev {
-    left: 6px !important;
-  }
-
-  .slick-next {
-    right: 6px !important;
-  }
 
   .slick-dots {
     bottom: -12px;
@@ -596,24 +575,6 @@ div{
   .slick-slider {
     margin-top: 12px;
     max-width: 100%;
-  }
-
-  .slick-prev,
-  .slick-next {
-    top: 45%;
-    width: 32px;
-    height: 32px;
-    background-color: #8B5E3C !important;
-    color: white !important;
-    z-index: 1;
-  }
-
-  .slick-prev {
-    left: -36px;
-  }
-
-  .slick-next {
-    right: -36px;
   }
 
   .shop-details-container h2,
