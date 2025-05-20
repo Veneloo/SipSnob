@@ -3,10 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { db } from "../firebaseConfig";
 import {
-  collection,
-  addDoc,
-  serverTimestamp,
-  onSnapshot
+  doc,
+  updateDoc,
+  arrayUnion,
+  getDoc,
+  onSnapshot,
 } from "firebase/firestore";
 import "./pages.css";
 
@@ -26,7 +27,7 @@ const Ratings = () => {
   const [milkOptions, setMilkOptions] = useState([]);
   const [foodAvailable, setFoodAvailable] = useState(null);
   const [sugarFree, setSugarFree] = useState(null);
-  const [comment, setComment] = useState(""); // ← NEW
+  const [comment, setComment] = useState("");
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState([]);
 
@@ -35,18 +36,18 @@ const Ratings = () => {
       navigate("/discover");
     }
 
-    const unsubscribe = onSnapshot(
-      collection(db, "reviews"),
-      (snapshot) => {
-        const reviewsData = snapshot.docs
-          .filter((doc) => doc.data().shopId === shop.place_id)
-          .map((doc) => ({ id: doc.id, ...doc.data() }));
-        setReviews(reviewsData);
+    const unsubscribe = onSnapshot(doc(db, "users", currentUser?.uid || ""), (docSnap) => {
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const userReviews = (data.reviews || []).filter(
+          (r) => r.shopId === shop.place_id
+        );
+        setReviews(userReviews);
       }
-    );
+    });
 
     return () => unsubscribe();
-  }, [shop, navigate]);
+  }, [shop, navigate, currentUser]);
 
   const handleRatingChange = (e, category) => {
     setRatings({ ...ratings, [category]: parseInt(e.target.value) });
@@ -72,13 +73,17 @@ const Ratings = () => {
       milkOptions,
       foodAvailable,
       sugarFree,
-      comment, 
-      timestamp: serverTimestamp(),
+      comment,
+      timestamp: new Date().toISOString(),
       userId: currentUser.uid,
     };
 
     try {
-      await addDoc(collection(db, "reviews"), payload);
+      const userRef = doc(db, "users", currentUser.uid);
+      await updateDoc(userRef, {
+        reviews: arrayUnion(payload),
+      });
+
       alert("Rating submitted successfully!");
       navigate("/home");
     } catch (err) {
@@ -114,7 +119,6 @@ const Ratings = () => {
         </div>
       ))}
 
-      {/* Comment Box */}
       <textarea
         placeholder="Write your review here..."
         value={comment}
@@ -166,8 +170,8 @@ const Ratings = () => {
 
       {/* Display Real-Time Reviews */}
       <h3 style={{ marginTop: "2rem" }}>Recent Reviews:</h3>
-      {reviews.map((review) => (
-        <div key={review.id} style={{ padding: "12px", borderBottom: "1px solid #ccc" }}>
+      {reviews.map((review, idx) => (
+        <div key={idx} style={{ padding: "12px", borderBottom: "1px solid #ccc" }}>
           <strong>{review.userId}</strong>
           <p>{review.comment || "(No comment provided)"}</p>
         </div>

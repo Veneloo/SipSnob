@@ -6,7 +6,7 @@ import BookmarkItem from "../components/BookmarkItem";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebaseConfig";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
-import { motion } from "framer-motion"; // ✅ Framer Motion
+import { motion } from "framer-motion"; 
 
 const HomePage = () => {
   const navigate = useNavigate();
