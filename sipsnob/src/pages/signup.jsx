@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUpUser } from "../firebase/auth";
 import { db } from "../firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 
 function SignUp() {
   const [error, setError] = useState('');
@@ -36,13 +36,19 @@ function SignUp() {
     }
 
     try {
+      const q = query(collection(db, "users"), where("username", "==", username.toLowerCase()));
+      const snapshot = await getDocs(q);
+      if (!snapshot.empty) {
+        setError("Username is already taken.");
+        return;
+      }
+
       const user = await signUpUser(email, password, username);
 
-      //Save user to Firestore
       const userRef = doc(db, "users", user.uid);
       await setDoc(userRef, {
         email,
-        full_name: username,
+        username: username.toLowerCase(),
         createdAt: new Date(),
       });
 
@@ -116,7 +122,7 @@ function SignUp() {
         </h1>
 
         <form onSubmit={handleSignUp}>
-          <label>Entert an email </label>
+          <label>Enter an email </label>
           <input
             type="email"
             placeholder="johnsmith@email.com"
