@@ -3,11 +3,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/authContext";
 import { db } from "../firebaseConfig";
 import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  getDoc,
+  collection,
+  addDoc,
   onSnapshot,
+  query,
+  where
 } from "firebase/firestore";
 import "./pages.css";
 
@@ -31,23 +31,25 @@ const Ratings = () => {
   const [error, setError] = useState("");
   const [reviews, setReviews] = useState([]);
 
+  // 🔁 Fetch reviews from users/{userId}/reviews subcollection
   useEffect(() => {
-    if (!shop?.name) {
-      navigate("/discover");
-    }
+    if (!shop?.name || !currentUser?.uid) return;
 
-    const unsubscribe = onSnapshot(doc(db, "users", currentUser?.uid || ""), (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const userReviews = (data.reviews || []).filter(
-          (r) => r.shopId === shop.place_id
-        );
-        setReviews(userReviews);
-      }
+    const q = query(
+      collection(db, "users", currentUser.uid, "reviews"),
+      where("shopId", "==", shop.place_id)
+    );
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const reviewsData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setReviews(reviewsData);
     });
 
     return () => unsubscribe();
-  }, [shop, navigate, currentUser]);
+  }, [shop, currentUser]);
 
   const handleRatingChange = (e, category) => {
     setRatings({ ...ratings, [category]: parseInt(e.target.value) });
@@ -79,10 +81,8 @@ const Ratings = () => {
     };
 
     try {
-      const userRef = doc(db, "users", currentUser.uid);
-      await updateDoc(userRef, {
-        reviews: arrayUnion(payload),
-      });
+      const userReviewsRef = collection(db, "users", currentUser.uid, "reviews");
+      await addDoc(userReviewsRef, payload);
 
       alert("Rating submitted successfully!");
       navigate("/home");
@@ -169,9 +169,9 @@ const Ratings = () => {
       </button>
 
       {/* Display Real-Time Reviews */}
-      <h3 style={{ marginTop: "2rem" }}>Recent Reviews:</h3>
-      {reviews.map((review, idx) => (
-        <div key={idx} style={{ padding: "12px", borderBottom: "1px solid #ccc" }}>
+      <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
+      {reviews.map((review) => (
+        <div key={review.id} style={{ padding: "12px", borderBottom: "1px solid #ccc" }}>
           <strong>{review.userId}</strong>
           <p>{review.comment || "(No comment provided)"}</p>
         </div>
