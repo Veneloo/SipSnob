@@ -493,23 +493,20 @@ div{
   }
 }
 
-
-/* === Final Mobile Fixes for ShopDetails === */
+/* === FINAL FIX: ShopDetails Mobile Carousel + Layout === */
 @media (max-width: 768px) {
   .page-container {
     padding: 24px 16px;
-    align-items: center;
+    box-sizing: border-box;
+    max-width: 100vw;
+    overflow-x: hidden;
     justify-content: flex-start;
   }
 
   h1, h2 {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-  }
-
-  p, li {
-    font-size: 0.95rem;
-    line-height: 1.4;
+    font-size: 1.4rem;
+    margin: 12px 0;
+    line-height: 1.2;
   }
 
   .slick-slider {
@@ -517,61 +514,64 @@ div{
     margin: 12px 0;
   }
 
+  .slick-slide div {
+    display: flex !important;
+    justify-content: center;
+  }
+
   .slick-slide img {
-    width: 100% !important;
+    width: 100%;
+    max-width: 95%;
+    height: auto;
     max-height: 250px;
     object-fit: cover;
     border-radius: 12px;
-    margin: 0 auto;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
   }
 
   .slick-prev,
   .slick-next {
-    top: 45% !important;
-    z-index: 10;
-    width: 30px;
-    height: 30px;
+    top: 42% !important;
+    width: 28px;
+    height: 28px;
     background-color: #8B5E3C !important;
-    color: white !important;
-    font-size: 20px !important;
     border-radius: 50%;
+    color: white !important;
+    font-size: 16px !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
+    z-index: 10;
   }
 
   .slick-prev {
-    left: 8px !important;
+    left: 6px !important;
   }
 
   .slick-next {
-    right: 8px !important;
+    right: 6px !important;
   }
 
   .slick-dots {
-    bottom: -24px;
-  }
-
-  .button {
-    padding: 6px 16px;
-    font-size: 0.9rem;
-    width: auto;
-  }
-
-  .setting-section,
-  .review,
-  .comment {
-    padding: 16px 12px;
-    width: 100% !important;
-    box-sizing: border-box;
-  }
-
-  ul {
-    padding-left: 0;
+    bottom: -12px;
   }
 
   .shop-details-container {
     width: 100%;
-    padding: 0 12px;
+    padding-inline: 12px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  p, li {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    margin: 6px 0;
+  }
+
+  .button {
+    font-size: 0.9rem;
+    padding: 6px 18px;
   }
 }
+
