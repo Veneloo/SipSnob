@@ -73,9 +73,9 @@ const Ratings = () => {
       setError("You must be logged in to submit a review.");
       return;
     }
-
+  
     const reviewId = editingReviewId || uuidv4();
-
+  
     const payload = {
       id: reviewId,
       shopId: shop.place_id,
@@ -88,11 +88,14 @@ const Ratings = () => {
       timestamp: new Date().toISOString(),
       userId: currentUser.uid,
     };
-
+  
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await setDoc(userReviewRef, payload);
-
+  
+      const publicReviewRef = doc(db, "reviews", reviewId);
+      await setDoc(publicReviewRef, payload);
+  
       setError("");
       alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
       setEditingReviewId(null);
@@ -102,6 +105,7 @@ const Ratings = () => {
       setError("Something went wrong. Try again.");
     }
   };
+  
 
   const handleEdit = (review) => {
     setEditingReviewId(review.id);
