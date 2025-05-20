@@ -5,6 +5,55 @@ import "./pages.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+// Custom Arrows
+const NextArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <div
+      style={{
+        display: "block",
+        background: "#8B5E3C",
+        padding: "10px",
+        borderRadius: "50%",
+        position: "absolute",
+        right: "-25px",
+        top: "40%",
+        zIndex: 2,
+        cursor: "pointer",
+        color: "white",
+        fontSize: "18px",
+      }}
+      onClick={onClick}
+    >
+      ❯
+    </div>
+  );
+};
+
+const PrevArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <div
+      style={{
+        display: "block",
+        background: "#8B5E3C",
+        padding: "10px",
+        borderRadius: "50%",
+        position: "absolute",
+        left: "-25px",
+        top: "40%",
+        zIndex: 2,
+        cursor: "pointer",
+        color: "white",
+        fontSize: "18px",
+      }}
+      onClick={onClick}
+    >
+      ❮
+    </div>
+  );
+};
+
 const ShopDetails = () => {
   const { shopId } = useParams();
   const navigate = useNavigate();
@@ -39,7 +88,9 @@ const ShopDetails = () => {
     autoplay: true,
     autoplaySpeed: 4000,
     arrows: true,
-    adaptiveHeight: true
+    adaptiveHeight: true,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   if (!shop && !error) return null;
@@ -75,7 +126,6 @@ const ShopDetails = () => {
             <h2>{shop.name}</h2>
             <p><strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐</p>
 
-            {/* Photo Carousel */}
             {shop.photos?.length > 0 && (
               <Slider {...sliderSettings}>
                 {shop.photos.map((photo, index) => (
