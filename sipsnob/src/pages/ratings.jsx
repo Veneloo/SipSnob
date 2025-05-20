@@ -54,7 +54,7 @@ const Ratings = () => {
           try {
             const userDoc = await getDoc(doc(db, "users", data.userId));
             if (userDoc.exists()) {
-              displayName = userDoc.data().displayName || userDoc.data().email || data.userId;
+              displayName = userDoc.data().username || data.userId;
             }
           } catch (e) {
             console.error("Failed to fetch display name:", e);
