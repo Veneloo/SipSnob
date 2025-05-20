@@ -178,7 +178,7 @@ const ProfilePage = () =>{
     {/* User Location*/}
     <p style={{color: "#d7b898", marginBlock: "0px"}}>{sampleUserDetails.userLocationCity}, {sampleUserDetails.userLocationState}</p>
     {/* Edit button: routes to settings/profile*/}
-    {isCurrentUser && (<button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#5a3e2b", color: "#8B5E3C"}}>Edit</button>)}
+    {isCurrentUser && (<button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#d7b898", color: "#8B5E3C"}}>Edit</button>)}
     
 </div>
 

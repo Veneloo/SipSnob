@@ -194,7 +194,7 @@ const HomePage = () => {
                 <br />
                 Go to the Discover & Search tab to find shops!
               </h3>
-              <button className="button" onClick={() => navigate("/discover")} style={{ backgroundColor: "#A2845E" }}>
+              <button className="button" onClick={() => navigate("/discover")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
                 Discover Coffee Shops
               </button>
             </div>
@@ -244,13 +244,13 @@ const HomePage = () => {
         ))}
 
         {sampleFeed.length === 0 && (
-          <div style={{ width: "inherit", height: "fit-content", color: "#572e05" }}>
+          <div style={{ width: "inherit", height: "fit-content", color: "#572e05", backgroundColor: "rgb(90, 62, 43)", padding: "12px", borderRadius: "24px" }}>
             <h3>
               There is no friend activity to display.
               <br />
               Go to the settings tab to follow friends!
             </h3>
-            <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E" }}>
+            <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8"  }}>
               Add Friends
             </button>
           </div>
