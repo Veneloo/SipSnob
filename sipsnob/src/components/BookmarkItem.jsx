@@ -1,19 +1,22 @@
 import React from 'react';
 import sampleImg from '../assets/sampleimg.png';
-import { useAuth } from '../context/authContext';
-import { db } from '../firebaseConfig';
-import { doc, updateDoc, arrayRemove } from 'firebase/firestore';
+import { auth, db } from '../firebaseConfig';
+import { doc, deleteDoc } from 'firebase/firestore';
 
-export default function BookmarkItem({ bookmarkDetails }) {
-  const { currentUser } = useAuth();
-  if (!bookmarkDetails || !currentUser) return null;
+export default function BookmarkItem({ bookmarkDetails, onRemove }) {
+  if (!bookmarkDetails || !auth.currentUser) return null;
 
   const handleUnfavorite = async () => {
+    const confirmed = window.confirm("Do you want to remove this bookmark?");
+    if (!confirmed) return;
+
     try {
-      const userRef = doc(db, 'users', currentUser.uid);
-      await updateDoc(userRef, {
-        bookmarks: arrayRemove(bookmarkDetails)
-      });
+      const userId = auth.currentUser.uid;
+      const ref = doc(db, `users/${userId}/bookmarks`, bookmarkDetails.id || bookmarkDetails.place_id);
+      await deleteDoc(ref);
+      if (onRemove) {
+        onRemove(bookmarkDetails);
+      }
     } catch (err) {
       console.error('Failed to remove bookmark', err);
     }
@@ -60,6 +63,7 @@ export default function BookmarkItem({ bookmarkDetails }) {
           cursor: 'pointer',
           color: '#fff'
         }}
+        title="Remove Bookmark"
       >
         ★
       </button>
