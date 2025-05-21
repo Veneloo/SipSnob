@@ -91,9 +91,9 @@ const Ratings = () => {
       setError("You must be logged in to submit a review.");
       return;
     }
-
+  
     const reviewId = editingReviewId || uuidv4();
-
+  
     const payload = {
       id: reviewId,
       shopId: shop.place_id,
@@ -106,20 +106,24 @@ const Ratings = () => {
       timestamp: new Date().toISOString(),
       userId: currentUser.uid,
     };
-
+  
+    console.log("Submitting review payload:", payload);
+  
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await setDoc(userReviewRef, payload);
-
+      console.log("Saved to user subcollection");
+  
       const publicReviewRef = doc(db, "reviews", reviewId);
       await setDoc(publicReviewRef, payload);
-
+      console.log("Public review saved successfully.");
+  
       setError("");
       alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
       setEditingReviewId(null);
       navigate("/home");
     } catch (err) {
-      console.error("Submission error:", err.message);
+      console.error("Submission error:", err);
       setError("Something went wrong. Try again.");
     }
   };
