@@ -29,7 +29,7 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
   };
 
   const handleCardClick = () => {
-    navigate(`/shop/${bookmarkDetails.place_id}`, {
+    navigate(`/shop_details/${bookmarkDetails.place_id}`, {
       state: { shop: bookmarkDetails }
     });
   };
