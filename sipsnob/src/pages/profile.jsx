@@ -39,14 +39,17 @@ const ProfilePage = () => {
     >
       {/* Profile Card */}
       <div style={{
-        backgroundColor: "#5a3e2b",
+        background: "linear-gradient(#f5e1c8,#d7b898,#d7b898,#8B5E3C,#5a3e2b)",
         borderRadius: "24px",
         color: "#f5e1c8",
         padding: "20px",
         margin: "0 auto",
         width: "90%",
         maxWidth: "250px",
-        boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+
+        border: "1px solid #d7b898"
+        
       }}>
         <img
           src={profile.profileImage || defaultImg}
@@ -54,15 +57,18 @@ const ProfilePage = () => {
           style={{
             width: "120px",
             height: "120px",
-            borderRadius: "50%",
+            borderRadius: "25%",
             objectFit: "cover",
-            border: "3px solid #f5e1c8",
+            border: "2px solid #d7b898",
             marginBottom: "12px"
           }}
         />
-        <h2>{profile.full_name || "Name"}</h2>
-        <p>{profile.username}</p>
-        <p>{profile.location}</p>
+        <h2 style={{color: "#5a3e2b"}}>{profile.full_name || "Name"}</h2>
+        <div>
+          <p>{profile.username}</p>
+          <p>{profile.location}</p>
+        </div>
+        
         <button style={{
           backgroundColor: "#d7b898",
           padding: "8px 16px",

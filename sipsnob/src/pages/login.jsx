@@ -43,7 +43,7 @@ function LogIn() {
         fontFamily: "YoungSerif",
         fontWeight: "bold",
         flexDirection: "column",
-        textAlign: "center",
+        textAlign: "center"
       }}
     >
       <div
@@ -77,7 +77,8 @@ function LogIn() {
           padding: "25px",
           boxShadow: "0 0 4px 4px rgb(0,0,0,0.1)",
           borderRadius: "10px",
-          backgroundColor: "#d7b898"
+          backgroundColor: "#d7b898",
+          border: "2px solid #b79c83"
         }}
       >
         <h1
