@@ -86,6 +86,7 @@ const Settings = () => {
       user_id: user.uid,
     }, { merge: true });
 
+    setProfileData(prev => ({ ...prev, username: trimmedUsername }));
     alert("Profile updated!");
   };
 
@@ -119,6 +120,7 @@ const Settings = () => {
               <p style={{ fontWeight: "bolder" }}>{profileData.fullName}</p>
               <p style={{ color: "#A2845E" }}>{profileData.email}</p>
               <p style={{ color: "#A2845E" }}>{profileData.location || "Add Location"}</p>
+              <p style={{ color: "#A2845E" }}>{profileData.username ? `@${profileData.username}` : "Add Username"}</p>
             </div>
             <button className="button" style={{ maxHeight: "fit-content" }}>Upload Photo</button>
             <button className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b", maxHeight: "fit-content" }}>Delete</button>
@@ -147,7 +149,7 @@ const Settings = () => {
               <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Location:</label>
               <input className="input settings" value={profileData.location} onChange={(e) => setProfileData({ ...profileData, location: e.target.value })} />
 
-              <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }} onClick={() => handleChangePassword()}>
+              <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }} onClick={handleChangePassword}>
                 Change Password
               </button>
               {changePassword && (
@@ -182,4 +184,3 @@ const Settings = () => {
 };
 
 export default Settings;
-
