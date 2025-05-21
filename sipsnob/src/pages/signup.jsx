@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { signUpUser } from "../firebase/auth";
 import { db } from "../firebaseConfig";
 import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { motion } from "framer-motion";
 
 function SignUp() {
   const [error, setError] = useState('');
@@ -60,7 +61,10 @@ function SignUp() {
   };
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="page-container"
       style={{
         padding: "10px",
         height: "100%",
@@ -97,7 +101,10 @@ function SignUp() {
         </p>
       </div>
 
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2 }}
         style={{
           margin: "10%",
           display: "flex",
@@ -112,12 +119,7 @@ function SignUp() {
           borderRadius: "10px",
         }}
       >
-        <h1
-          style={{
-            fontWeight: "bold",
-            textShadow: "0 2px 2px rgb(0,0,0,0.2)",
-          }}
-        >
+        <h1 style={{ fontWeight: "bold", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>
           Sign Up
         </h1>
 
@@ -152,13 +154,27 @@ function SignUp() {
             className="input"
           />
           <br />
-          {error && <p style={{ color: "red", margin: "25px" }}>{error}</p>}
-          <button type="submit" style={buttonStyle}>
+          {error && (
+            <motion.p
+              style={{ color: "red", margin: "25px" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+            >
+              {error}
+            </motion.p>
+          )}
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            type="submit"
+            style={buttonStyle}
+          >
             Sign Up
-          </button>
+          </motion.button>
         </form>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 

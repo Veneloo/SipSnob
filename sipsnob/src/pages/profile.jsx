@@ -1,239 +1,196 @@
-import React from "react";
-import './pages.css'
-import { useState } from "react";
-import sampleImg from "../assets/sampleimg.png"
+import React, { useEffect, useState, useContext } from "react";
+import { db } from "../firebaseConfig";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { AuthContext } from "../context/authContext";
+import defaultImg from "../assets/sampleimg.png";
+import FriendsSection from "../components/FriendsSection";
+import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import FriendItem from "../components/FriendItem";
-import RatingItem from "../components/RatingItem";
-import CommentItem from "../components/CommentItem";
 
-const CommentHistory = () =>{
-    <div>
+const ProfilePage = () => {
+  const { currentUser } = useContext(AuthContext);
+  const [profile, setProfile] = useState({});
+  const [reviews, setReviews] = useState([]);
+  const navigate = useNavigate();
 
-    </div>
-}
-
-const ProfilePage = () =>{
-
-    {/*Temporary Sample History*/}    
-    const sampleUserDetails = {
-        fullName: "John Smith",
-        username: "jsmith 25",
-        userLocationCity: "New York",
-        userLocationState: "NY",
-    
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (!currentUser) return;
+      const ref = doc(db, "users", currentUser.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) setProfile(snap.data());
     };
-    const sampleRatingHistory = [{
-        shopName: "Ground & Grind",
-        user: "You",
-        timestamp: "2025-04-12T11:10:00",
-        ratings: {
-          drinkConsistency: 9,
-          ambiance: 7,
-          waitTime: 4,
-          pricing: 6,
-          customerService: 8,
-        },
-        milkOptions: ["Oat", "Almond"],
-        foodAvailable: "Yes",
-        sugarFree: "Yes",
-        comment: "Really solid flat white. Staff was sweet. Ambiance felt like Pinterest threw up in a good way.",
-        replies: []
-      },
-      {
-        shopName: "Café Soleil",
-        user: "You",
-        timestamp: "2025-04-10T08:45:00",
-        ratings: {
-          drinkConsistency: 6,
-          ambiance: 9,
-          waitTime: 3,
-          pricing: 7,
-          customerService: 9,
-        },
-        milkOptions: ["Soy", "Whole"],
-        foodAvailable: "No",
-        sugarFree: "No",
-        comment: "Gorgeous interior but my latte tasted like vibes instead of espresso. Still, I’d come back to sit and read here.",
-        replies: [
-          {
-            user: "Jasmine",
-            timestamp: "2025-04-10T10:02:00",
-            text: "LMAO that description is too real 😭"
-          }
-        ]
-      },
-      {
-        shopName: "Java Junction",
-        user: "You",
-        timestamp: "2025-04-08T16:20:00",
-        ratings: {
-          drinkConsistency: 7,
-          ambiance: 5,
-          waitTime: 7,
-          pricing: 8,
-          customerService: 6,
-        },
-        milkOptions: ["Whole"],
-        foodAvailable: "Yes",
-        sugarFree: "No",
-        comment: "Good for a grab-and-go. Not really a sit-and-stay unless you love fluorescent lighting.",
-        replies: []
-      },
-      {
-        shopName: "The Bean Scene",
-        user: "You",
-        timestamp: "2025-04-05T14:00:00",
-        ratings: {
-          drinkConsistency: 10,
-          ambiance: 10,
-          waitTime: 2,
-          pricing: 5,
-          customerService: 10,
-        },
-        milkOptions: ["Oat", "Almond", "Soy"],
-        foodAvailable: "Yes",
-        sugarFree: "Yes",
-        comment: "If I could live here I would. Pricey, but the lavender oat latte healed my inner child.",
-        replies: [
-          {
-            user: "Ava",
-            timestamp: "2025-04-05T16:33:00",
-            text: "I KNEW you’d love this one 🥺"
-          }
-        ]
-      }]
-      const sampleCommentHistory = [
-        {
-          user: "You",
-          timestamp: "2025-04-18T09:30:00",
-          text: "No but seriously, this café feels like a Pinterest board come to life.",
-        },
-        {
-          user: "You",
-          timestamp: "2025-04-17T13:45:00",
-          text: "I was gonna rate this a 6 but then the cookie hit me. Changed everything.",
-        },
-        {
-          user: "You",
-          timestamp: "2025-04-16T18:10:00",
-          text: "Lmao I thought I was the only one who noticed the squeaky chairs 😭",
-        },
-        {
-          user: "You",
-          timestamp: "2025-04-15T11:05:00",
-          text: "Agreed — staff was so sweet I forgot my drink was mid.",
-        },
-        {
-          user: "You",
-          timestamp: "2025-04-14T16:22:00",
-          text: "Okay but WHY is every latte here photogenic? 😭",
-        },
-      ];
-    const sampleFriendList = [
-        { name: "Jane Doe", username: "jdoe_92" },
-        { name: "Michael Chen", username: "mikec89" },
-        { name: "Aria Patel", username: "ariap_" },
-        { name: "Liam Johnson", username: "liamj" },
-        { name: "Sofia Reyes", username: "sofiareyes22" },
-        { name: "Noah Kim", username: "nk_theory" },
-        { name: "Emily Zhang", username: "emz_04" },
-        { name: "Lucas Rivera", username: "lucas.riv" },
-      ];
-    const [sectionOpen, sectionSelect] = useState("comments")
-    const navigate = useNavigate();
 
-    const [isCurrentUser, setCurrentUser] = useState("true")
+    const fetchReviews = async () => {
+      if (!currentUser) return;
+      const snapshot = await getDocs(collection(db, "users", currentUser.uid, "reviews"));
+      const data = snapshot.docs.map((doc) => doc.data());
+      setReviews(data);
+    };
 
-    return (
+    fetchUser();
+    fetchReviews();
+  }, [currentUser]);
 
-  <div className="page-container">
+  const [currentPage, setCurrentPage] = useState(1);
+  const reviewsPerPage = 2;
+  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+  const startIndex = (currentPage - 1) * reviewsPerPage;
+  const endIndex = startIndex + reviewsPerPage;
+  const displayedReviews = reviews.slice(startIndex, endIndex);
 
+  const handlePageChange = (value) => {
+    if (value === "back" && currentPage !== 1) setCurrentPage((prev) => prev - 1);
+    if (value === "next" && currentPage < totalPages) setCurrentPage((prev) => prev + 1);
+  };
 
+  return (
+    <div className="page-container" style={{ padding: "20px", textAlign: "center", marginTop: "60px", paddingBottom: "100px" }}>
+      
+      {/* Profile Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{
+          background: "linear-gradient(#f5e1c8,#d7b898,#d7b898,#8B5E3C,#5a3e2b)",
+          borderRadius: "24px",
+          color: "#f5e1c8",
+          padding: "20px",
+          margin: "0 auto 40px",
+          width: "90%",
+          maxWidth: "250px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          border: "1px solid #d7b898",
+        }}
+      >
+        <img
+          src={profile.profileImage || defaultImg}
+          alt="profile"
+          style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "25%",
+            objectFit: "cover",
+            border: "2px solid #d7b898",
+            marginTop: "5px",
+            marginBottom: "0px",
+          }}
+        />
+        <div style={{ marginTop: "0" }}>
+          <h2 style={{ color: "#5a3e2b", marginBottom: "5px" }}>{profile.full_name || "Name"}</h2>
+          <p style={{ color: "#f5e1c8", marginBlock: "0" }}>@{profile.username}</p>
+          <p style={{ color: "#f5e1c8", marginBlock: "0" }}>{profile.location}</p>
+        </div>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          className="button"
+          onClick={() => navigate("/settings#ProfileInfo")}
+          style={{
+            backgroundColor: "#d7b898",
+            padding: "5px 15px",
+            border: "none",
+            marginTop: "12px",
+            fontWeight: "bold",
+            color: "#5a3e2b",
+          }}
+        >
+          Edit
+        </motion.button>
+      </motion.div>
 
-<div className="profile-info column-container" style={{justifySelf: "center", justifyContent: "center", alignItems: "center", boxSizing: "border-box"}}>
+      {/* Ratings */}
+      <h2 style={{ marginBlock: "30px 0", color: "#5a3e2b" }}>My Ratings</h2>
 
-    {/* User Info*/}
-
-    {/*Pfp*/}
-
-    <div style={{
-                height: "150px",
-                width: "150px",
-                backgroundImage: `url(${sampleImg})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                borderRadius: "100%", 
-                boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
-                border: "1px solid rgb(0,0,0,0.5)"
-                
-            }}
-            />
-
-    <div>
-    {/* Name*/}
-    <h2 style={{color: "#f5e1c8", marginBottom: "0px", textShadow: "0 1px 1px rgba(0, 0, 0, 0.2)"}}>{sampleUserDetails.fullName}</h2>
-    {/* UserName*/}
-    <p style={{color: "#d7b898", marginBlock: "0px"}}>{sampleUserDetails.username}</p>
-    {/* User Location*/}
-    <p style={{color: "#d7b898", marginBlock: "0px"}}>{sampleUserDetails.userLocationCity}, {sampleUserDetails.userLocationState}</p>
-    {/* Edit button: routes to settings/profile*/}
-    {isCurrentUser && (<button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#d7b898", color: "#8B5E3C"}}>Edit</button>)}
-    
-</div>
-
-</div>
-<div className="column-container " style={{ width: "100vw"}}>
-
-
-<div className="row-container" style={{justifyContent: "center"}}>
-    <button className="button-profile-section" onClick={() => sectionSelect("ratings")} style={{ color: sectionOpen === "ratings" ? "#5a3e2b" : "#8B5E3C" }}>{sampleRatingHistory.length} Ratings </button>
-    <button className="button-profile-section" onClick={() => sectionSelect("comments")} style={{ color: sectionOpen === "comments" ? "#5a3e2b" : "#8B5E3C" }}>{sampleRatingHistory.length} Comments </button>
-    <button className="button-profile-section" onClick={() => sectionSelect("friends")} style={{ color: sectionOpen === "friends" ? "#5a3e2b" : "#8B5E3C" }}>{sampleRatingHistory.length} Friends </button>
-
-</div>
-<div style={{backgroundColor: "rgba(89, 41, 10,0.1)", display: "flex",borderRadius: "24px", marginBlock: "24px", height: "fit-content", alignSelf: "center", width: "90vw", justifyContent: "center",}}>
-
-{sectionOpen === "ratings" &&  (sampleRatingHistory.length == 0 ? 
-        (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
-        <h3> There are no ratings to display. {<br/>} Go to the Discover & Search tab to start rating!</h3>
-        <button className="button" onClick={() => navigate("/discover")} style={{backgroundColor: "#A2845E"}}>
-          Discover & Rate Shops
-        </button>
-        </div>)
-        :
-        (<div style={{ padding: "32px", overflowY: "scroll", width: "75%"}}> 
-
-        {sampleRatingHistory.map((item,index) => (
-            <RatingItem key={index} ratingDetails={item}/>
-        ))}</div>)
+      <div className="row-container" style={{ justifyContent: "space-between", width: "360px" }}>
+        {currentPage !== 1 && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="button"
+            style={{ backgroundColor: "#d7b898", color: "#5a3e2b", padding: "0 5px", marginBlock: "0 10px" }}
+            onClick={() => handlePageChange("back")}
+          >
+            <p style={{ margin: "0", padding: "0", fontSize: "small" }}>Back</p>
+          </motion.button>
         )}
+        <p style={{ marginBlock: "0 10px" }}>{currentPage} of {totalPages}</p>
+        {currentPage !== totalPages && (
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            className="button"
+            style={{ backgroundColor: "#d7b898", color: "#5a3e2b", padding: "0 5px", marginBlock: "0 10px" }}
+            onClick={() => handlePageChange("next")}
+          >
+            <p style={{ margin: "0", padding: "0", fontSize: "small" }}>Next</p>
+          </motion.button>
+        )}
+      </div>
 
-{sectionOpen === "comments" && (sampleCommentHistory.length != 0 ? (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
-        <h3> There are no comments to display. {<br/>} Go to your feed to interact with friends!</h3>
-        <button className="button" onClick={() => navigate("/home")} style={{backgroundColor: "#A2845E"}}>
-          Home
-        </button>
-        </div>)
-        :(<div style={{padding: "32px", overflowY: "scroll", width: "75%", justifyContent: "center"}}> {sampleCommentHistory.map((item,index) => (
-            <CommentItem key={index} commentDetails={item}/>
-        ))}</div>))}
+      <div style={{ minHeight: "320px", overflowY: "auto", margin: "0 auto", width: "400px", maxWidth: "750px", paddingRight: "8px" }}>
+        {reviews.length === 0 ? (
+          <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>
+            You haven’t rated any coffee shops yet.
+          </p>
+        ) : (
+          <AnimatePresence>
+            {displayedReviews.map((review) => (
+              <motion.div
+                key={review.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.4 }}
+                style={{
+                  backgroundColor: "#fffaf5",
+                  padding: "28px",
+                  borderRadius: "16px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+                  marginBottom: "20px",
+                  minHeight: "180px",
+                  textAlign: "center",
+                }}
+              >
+                <h3 style={{ color: "#5a3e2b", fontSize: "1.3rem", marginBottom: "10px" }}>{review.shopName}</h3>
+                <p style={{ fontStyle: "italic", fontWeight: "500", color: "#5a3e2b", marginBottom: "16px", fontSize: "1rem" }}>
+                  {review.comment?.trim() !== "" ? review.comment : "No comment"}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "6px", textAlign: "left", margin: "0 auto", maxWidth: "360px", fontSize: "1rem" }}>
+                  {Object.entries(review.ratings || {}).map(([key, val]) => (
+                    <div key={key} style={{ lineHeight: "1.5" }}>
+                      <strong>{key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:</strong>
+                      <span style={{ marginLeft: "8px", color: "#5a3e2b" }}>{val}/10</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        )}
+      </div>
 
-{sectionOpen === "friends" && ((sampleFriendList.length == 0 && (<div style={{width: "inherit", height: "fit-content", color: "#572e05"}}>
-        <h3> You have no friends added on SipSnob. {<br/>}Go to the settings tab to follow friends!</h3>
-        <button className="button" onClick={() => navigate("/settings")} style={{backgroundColor: "#A2845E"}}>
-          Add Friends
-        </button>
-        </div>)) || (<div className="column-container" style={{padding: "32px", overflowY: "scroll", width: "75%", justifyContent: "center"}}> {sampleFriendList.map((item,index) => (
-            <FriendItem key={index} friendDetails={item}/>
-        ))}</div>))}
-
-</div>        
-</div>
-</div>
-
-    )
-
-}
+      {/* Friends Section */}
+      
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{
+          backgroundColor: "#fffaf5",
+          padding: "20px",
+          borderRadius: "12px",
+          margin: "0 auto 60px",
+          width: "90%",
+          maxWidth: "500px", 
+          color: "#8b5e3c",
+          fontStyle: "italic",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.05)",
+        }}
+      
+      >
+        <FriendsSection />
+      </motion.div>
+    </div>
+  );
+};
 
 export default ProfilePage;

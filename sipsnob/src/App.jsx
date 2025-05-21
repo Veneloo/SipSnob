@@ -14,6 +14,7 @@ import ShopDetails from './pages/shop_details';
 import ProfilePage from './pages/profile';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import FriendProfilePage from "./pages/friendProfilePage";
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path="/ratings/:shopId" element={<><Navbar /><Ratings /></>} />
         <Route path="/shop_details/:shopId" element={<ShopDetails />} />
         <Route path="/profile" element={<><Navbar/><ProfilePage /></>} />
+        <Route path="/profile/:friendId" element={<FriendProfilePage />} />
 
       </Routes>
     </BrowserRouter>

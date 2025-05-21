@@ -13,6 +13,7 @@ import {
   deleteDoc
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
+import { motion, AnimatePresence } from "framer-motion";
 import "./pages.css";
 
 const Ratings = () => {
@@ -20,6 +21,14 @@ const Ratings = () => {
   const location = useLocation();
   const shop = location.state?.shop || {};
   const { currentUser } = useContext(AuthContext);
+
+  const ratingLabels = {
+    drinkConsistency: "☕️ Drink Consistency",
+    ambiance: "🪑 Ambiance",
+    waitTime: "⏱️ Wait Time",
+    pricing: "💸 Pricing",
+    customerService: "🤝 Customer Service"
+  };
 
   const [ratings, setRatings] = useState({
     drinkConsistency: 5,
@@ -107,37 +116,23 @@ const Ratings = () => {
       userId: currentUser.uid,
     };
   
-    console.log("Submitting review payload:", payload);
-  
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
-      await setDoc(userReviewRef, payload);
-      console.log("Saved to user subcollection");
-  
+      await setDoc(userReviewRef, payload, { merge: true });
+
       const publicReviewRef = doc(db, "reviews", reviewId);
-      await setDoc(publicReviewRef, payload);
-      console.log("Public review saved successfully.");
+      await setDoc(publicReviewRef, payload, { merge: true });
   
-      setError("");
-      alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
+      alert(editingReviewId ? "Review updated!" : "Rating submitted!");
       setEditingReviewId(null);
+      setError("");
       navigate("/home");
+  
     } catch (err) {
-      console.error("Submission error:", err);
       setError("Something went wrong. Try again.");
     }
   };
-
-  const handleEdit = (review) => {
-    setEditingReviewId(review.id);
-    setRatings(review.ratings);
-    setMilkOptions(review.milkOptions || []);
-    setFoodAvailable(review.foodAvailable);
-    setSugarFree(review.sugarFree);
-    setComment(review.comment || "");
-    setError("");
-  };
-
+  
   const handleDelete = async (reviewId) => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
@@ -160,7 +155,7 @@ const Ratings = () => {
       setSugarFree(null);
       setComment("");
     } catch (err) {
-      console.error("Error deleting review:", err.message);
+      console.error("Delete error:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
@@ -174,150 +169,191 @@ const Ratings = () => {
   };
 
   return (
-    <div className="page-container">
-      <h1 className="rating-header">{editingReviewId ? "Edit Review" : "Rate Shop"}</h1>
-      <button onClick={() => navigate("/discover")}>← Back to Discover</button>
+    <motion.div
+      className="page-container"
+      style={{ fontFamily: "YoungSerif", color: "#5a3e2b" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.h1 className="rating-header" initial={{ y: -10 }} animate={{ y: 0 }}>
+        {editingReviewId ? "Edit Review" : "Rate Shop"}
+      </motion.h1>
 
-      <h2>{shop.name}</h2>
+      <motion.button
+        onClick={() => navigate("/discover")}
+        whileHover={{ scale: 1.05 }}
+        style={{
+          backgroundColor: "#A2845E",
+          color: "#fff",
+          border: "none",
+          padding: "8px 12px",
+          borderRadius: "8px",
+          marginBottom: "1rem",
+          cursor: "pointer"
+        }}
+      >
+        ← Back to Discover
+      </motion.button>
+
+      <motion.h2 initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ delay: 0.1 }}>
+        {shop.name}
+      </motion.h2>
 
       {Object.entries(ratings).map(([category, value]) => (
-        <div key={category}>
-          <label>{category.replace(/([A-Z])/g, " $1")}:</label>
+        <motion.div
+          key={category}
+          initial={{ opacity: 0, x: -15 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+          style={{
+            marginBottom: "24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "16px"
+          }}
+        >
+          <label style={{ flex: "1", fontWeight: "bold", whiteSpace: "nowrap" }}>
+            {ratingLabels[category] || category}:
+          </label>
           <input
             type="range"
             min="1"
             max="10"
             value={value}
             onChange={(e) => handleRatingChange(e, category)}
+            style={{
+              flex: "3",
+              height: "6px",
+              background: `linear-gradient(to right, #8B5E3C ${value * 10}%, #f2e3d5 ${value * 10}%)`,
+              borderRadius: "4px",
+              appearance: "none",
+              outline: "none",
+              accentColor: "#8B5E3C",
+              cursor: "pointer"
+            }}
           />
-          <span>{value}</span>
-        </div>
+          <span style={{ flex: "0", fontWeight: "bold", minWidth: "30px", textAlign: "right" }}>
+            {value}/10
+          </span>
+        </motion.div>
       ))}
 
-      <div style={{ marginTop: "1rem", textAlign: "left", width: "100%" }}>
-        <label htmlFor="comment" style={{ fontWeight: "bold", color: "#5a3e2b" }}>
-          Optional Comment:
-        </label>
-        <textarea
-          id="comment"
-          placeholder="Share your thoughts about this coffee shop..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          rows={4}
-          style={{
-            width: "100%",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            marginTop: "8px",
-            fontFamily: "inherit",
-          }}
-        />
-      </div>
+      {/* You can apply motion.div to other sections like comments, checkboxes, etc., similarly if desired */}
 
-      <hr style={{ width: "90%", margin: "30px auto", borderTop: "2px solid #A2845E" }} />
+      {error && <motion.p style={{ color: "red" }} initial={{ scale: 0.9 }} animate={{ scale: 1 }}>{error}</motion.p>}
 
-      <div style={{ marginTop: "1rem" }}>
-        <label>Alternative Milk Options:</label>
-        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "4px" }}>
-          {["Oat", "Almond", "Coconut", "Soy", "Skim"].map((option) => (
-            <label key={option}>
-              <input
-                type="checkbox"
-                value={option}
-                checked={milkOptions.includes(option)}
-                onChange={handleCheckboxChange}
-              />
-              {option}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ marginTop: "1rem" }}>
-        <label>Food Items Available:</label>
-        <div style={{ display: "flex", gap: "16px", marginTop: "4px" }}>
-          {["Yes", "No"].map((val) => (
-            <label key={val}>
-              <input
-                type="radio"
-                name="food"
-                checked={foodAvailable === val}
-                onChange={() => setFoodAvailable(val)}
-              />
-              {val}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ marginTop: "1rem" }}>
-        <label>Sugar-Free Syrup Options Available:</label>
-        <div style={{ display: "flex", gap: "16px", marginTop: "4px" }}>
-          {["Yes", "No"].map((val) => (
-            <label key={val}>
-              <input
-                type="radio"
-                name="sugarFree"
-                checked={sugarFree === val}
-                onChange={() => setSugarFree(val)}
-              />
-              {val}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <button onClick={handleSubmit}>
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={handleSubmit}
+        style={{
+          backgroundColor: "#5a3e2b",
+          color: "#fffaf5",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          border: "none",
+          marginTop: "1rem",
+          fontFamily: "inherit",
+          fontSize: "1rem",
+          cursor: "pointer",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          transition: "all 0.2s ease-in-out"
+        }}
+      >
         {editingReviewId ? "Update Review" : "Submit Rating"}
-      </button>
+      </motion.button>
 
       <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
-      {reviews.length === 0 && <p>No reviews yet. Be the first to rate this coffee shop!</p>}
 
-      {(expanded ? reviews : reviews.slice(0, 2)).map((review) => (
-        <div
-          key={review.id}
-          style={{
-            border: "1px solid #8B5E3C",
-            borderRadius: "12px",
-            padding: "16px",
-            marginBottom: "16px",
-            backgroundColor: "#fffaf5",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-          }}
-        >
-          <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.displayName}</strong>
-          <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "8px" }}>
-            Reviewed on {formatDate(review.timestamp)}
-          </div>
-
-          <p style={{ fontStyle: "italic" }}>{review.comment || "(No comment provided)"}</p>
-
-          <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
-            {Object.entries(review.ratings || {}).map(([key, val]) => (
-              <p key={key} style={{ margin: "2px 0" }}>
-                <strong>{key.replace(/([A-Z])/g, " $1")}:</strong> {val}/10
-              </p>
-            ))}
-          </div>
-
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
-            <button onClick={() => handleEdit(review)}>Edit</button>
-            <button onClick={() => handleDelete(review.id)}>Delete</button>
-          </div>
-        </div>
-      ))}
+      <AnimatePresence>
+        {(expanded ? reviews : reviews.slice(0, 2)).map((review) => (
+          <motion.div
+            key={review.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              border: "1px solid #8B5E3C",
+              borderRadius: "12px",
+              padding: "16px",
+              marginBottom: "24px",
+              backgroundColor: "#fcf8f3",
+              boxShadow: "0 4px 10px rgba(90, 62, 43, 0.1)",
+            }}
+          >
+            <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.displayName}</strong>
+            <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "8px" }}>
+              Reviewed on {formatDate(review.timestamp)}
+            </div>
+            <p style={{
+              fontStyle: "italic",
+              color: "#5a3e2b",
+              backgroundColor: "#f5e8dc",
+              padding: "10px",
+              borderRadius: "8px",
+              marginBottom: "8px"
+            }}>
+              {review.comment || " "}
+            </p>
+            {review.milkOptions?.length > 0 && (
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
+                {review.milkOptions.map((milk, idx) => (
+                  <span key={idx} style={{
+                    padding: "4px 8px",
+                    backgroundColor: "#e8d6c3",
+                    borderRadius: "12px",
+                    fontSize: "0.85rem",
+                    color: "#5a3e2b"
+                  }}>{milk}</span>
+                ))}
+              </div>
+            )}
+            <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
+              {Object.entries(review.ratings || {}).map(([key, val]) => (
+                <p key={key} style={{ margin: "2px 0" }}>
+                  <strong>{key.replace(/([A-Z])/g, " $1")}:</strong> {val}/10
+                </p>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
+              <button onClick={() => handleEdit(review)} style={actionBtn}>Edit</button>
+              <button onClick={() => handleDelete(review.id)} style={deleteBtn}>Delete</button>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
 
       {reviews.length > 2 && (
-        <button onClick={() => setExpanded(!expanded)} style={{ marginBottom: "2rem" }}>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          style={{ marginBottom: "2rem", marginTop: "8px" }}
+          onClick={() => setExpanded(!expanded)}
+        >
           {expanded ? "Show Less" : "Show More Reviews"}
-        </button>
+        </motion.button>
       )}
-    </div>
+    </motion.div>
   );
+};
+
+const actionBtn = {
+  backgroundColor: "#d7b898",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "5px",
+  cursor: "pointer"
+};
+
+const deleteBtn = {
+  backgroundColor: "#A2845E",
+  color: "#fff",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "5px",
+  cursor: "pointer"
 };
 
 export default Ratings;
