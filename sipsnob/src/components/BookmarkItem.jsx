@@ -5,10 +5,13 @@ import { doc, deleteDoc } from 'firebase/firestore';
 import { FaStar } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import ConfirmModal from './ConfirmModal'; 
+import { useNavigate } from 'react-router-dom';
 
 export default function BookmarkItem({ bookmarkDetails, onRemove }) {
   const [isVisible, setIsVisible] = useState(true);
   const [showConfirm, setShowConfirm] = useState(false);
+  const navigate = useNavigate();
+
   if (!bookmarkDetails || !auth.currentUser) return null;
 
   const handleConfirmedRemove = async () => {
@@ -23,6 +26,12 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
     } catch (err) {
       console.error('Failed to remove bookmark', err);
     }
+  };
+
+  const handleCardClick = () => {
+    navigate(`/shop/${bookmarkDetails.place_id}`, {
+      state: { shop: bookmarkDetails }
+    });
   };
 
   return (
@@ -51,8 +60,10 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
           boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
           backgroundColor: "#572e05",
           overflow: "hidden",
-          flexShrink: "0"
+          flexShrink: "0",
+          cursor: 'pointer'
         }}
+        onClick={handleCardClick}
       >
         <div
           style={{
@@ -66,14 +77,17 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
           }}
         />
         <FaStar
-          onClick={() => setShowConfirm(true)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowConfirm(true);
+          }}
           style={{
             position: 'absolute',
-            top: 8,
-            right: 8,
+            top: 12,
+            right: 12,
             zIndex: 2,
             cursor: 'pointer',
-            fontSize: '1.5rem',
+            fontSize: '1.3rem',
             color: '#FFD700',
           }}
           title="Remove Bookmark"
@@ -87,7 +101,9 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
             margin: 4,
             zIndex: 2,
             color: '#f5e1c8',
-            textShadow: '0 2px 2px rgba(0,0,0,0.2)'
+            textShadow: '0 2px 2px rgba(0,0,0,0.2)',
+            textAlign: 'center',
+            fontFamily: 'YoungSerif'
           }}
         >
           {bookmarkDetails.name}
