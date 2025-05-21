@@ -40,19 +40,6 @@ const Settings = () => {
     }
   };
 
-  const fetchBookmarks = async () => {
-    const user = auth.currentUser;
-    if (!user) return;
-    const snapshot = await getDocs(collection(db, `users/${user.uid}/bookmarks`));
-    const bookmarks = snapshot.docs.map((doc) => doc.data());
-    setBookmarkedShops(bookmarks);
-  };
-
-  useEffect(() => {
-    fetchUserData();
-    fetchBookmarks();
-  }, []);
-
   const handleSaveChanges = async () => {
     const user = auth.currentUser;
     if (!user) {
@@ -212,33 +199,6 @@ const Settings = () => {
           </form>
         </motion.div>
 
-        {/* Bookmarks Section */}
-        <motion.div
-          className="setting-section"
-          id="Bookmarks"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          style={{ width: "90%" }}
-        >
-          <h2 style={{ fontSize: "2em", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>Bookmarked Shops</h2>
-          <p style={{ color: "#A2845E", marginTop: "-12px" }}>View and remove shops from bookmark list</p>
-          <hr style={{ height: "1px", width: "100%", border: "0", backgroundColor: "rgba(90, 62, 43, 0.4)" }} />
-          <div style={{
-            display: 'flex',
-            overflowX: 'auto',
-            overflowY: 'hidden',
-            scrollBehavior: 'smooth',
-            margin: "24px",
-            justifyContent: "center",
-            borderRadius: "50px",
-            textAlign: "center"
-          }}>
-            {bookmarkedShops.map((item, index) => (
-              <BookmarkItem key={index} bookmarkDetails={item} />
-            ))}
-          </div>
-        </motion.div>
 
         {/* Log Out */}
         <motion.div
