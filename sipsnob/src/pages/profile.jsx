@@ -28,6 +28,27 @@ const ProfilePage = () => {
     fetchReviews();
   }, [currentUser]);
 
+
+  //ratings page handling
+  const [currentPage, setCurrentPage] = useState(1)
+  const reviewsPerPage = 2
+
+  const totalPages = Math.ceil(reviews.length / reviewsPerPage);
+  const startIndex = (currentPage - 1) * reviewsPerPage
+  const endIndex = startIndex + reviewsPerPage
+
+  const displayedReviews = reviews.slice(startIndex, endIndex)
+
+  const handlePageChange = (value) => {
+    if (value === "back" && currentPage != 1){
+      setCurrentPage((currentPage) => currentPage - 1)
+    }
+    if (value === "next" && currentPage < totalPages){
+      setCurrentPage((currentPage) => currentPage + 1)
+    }
+    return
+  }
+
   return (
     <div
       className="page-container"
@@ -48,41 +69,59 @@ const ProfilePage = () => {
         maxWidth: "250px",
         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
 
-        border: "1px solid #d7b898"
+        border: "1px solid #d7b898",
         
       }}>
         <img
           src={profile.profileImage || defaultImg}
           alt="profile"
           style={{
-            width: "120px",
-            height: "120px",
+            width: "100px",
+            height: "100px",
             borderRadius: "25%",
             objectFit: "cover",
             border: "2px solid #d7b898",
-            marginBottom: "12px"
+            marginTop: "5px",
+            marginBottom: "0px"
           }}
         />
-        <h2 style={{color: "#5a3e2b"}}>{profile.full_name || "Name"}</h2>
-        <div>
-          <p>{profile.username}</p>
-          <p>{profile.location}</p>
+        <div style={{marginTop: "0"}}>
+        <h2 style={{color: "#5a3e2b", marginBottom: "5px"}}>{profile.full_name || "Name"}</h2>
+        
+          <p style={{color: "#f5e1c8", marginBlock: "0"}}>{profile.username}</p>
+          <p style={{color: "#f5e1c8", marginBlock: "0"}}>{profile.location}</p>
         </div>
         
-        <button style={{
+        <button className="button" style={{
           backgroundColor: "#d7b898",
-          padding: "8px 16px",
-          borderRadius: "8px",
+          padding: "5px 15px",
           border: "none",
           marginTop: "12px",
-          fontWeight: "bold"
+          fontWeight: "bold",
+          color: "#5a3e2b"
         }}>
           Edit
         </button>
       </div>
 
     {/* Ratings Section */}
-    <h2 style={{ marginTop: "30px", color: "#5a3e2b" }}>My Ratings</h2>
+    <h2 style={{ marginBlock: "30px 0", color: "#5a3e2b" }}>My Ratings</h2>
+
+      {/*page numbers and switching*/}
+      <div className="row-container" style={{justifyContent: "space-between", width: "360px"}}>
+        {currentPage != 1 && (
+        <button className="button" style={{backgroundColor: "#d7b898", color: "#5a3e2b", padding: "0 5px", marginBlock: "0 10px"}} onClick={() => handlePageChange("back")}>
+          <p style={{margin: "0", padding: "0", fontSize: "small"}}>Back</p>
+        </button>
+        )}
+        <p style={{marginBlock: "0 10px"}}>{currentPage} of {totalPages}</p>
+        {currentPage != totalPages && (
+        <button className="button" style={{backgroundColor: "#d7b898", color: "#5a3e2b", padding: "0 5px", marginBlock: "0 10px"}} onClick={() => handlePageChange("next")}>
+          <p style={{margin: "0", padding: "0", fontSize: "small"}}>Next</p>
+        </button>
+        )}
+      </div>
+
     <div
       style={{
         minHeight: "320px",
@@ -93,12 +132,15 @@ const ProfilePage = () => {
         paddingRight: "8px",
       }}
     >
+      
       {reviews.length === 0 ? (
         <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>
           You haven’t rated any coffee shops yet.
         </p>
       ) : (
-        reviews.map((review) => (
+        <div>
+
+        {displayedReviews.map((review) => (
           <div
             key={review.id}
             style={{
@@ -160,7 +202,7 @@ const ProfilePage = () => {
             </div>
           </div>
         ))
-      )}
+        }</div>)}
     </div>
 
 
@@ -182,5 +224,4 @@ const ProfilePage = () => {
     </div>
   );
 };
-
 export default ProfilePage;

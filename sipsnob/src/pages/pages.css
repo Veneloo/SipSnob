@@ -30,8 +30,11 @@
   color: #d7b898;
   background-color: #5a3e2b;
 }
-button:hover{
-  filter: saturate(120%);
+.button:hover{
+  scale: 1.05
+}
+.button:active{
+scale: 0.95
 }
 
 .button.view-profile{
@@ -122,7 +125,7 @@ html, body {
   height: 100%;
   width: 100%;
   overflow-y: visible;
-  background-color: #f5e1c8;
+  background: linear-gradient(#f5e1c8,#d7b898);
   @media (max-width: 768px) {
     text-align: center;
   }

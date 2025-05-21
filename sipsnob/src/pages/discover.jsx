@@ -111,6 +111,7 @@ const Discover = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
+
     >
       <motion.h1
         style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}
