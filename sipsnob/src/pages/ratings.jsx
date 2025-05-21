@@ -100,9 +100,9 @@ const Ratings = () => {
       setError("You must be logged in to submit a review.");
       return;
     }
-
+  
     const reviewId = editingReviewId || uuidv4();
-
+  
     const payload = {
       id: reviewId,
       shopId: shop.place_id,
@@ -115,34 +115,24 @@ const Ratings = () => {
       timestamp: new Date().toISOString(),
       userId: currentUser.uid,
     };
-
+  
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
-      await setDoc(userReviewRef, payload);
+      await setDoc(userReviewRef, payload, { merge: true });
 
       const publicReviewRef = doc(db, "reviews", reviewId);
-      await setDoc(publicReviewRef, payload);
-
-      setError("");
+      await setDoc(publicReviewRef, payload, { merge: true });
+  
       alert(editingReviewId ? "Review updated!" : "Rating submitted!");
       setEditingReviewId(null);
+      setError("");
       navigate("/home");
+  
     } catch (err) {
-      console.error("Submission error:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
-
-  const handleEdit = (review) => {
-    setEditingReviewId(review.id);
-    setRatings(review.ratings);
-    setMilkOptions(review.milkOptions || []);
-    setFoodAvailable(review.foodAvailable);
-    setSugarFree(review.sugarFree);
-    setComment(review.comment || "");
-    setError("");
-  };
-
+  
   const handleDelete = async (reviewId) => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);

@@ -3,6 +3,7 @@ import { db } from "../firebaseConfig";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { AuthContext } from "../context/authContext";
 import defaultImg from "../assets/sampleimg.png";
+import FriendsSection from "../components/FriendsSection";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -44,7 +45,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="page-container" style={{ padding: "20px", textAlign: "center", marginTop: "60px" }}>
+    <div className="page-container" style={{ padding: "20px", textAlign: "center", marginTop: "60px", paddingBottom: "100px" }}>
       
       {/* Profile Card */}
       <motion.div
@@ -56,7 +57,7 @@ const ProfilePage = () => {
           borderRadius: "24px",
           color: "#f5e1c8",
           padding: "20px",
-          margin: "0 auto",
+          margin: "0 auto 40px",
           width: "90%",
           maxWidth: "250px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
@@ -78,7 +79,7 @@ const ProfilePage = () => {
         />
         <div style={{ marginTop: "0" }}>
           <h2 style={{ color: "#5a3e2b", marginBottom: "5px" }}>{profile.full_name || "Name"}</h2>
-          <p style={{ color: "#f5e1c8", marginBlock: "0" }}>{profile.username}</p>
+          <p style={{ color: "#f5e1c8", marginBlock: "0" }}>@{profile.username}</p>
           <p style={{ color: "#f5e1c8", marginBlock: "0" }}>{profile.location}</p>
         </div>
         <motion.button
@@ -179,13 +180,12 @@ const ProfilePage = () => {
           borderRadius: "12px",
           margin: "0 auto",
           width: "90%",
-          maxWidth: "500px",
+          maxWidth: "600px",
           color: "#8b5e3c",
-          fontStyle: "italic",
-          marginBottom: "60px"
+          marginBottom: "60px",
         }}
       >
-        You haven’t added any friends yet.
+        <FriendsSection />
       </motion.div>
     </div>
   );
