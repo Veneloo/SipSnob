@@ -1,107 +1,19 @@
-import React from "react";
-import './pages.css'
-import { useState } from "react";
-import sampleImg from "../assets/sampleimg.png"
+import React, { useEffect, useState } from "react";
+import './pages.css';
+import sampleImg from "../assets/sampleimg.png";
+import RatingItem from "../components/RatingItem";
+import BookmarkItem from "../components/BookmarkItem";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebaseConfig";
+import { doc, getDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
+import { motion } from "framer-motion"; 
 
-const bookmarkedShops = [
-    {name:"Blank Street (71st & Lex)" },
-    {name: "Coffee"},
-    {name: "new coffee!"},
-    {name: "java chip"},
-    {name: "latte at 91st"},
-    {name: "another coffe shop"}
-]
-const handleUnfavorite = (shopname) => {
-    console.log(`Unfavorite ${shopname}`)
-}
+const HomePage = () => {
+  const navigate = useNavigate();
+  const [fullName, setFullName] = useState("User");
+  const [bookmarkedShops, setBookmarkedShops] = useState([]);
 
-const BookmarkItem = ({bookmarkDetails}) => {
-    if (!bookmarkDetails){
-        return null;
-    }
-    return (
-        <div style={{
-            height: "200px",
-            width: "250px",
-            borderRadius: "50px", 
-            backgroundColor: "#572e05",
-            padding: "24px",
-            marginRight: "75px",
-            flexShrink: "0",
-            alignContent: "center",
-            position: "relative",
-            boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
-            }}>
-        {/* Shop Photo*/}
-        <div style={{
-            
-            position: "absolute",
-            top: "0",
-            bottom: "0",
-            left: "0",
-            right: "0",
-            backgroundImage: `url(${sampleImg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            borderRadius: "50px", 
-            opacity: "0.4",
-            zIndex: "1",
-            boxShadow: "0 1px 1px rgb(0,0,0,0.1)"
-            
-        }}>
-        </div>
-
-        
-        <button onClick="handleUnfavorite"
-        className="bookmark-button"
-        style={{
-            zIndex: "2",
-        }}>
-        ★
-        </button>
-        <h2
-        style={{
-            textShadow: "0 2px 2px rgb(0,0,0,0.2)",
-            color: "#f5e1c8",
-            zIndex: "2",
-            position: "relative",
-        }}>{bookmarkDetails.name}</h2>
-
-        
-        </div>
-    );
-}
-
-const formatRatingDetail = (label) => {
-    {/* ratings: {
-        drinkConsistency: 8,
-        ambiance: 7,
-        waitTime: 5,
-        pricing: 6,
-        customerService: 9,
-      },
-      milkOptions: ["Oat", "Almond"],
-      foodAvailable: "Yes",
-    sugarFree: "No",*/}
-
-
-    const map = {
-        drinkConsistency: "Drink Consistency",
-        ambiance: "Ambiance",
-        waitTime: "Wait Time",
-        pricing: "Pricing",
-        customerService: "Costumer Service",
-        milkOptions: "Milk Options",
-        foodAvailable: "Food Available",
-        sugarFree: "Sugar Free"
-    }
-
-    return(map[label] || label)
-
-}
-
-
-const sampleRatings = [
+  const sampleFeed = [
     {
       shopName: "Blank Street (71st & Lex)",
       user: "Axel",
@@ -130,194 +42,219 @@ const sampleRatings = [
         },
       ],
     },
-    // more ratings...
+    {
+      shopName: "The Daily Drip",
+      user: "John",
+      timestamp: "2025-04-14T10:20:00",
+      ratings: {
+        drinkConsistency: 7,
+        ambiance: 6,
+        waitTime: 8,
+        pricing: 5,
+        customerService: 7,
+      },
+      milkOptions: ["Whole", "Almond"],
+      foodAvailable: "Yes",
+      sugarFree: "No",
+      comment: "Fast service, decent coffee. Good spot for a quick stop.",
+      replies: [
+        {
+          user: "Sarah",
+          timestamp: "2025-04-14T12:05:00",
+          text: "Their croissants are underrated tbh!",
+        }
+      ]
+    },
+    {
+      shopName: "Mocha Mornings",
+      user: "Emily",
+      timestamp: "2025-04-16T13:55:00",
+      ratings: {
+        drinkConsistency: 9,
+        ambiance: 8,
+        waitTime: 3,
+        pricing: 6,
+        customerService: 9,
+      },
+      milkOptions: ["Oat", "Soy"],
+      foodAvailable: "No",
+      sugarFree: "Yes",
+      comment: "So cute inside! Wish they had food but the drinks are top tier.",
+      replies: [
+        {
+          user: "David",
+          timestamp: "2025-04-16T15:10:00",
+          text: "Right?? Their iced mocha is insane.",
+        }
+      ]
+    }
   ];
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+        if (snap.exists()) {
+          setFullName(snap.data().full_name || "User");
+        }
+      }
+    };
 
- const RatingItem = ({ratingDetails}) =>{
-    if (!ratingDetails){
-        return null;
+    const fetchBookmarks = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const snapshot = await getDocs(collection(db, `users/${user.uid}/bookmarks`));
+        const bookmarks = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+        setBookmarkedShops(bookmarks);
+      }
+    };
+
+    fetchUserData();
+    fetchBookmarks();
+  }, []);
+
+  const handleRemoveBookmark = async (bookmarkDetails) => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    try {
+      await deleteDoc(doc(db, `users/${user.uid}/bookmarks`, bookmarkDetails.id));
+      setBookmarkedShops(prev => prev.filter(shop => shop.id !== bookmarkDetails.id));
+    } catch (error) {
+      console.error("Error removing bookmark:", error);
     }
-    return(
-    <div className="review" style={{
-        height: "fit-content",
-        minWidth: "75%",
-        borderRadius: "50px", 
-        padding: "24px",
-        boxShadow: " 1px 1px 1px 2px rgb(0,0,0,0.1)",
-        color: "black",
-        textAlign: "left",
-        display: "flex",
-        flexDirection: "column"
-        }}>
+  };
 
-            
-        {/*User rated Shop*/}
-        <div className="row-container" style={{justifyContent: "space-between"}}>
-        {/*Left*/}
-        <div className="row-container">
-            {/*Pfp*/}
+  return (
+    <motion.div
+      className="page-container"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      <motion.h1
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.5 }}
+        style={{
+          marginBlock: "64px 32px",
+          textShadow: "0 2px 2px rgb(0,0,0,0.2)",
+          textAlign: "left"
+        }}
+      >
+        Welcome, <span style={{ color: "#8B5E3C" }}>{fullName}</span>
+      </motion.h1>
 
-            <div style={{
-                height: "50px",
-                width: "50px",
-                backgroundImage: `url(${sampleImg})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                borderRadius: "100%", 
-                boxShadow: "0 1px 2px rgb(0,0,0,0.1)"
-            }}
-            />
+      {/* Bookmarked Shops */}
+      <div>
+        <h2 style={{ color: "#A2845E", textShadow: "0 1px 1px rgb(0,0,0,0.1)" }}>
+          Bookmarked shops near you
+        </h2>
 
-            {/*User rated Shop*/}
-
-            <h3 style={{margin: "12px"}}>{ratingDetails.user}{" "} <span style={{color: "#5a3e2b"}}>rated</span>{" "}{ratingDetails.shopName}</h3>
+        <motion.div
+          style={{
+            display: 'flex',
+            overflowX: 'auto',
+            overflowY: 'hidden',
+            scrollBehavior: 'smooth',
+            width: '75vw',
+            margin: "24px",
+            justifyContent: "center",
+            borderRadius: "50px",
+            textAlign: "center"
+          }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {bookmarkedShops.length > 0 ? (
+            bookmarkedShops.slice(0, 10).map((item) => (
+              <motion.div
+                key={item.id} // ✅ Unique key fix
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                <BookmarkItem
+                  bookmarkDetails={item}
+                  onRemove={handleRemoveBookmark}
+                />
+              </motion.div>
+            ))
+          ) : (
+            <div style={{ width: "inherit", height: "fit-content", margin: "0", color: "#572e05" }}>
+              <h3>
+                There are no bookmarks to display.
+                <br />
+                Go to the Discover & Search tab to find shops!
+              </h3>
+              <button className="button" onClick={() => navigate("/discover")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
+                Discover Coffee Shops
+              </button>
             </div>
-            {/*View Profile Button*/}
+          )}
+        </motion.div>
 
-            <button className="button" style={{right: "0", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>username ▶</button>
-        </div>
+        {bookmarkedShops.length !== 0 && (
+          <motion.button
+            className="button"
+            onClick={() => navigate("/settings#Bookmarks")}
+            style={{ color: "#f5e1c8", backgroundColor: "#A2845E" }}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            View All Bookmarks
+          </motion.button>
+        )}
+      </div>
 
-          {/*Timestamp*/}      
-        <small style={{color: "#5a3e2b"}}>{new Date(ratingDetails.timestamp).toDateString()}</small>
-<div>
-        {/*Overall Rating*/}
-        <h3 style={{color: "#5a3e2b"}}>★★★☆☆</h3>
-        {/*Review*/}
-        <p style={{width: "fit-content", color: "#59290A"}}>{ratingDetails.comment}</p>
-</div>
-        
-        {/*Rating Details*/}
-        <div style={{
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "10px",
-  marginTop: "12px"
-}}>
-  {Object.entries(ratingDetails.ratings).map(([label, rating]) => (
-    <span key={label} className="rating-detail">
-      {formatRatingDetail(label)}: {rating}/10
-    </span>
-  ))}
-</div>
-{/*Extras */}
-<div style={{
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "10px",
-  marginTop: "12px"
-}}>
-    <div className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
-        Food Available: {ratingDetails.foodAvailable}        
-    </div>
-    <div className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
-        Sugar Free: {ratingDetails.sugarFree}
-    </div>
-    <div  className="rating-detail" style={{backgroundColor: "rgba(245, 225, 200)"}}>
-    Milk Options: {ratingDetails.milkOptions.join(", " || "None")}
-</div>
-</div>
+      <br />
 
-        {/*Leave a comment button*/}
-        <div className="row-container">
-        <button className="button" style={{right: "0", backgroundColor: "rgb(117, 82, 39)", color: "rgba(245, 225, 200)"}}> Shop Details</button>
+      {/* Feed */}
+      <h2 style={{
+        color: "#A2845E",
+        textShadow: "0 1px 1px rgb(0,0,0,0.1)",
+      }}>
+        Your Feed
+      </h2>
 
-        <button className="button" style={{width: "fit-content", backgroundColor: "#5a3e2b", color: "rgba(245, 225, 200)"}}>Leave a comment</button>
-</div>
-
-        {/*Comments*/}
-
-
-
-
-        </div>
-    );
-
-
-}
-
-const CommentItem = ({commentDetails}) =>{
-    if (!commentDetails){
-        return null;
-    }
-    return(
-        <div>
-            {/*User */}
-            {/*PFP and name */}
-            {/*view profile */}
-
-            {/*comment */}
-
-            {/*reply button */}
-        </div>
-    )
-}
-
-const HomePage = () =>{
-    return (
-
-        <div className="page-container" style={{
-}}>
-
-        <h1 style={{
-            marginTop: "5%",
-            textShadow: "0 2px 2px rgb(0,0,0,0.2)",
-            textAlign: "left",
-        }}> Welcome, user </h1> {/*get user name from stored user info*/}
-
-        {/*bookmarked shops*/}
-        <div>
-        <h2 style={{
-            marginTop: "0",
-            textAlign: "left",
-            color: "#A2845E",
-            textShadow: "0 1px 1px rgb(0,0,0,0.1)",
-
-
-        }}> Bookmarked shops near you: </h2>
-
-
-        <div className="bookmarkItem" 
-            style={{
-            borderRadius: "50px", 
-            height: "250px",
-            width: "95%",
-            overflowX: "scroll",
-            overflowY: "hidden", 
-            display: "flex"
-            }}>
-        {bookmarkedShops.map((item,index) => (
-            <BookmarkItem key={index} bookmarkDetails={item}/>
+      <motion.div
+        className="feed"
+        style={{ width: "95%" }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true, amount: 0.2 }}
+      >
+        {sampleFeed.map((rating, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+          >
+            <RatingItem ratingDetails={rating} />
+          </motion.div>
         ))}
 
-
-
-        </div>
-
-
-
-    </div>
-        <br></br>
-
-    {/*Feed*/}
-  
-
-    <h2 style={{    textAlign: "left",
-            color: "#A2845E",
-            textShadow: "0 1px 1px rgb(0,0,0,0.1)"}}> Your Feed: </h2>
-
-        {/*Feed*/}
-
-        <div className="feed">
-        {sampleRatings.map((rating,index) => (
-            <RatingItem key={index} ratingDetails={rating}/>
-        ))}
-    
-
-        </div>
-
-    </div>
-    )
+        {sampleFeed.length === 0 && (
+          <div style={{ width: "inherit", height: "fit-content", color: "#572e05", backgroundColor: "rgb(90, 62, 43)", padding: "12px", borderRadius: "24px" }}>
+            <h3>
+              There is no friend activity to display.
+              <br />
+              Go to the settings tab to follow friends!
+            </h3>
+            <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
+              Add Friends
+            </button>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
 };
 
 export default HomePage;

@@ -35,10 +35,9 @@ body {
   font-family: 'YoungSerif', sans-serif;
 
   margin: 0;
-  display: flex;
-  place-items: center;
+  display: block;
   min-width: 320px;
-  min-height: 100vh;
+  height: 100%;
   color: #572e05;
 }
 
@@ -47,23 +46,12 @@ h1 {
   line-height: 1.1;
 }
 
-button.default-btn {
-  border-radius: px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: 'YoungSerif', sans-serif;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
 button:hover {
-  border-color: #646cff;
+  cursor:pointer;
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+
+button:active{
+  transform: scale(0.95);
 }
 
 @media (prefers-color-scheme: light) {

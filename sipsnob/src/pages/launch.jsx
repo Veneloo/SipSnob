@@ -1,50 +1,50 @@
 import React from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import "./pages.css"
-import LogIn from "./login";
-import SignUp from "./signup";
+import { useNavigate } from "react-router-dom";
+import "./pages.css";
 
-function Launch(){
-    const navigate =useNavigate()
+function Launch() {
+  const navigate = useNavigate();
 
+  return (
+    <div className="launch-wrapper">
+      {/* Animated Coffee Pour Background */}
+      <svg className="coffee-wave" viewBox="0 0 1440 320" preserveAspectRatio="none">
+        <path
+          d="M0,224 C480,320 960,160 1440,256 L1440,320 L0,320 Z"
+          fill="#4a2c1a"
+        >
+          <animate
+            attributeName="d"
+            dur="5s"
+            repeatCount="indefinite"
+            values="
+              M0,224 C480,320 960,160 1440,256 L1440,320 L0,320 Z;
+              M0,240 C480,280 960,180 1440,240 L1440,320 L0,320 Z;
+              M0,224 C480,320 960,160 1440,256 L1440,320 L0,320 Z"
+          />
+        </path>
+      </svg>
 
-    return(
+      {/* Page Content */}
+      <div className="launch-content fade-in-content">
+        <p>Welcome to</p>
+        <h1>SipSnob</h1>
+        <p className="tagline">
+          Your guide to the best brews, powered by coffee enthusiasts like you.
+        </p>
+        <div className="button-row">
+          <button className="button" onClick={() => navigate("/login")}>
+            Log In
+          </button>
+          <button className="button" onClick={() => navigate("/signup")}>
+            Sign Up
+          </button>
 
-        <div className="page-container"
-            style={{
-                justifyContent: "center",
-                backgroundColor: "#8B5E3C",
-                flexWrap: "pretty",
-                textWrap: "pretty"
-            }}>
-            <div className="max-w-4xl mx-auto p-6">
-
-            {/*Welcome to SipSnob */}
-            <p  style={{ color: "#572e05"}}> Welcome to </p>
-            <h1 style={{textShadow: "0 2px 2px rgb(0,0,0,0.2)", margin: "-12px", color: "#f5e1c8", fontWeight: "bold", fontSize: "10ex"}}> SipSnob</h1>
-
-            {/*About Us*/}
-            <p style={{marginTop: "36px", color: "#572e05"}}>Your guide to the best brews, powered by coffee enthusiasts like you.</p>
- 
-            {/*Login/signup*/}
-            <div className="mt-4 space-y-4">
-                <button onClick={() => navigate('/login')} 
-                className="button"
-                style={{color: "#f5e1c8", backgroundColor: "#572e05"}}>
-                    Log In
-                </button>
-                <button onClick={() => navigate('/signup')} className="button" style={{ color: "#f5e1c8", backgroundColor: "#572e05"}}>
-                    Sign Up
-                </button>
-
-            </div>
-
-            </div>
+          
         </div>
+      </div>
+    </div>
+  );
+}
 
-
-    )
-};
-
-export default Launch
+export default Launch;

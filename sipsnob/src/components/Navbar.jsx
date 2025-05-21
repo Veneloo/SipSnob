@@ -1,14 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // Import for navigation
 import { useLocation } from "react-router-dom";
+
+
+const Mobile_Menu = ({toggleMenu}) => {
+  return (
+
+      <div onChange={toggleMenu} style={{ border: "0", height: "95vh", width: "100vw", position: "fixed", display: "flex", flexDirection: "column", justifySelf: "center", alignItems: "center", backgroundColor: "#d7b898" }}>
+        <Link to="/home" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" onClick={toggleMenu}
+          style={{ border: "0",padding: "5px 10px", margin: "12px",
+          boxShadow: location.pathname === "/home" ? "0 1px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          color: "#5a3e2b", flexWrap: "nowrap"}}>
+            Home
+        </Link>
+
+        <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
+          onClick={toggleMenu}
+          style={{border: "0", margin: "12px",
+          padding: "5px 10px", 
+          boxShadow: location.pathname === "/discover" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          color: "#5a3e2b",
+          flexWrap: "nowrap"}}>
+            Discover & Search
+        </Link>
+        
+        <Link to="/ratings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
+          onClick={toggleMenu}
+          style={{ padding: "5px 10px", margin: "12px",
+          boxShadow: location.pathname === "/ratings" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          color: "#5a3e2b",
+          flexWrap: "nowrap"}}>
+            Rate Coffee Shops
+        </Link>
+
+        <Link to="/settings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
+          onClick={toggleMenu}
+          style={{ padding: "5px 10px", margin: "12px",
+          boxShadow: location.pathname === "/settings" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          color: "#5a3e2b"}}>
+            Settings
+        </Link>
+
+        <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
+          onClick={toggleMenu}
+          style={{ padding: "5px 10px", margin: "12px",
+          boxShadow: location.pathname === "/profile" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          color: "#5a3e2b",}}>
+            My Profile
+        </Link>
+      </div>
+  )
+}
 
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
+  const [isMobile, setMobileMenu] = useState(window.matchMedia('(max-width: 768px)').matches);
 
   const toggleMenu = () => {
     setMenuOpen(!menuOpen);
   };
+
+  useEffect(() => {
+
+    const toggleMobileMenu = () => {
+      setMobileMenu(window.matchMedia('(max-width: 800px)').matches)
+    }
+
+    window.addEventListener('resize', toggleMobileMenu)
+
+    return () => window.removeEventListener('resize', toggleMobileMenu)
+
+  
+  
+  }, [])
+
 
   return (
     <nav className="bg-[#f5e1c8] text-[#5a3e2b] p-4 flex justify-between items-center relative shadow-md"
@@ -19,12 +85,13 @@ const Navbar = () => {
         padding: "2px",
         display: "flex",
         justifyContent: "space-between",
-        alignItems: "center",
+        alignItems: isMobile ? "flex-start" : "center",
         backgroundColor:"#d7b898",
         boxShadow: "0 2px 2px rgb(0,0,0,0.1)",
         zIndex: "1000"
 
       }}>
+      <div style={{display: "flex", zIndex: "1001"}}>
       <p 
       style={{
         fontSize: "24px",
@@ -45,11 +112,12 @@ const Navbar = () => {
       }}>
         ☰
       </button>
-
+      </div>
       {/* Dropdown Menu */}
       {menuOpen && (
+      isMobile ? <Mobile_Menu toggleMenu={toggleMenu}/> : (
         <div 
-        onChange={{toggleMenu}}
+        onChange={toggleMenu}
         style={{
           position: "relative",
           marginRight: "50px",
@@ -59,7 +127,7 @@ const Navbar = () => {
           border: "0"
         }}className="absolute right-4 mt-2 w-48 bg-[#8B5E3C] rounded-md shadow-lg z-50">
           <Link to="/home" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
-          onClick={{toggleMenu}}
+          onClick={toggleMenu}
           style={{border: "0",
           padding: "5px 10px",
           boxShadow: location.pathname === "/home" ? "0 1px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
@@ -67,7 +135,7 @@ const Navbar = () => {
           flexWrap: "nowrap"
  }}>Home</Link>
           <Link to="/discover" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
-          onClick={{toggleMenu}}
+          onClick={toggleMenu}
           style={{border: "0", 
           padding: "5px 10px", 
           boxShadow: location.pathname === "/discover" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
@@ -75,20 +143,26 @@ const Navbar = () => {
           flexWrap: "nowrap"
  }}>Discover & Search</Link>
           <Link to="/ratings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
-          onClick={{toggleMenu}}
+          onClick={toggleMenu}
           style={{ padding: "5px 10px", 
           boxShadow: location.pathname === "/ratings" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
           color: "#5a3e2b",
           flexWrap: "nowrap"
  }}>Rate Coffee Shops</Link>
           <Link to="/settings" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
-          onClick={{toggleMenu}}
+          onClick={toggleMenu}
           style={{ padding: "5px 10px", 
           boxShadow: location.pathname === "/settings" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
           color: "#5a3e2b",
  }}>Settings</Link>
+           <Link to="/profile" className="block px-4 py-2 text-white hover:bg-[#5a3e2b]" 
+          onClick={toggleMenu}
+          style={{ padding: "5px 10px", 
+          boxShadow: location.pathname === "/profile" ? "0 2px 2px rgb(0,0,0,0.2)" : "2 2px 2px rgb(0,0,0,0.2)" ,
+          color: "#5a3e2b",
+ }}>My Profile</Link>
         </div>
-      )}
+      ))}
     </nav>
   );
 };
