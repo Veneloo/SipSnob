@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./pages.css";
+import { motion } from "framer-motion";
 
 const ShopDetails = () => {
   const { shopId } = useParams();
@@ -51,11 +52,23 @@ const ShopDetails = () => {
   if (!shop && !error) return null;
 
   return (
-    <div className="page-container">
-      <h1 style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}>
+    <motion.div
+      className="page-container"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.h1
+        style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}
+        initial={{ y: -10, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+      >
         Shop Details
-      </h1>
-      <button
+      </motion.h1>
+
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         onClick={() => navigate("/discover")}
         style={{
           backgroundColor: "#d7b899",
@@ -70,20 +83,31 @@ const ShopDetails = () => {
         }}
       >
         ← Back to Discover
-      </button>
+      </motion.button>
 
       {error ? (
-        <p style={{ color: "red" }}>{error}</p>
+        <motion.p style={{ color: "red" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+          {error}
+        </motion.p>
       ) : (
         shop && (
-          <div className="shop-details">
-            <h2 style={{ textAlign: "center" }}>{shop.name}</h2>
+          <motion.div
+            className="shop-details"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <motion.h2 style={{ textAlign: "center" }}>{shop.name}</motion.h2>
             <p style={{ textAlign: "center" }}>
               <strong>Rating:</strong> {shop.rating ?? "N/A"} ⭐
             </p>
 
             {shop.photos?.length > 0 && (
-              <div style={{ maxWidth: 500, margin: "1rem auto" }}>
+              <motion.div
+                style={{ maxWidth: 500, margin: "1rem auto" }}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+              >
                 <Slider {...sliderSettings}>
                   {shop.photos.slice(0, 10).map((photo, index) => (
                     <div key={index}>
@@ -100,29 +124,44 @@ const ShopDetails = () => {
                     </div>
                   ))}
                 </Slider>
-              </div>
+              </motion.div>
             )}
 
-            {shop.formatted_address && (
-              <p><strong>Address:</strong> {shop.formatted_address}</p>
-            )}
-            {shop.formatted_phone_number && (
-              <p><strong>Phone:</strong> {shop.formatted_phone_number}</p>
-            )}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
+              {shop.formatted_address && (
+                <p><strong>Address:</strong> {shop.formatted_address}</p>
+              )}
+              {shop.formatted_phone_number && (
+                <p><strong>Phone:</strong> {shop.formatted_phone_number}</p>
+              )}
+            </motion.div>
 
             {shop.opening_hours?.weekday_text && (
-              <div>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
                 <strong>Opening Hours:</strong>
                 <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left" }}>
                   {shop.opening_hours.weekday_text.map((line, index) => (
                     <li key={index}>{line}</li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             )}
 
             {shop.reviews?.length > 0 && (
-              <div style={{ marginTop: "1.5rem" }}>
+              <motion.div
+                style={{ marginTop: "1.5rem" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              >
                 <strong>Recent Reviews:</strong>
                 <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left" }}>
                   {shop.reviews.slice(0, 3).map((review, index) => (
@@ -134,12 +173,12 @@ const ShopDetails = () => {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             )}
-          </div>
+          </motion.div>
         )
       )}
-    </div>
+    </motion.div>
   );
 };
 

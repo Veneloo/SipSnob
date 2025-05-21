@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../firebase/auth";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ Icons
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { motion, AnimatePresence } from "framer-motion";
 
 function LogIn() {
   const [email, setEmail] = useState("");
   const [resetEmail, setResetEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // 👁️ Toggle state
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [forgotPasswordOpen, setForgotPasswordOpen] = useState(false);
 
@@ -70,7 +71,10 @@ function LogIn() {
         </p>
       </div>
 
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
         style={{
           marginTop: "10%",
           width: "fit-content",
@@ -142,7 +146,8 @@ function LogIn() {
             <p style={{ color: "red", margin: "25px" }}>{error}</p>
           )}
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
             type="submit"
             style={{
               fontFamily: "YoungSerif",
@@ -157,10 +162,11 @@ function LogIn() {
             }}
           >
             Log in
-          </button>
+          </motion.button>
 
           <br />
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
             type="button"
             style={{
               backgroundColor: "#8B5E3C",
@@ -175,55 +181,62 @@ function LogIn() {
             onClick={handleForgotPassword}
           >
             Forgot Password
-          </button>
+          </motion.button>
 
-          {forgotPasswordOpen && (
-            <div
-              className="column"
-              style={{ width: "inherit", height: "fit-content", padding: "24px" }}
-            >
-              <form>
-                <label>Enter your email address</label>
-                <input
-                  type="email"
-                  id="reset-email"
-                  name="reset-email"
-                  autoComplete="email"
-                  value={resetEmail}
-                  onChange={(e) => setResetEmail(e.target.value)}
-                  style={{
-                    margin: "10px",
-                    color: "black",
-                    height: "25px",
-                    width: "80%",
-                    borderRadius: "5px",
-                    border: "0px",
-                    boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-                    backgroundColor: "#f5e1c89b",
-                    fontSize: "1rem"
-                  }}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    fontFamily: "YoungSerif",
-                    margin: "10px",
-                    fontSize: "medium",
-                    backgroundColor: "#572e05",
-                    padding: "8px 24px",
-                    borderRadius: "5px",
-                    border: "0",
-                    boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-                    color: "#f5e1c89b",
-                  }}
-                >
-                  Send Password Reset
-                </button>
-              </form>
-            </div>
-          )}
+          <AnimatePresence>
+            {forgotPasswordOpen && (
+              <motion.div
+                className="column"
+                style={{ width: "inherit", height: "fit-content", padding: "24px" }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 20 }}
+                transition={{ duration: 0.4 }}
+              >
+                <form>
+                  <label>Enter your email address</label>
+                  <input
+                    type="email"
+                    id="reset-email"
+                    name="reset-email"
+                    autoComplete="email"
+                    value={resetEmail}
+                    onChange={(e) => setResetEmail(e.target.value)}
+                    style={{
+                      margin: "10px",
+                      color: "black",
+                      height: "25px",
+                      width: "80%",
+                      borderRadius: "5px",
+                      border: "0px",
+                      boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+                      backgroundColor: "#f5e1c89b",
+                      fontSize: "1rem"
+                    }}
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    type="submit"
+                    style={{
+                      fontFamily: "YoungSerif",
+                      margin: "10px",
+                      fontSize: "medium",
+                      backgroundColor: "#572e05",
+                      padding: "8px 24px",
+                      borderRadius: "5px",
+                      border: "0",
+                      boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+                      color: "#f5e1c89b",
+                    }}
+                  >
+                    Send Password Reset
+                  </motion.button>
+                </form>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </form>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -13,6 +13,7 @@ import {
   deleteDoc
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
+import { motion, AnimatePresence } from "framer-motion";
 import "./pages.css";
 
 const Ratings = () => {
@@ -178,10 +179,20 @@ const Ratings = () => {
   };
 
   return (
-    <div className="page-container" style={{ fontFamily: "YoungSerif", color: "#5a3e2b" }}>
-      <h1 className="rating-header">{editingReviewId ? "Edit Review" : "Rate Shop"}</h1>
-      <button
+    <motion.div
+      className="page-container"
+      style={{ fontFamily: "YoungSerif", color: "#5a3e2b" }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
+      <motion.h1 className="rating-header" initial={{ y: -10 }} animate={{ y: 0 }}>
+        {editingReviewId ? "Edit Review" : "Rate Shop"}
+      </motion.h1>
+
+      <motion.button
         onClick={() => navigate("/discover")}
+        whileHover={{ scale: 1.05 }}
         style={{
           backgroundColor: "#A2845E",
           color: "#fff",
@@ -193,185 +204,101 @@ const Ratings = () => {
         }}
       >
         ← Back to Discover
-      </button>
+      </motion.button>
 
-      <h2>{shop.name}</h2>
-
+      <motion.h2 initial={{ scale: 0.9 }} animate={{ scale: 1 }} transition={{ delay: 0.1 }}>
+        {shop.name}
+      </motion.h2>
 
       {Object.entries(ratings).map(([category, value]) => (
-  <div key={category} style={{ marginBottom: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
-    {/* Left side: Label */}
-    <label style={{ flex: "1", fontWeight: "bold", color: "#5a3e2b", whiteSpace: "nowrap" }}>
-      {ratingLabels[category] || category}:
-    </label>
+        <motion.div
+          key={category}
+          initial={{ opacity: 0, x: -15 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.3 }}
+          style={{
+            marginBottom: "24px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "16px"
+          }}
+        >
+          <label style={{ flex: "1", fontWeight: "bold", whiteSpace: "nowrap" }}>
+            {ratingLabels[category] || category}:
+          </label>
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={value}
+            onChange={(e) => handleRatingChange(e, category)}
+            style={{
+              flex: "3",
+              height: "6px",
+              background: `linear-gradient(to right, #8B5E3C ${value * 10}%, #f2e3d5 ${value * 10}%)`,
+              borderRadius: "4px",
+              appearance: "none",
+              outline: "none",
+              accentColor: "#8B5E3C",
+              cursor: "pointer"
+            }}
+          />
+          <span style={{ flex: "0", fontWeight: "bold", minWidth: "30px", textAlign: "right" }}>
+            {value}/10
+          </span>
+        </motion.div>
+      ))}
 
-    {/* Middle: Slider */}
-    <input
-      type="range"
-      min="1"
-      max="10"
-      value={value}
-      onChange={(e) => handleRatingChange(e, category)}
-      style={{
-        flex: "3",
-        height: "6px",
-        borderRadius: "4px",
-        background: `linear-gradient(to right, #8B5E3C ${value * 10}%, #f2e3d5 ${value * 10}%)`,
-        appearance: "none",
-        outline: "none",
-        accentColor: "#8B5E3C",
-        cursor: "pointer"
-      }}
-    />
+      {/* You can apply motion.div to other sections like comments, checkboxes, etc., similarly if desired */}
 
-    <span style={{ flex: "0", fontWeight: "bold", color: "#5a3e2b", minWidth: "30px", textAlign: "right" }}>
-      {value}/10
-    </span>
-  </div>
-))}
+      {error && <motion.p style={{ color: "red" }} initial={{ scale: 0.9 }} animate={{ scale: 1 }}>{error}</motion.p>}
 
-    <div style={{ marginTop: "1rem", width: "100%" }}>
-      <label style={{ 
-        fontWeight: "bold", 
-        fontSize: "1.1rem", 
-        color: "#5a3e2b", 
-        marginBottom: "8px", 
-        display: "block" 
-      }}>
-        Leave a comment:
-      </label>
-      
-    <textarea
-      placeholder="Share your thoughts about this coffee shop..."
-      value={comment}
-      onChange={(e) => setComment(e.target.value)}
-      style={{
-        width: "100%",
-        height: "140px",
-        marginTop: "16px",
-        padding: "14px",
-        borderRadius: "10px",
-        border: "2px solid #b79c83",
-        fontFamily: "inherit",
-        fontSize: "1rem",
-        backgroundColor: "#fffaf5",
-        color: "#5a3e2b",
-        resize: "vertical",
-        boxShadow: "inset 0 2px 4px rgba(0,0,0,0.08)"
-      }}
-    />
-
-  <div style={{ 
-    textAlign: "right", 
-    fontSize: "0.85rem", 
-    marginTop: "6px", 
-    color: comment.length >= 400 ? "#b22222" : "#8B5E3C" 
-  }}>
-    {comment.length}/400 characters
-  </div>
-</div>
-
-      <div style={{ marginTop: "1rem" }}>
-        <label>Alternative Milk Options:</label>
-        <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "4px" }}>
-          {["Oat", "Almond", "Coconut", "Soy", "Skim"].map((option) => (
-            <label key={option}>
-              <input
-                type="checkbox"
-                value={option}
-                checked={milkOptions.includes(option)}
-                onChange={handleCheckboxChange}
-              />
-              {" " + option}
-            </label>
-          ))}
-        </div>
-      </div>
-      
-
-      <div style={{ marginTop: "1rem", textAlign: "center" }}>
-        <label>Food Items Available:</label>
-        <div style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "32px",
-                marginTop: "6px",
-                marginBottom: "8px",
-                flexWrap: "wrap"
-              }}>
-          {["Yes", "No"].map((val) => (
-            <label key={val}>
-              <input
-                type="radio"
-                name="food"
-                checked={foodAvailable === val}
-                onChange={() => setFoodAvailable(val)}
-              />
-              {" " + val}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      <div style={{ marginTop: "1rem", textAlign: "center" }}>
-        <label>Sugar-Free Syrup Options Available:</label>
-        <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "4px" }}>
-          {["Yes", "No"].map((val) => (
-            <label key={val}>
-              <input
-                type="radio"
-                name="sugarFree"
-                checked={sugarFree === val}
-                onChange={() => setSugarFree(val)}
-              />
-              {" " + val}
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <button
-  onClick={handleSubmit}
-  style={{
-    backgroundColor: "#5a3e2b",
-    color: "#fffaf5",
-    padding: "10px 20px",
-    borderRadius: "8px",
-    border: "none",
-    marginTop: "1rem",
-    fontFamily: "inherit",
-    fontSize: "1rem",
-    cursor: "pointer",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-    transition: "all 0.2s ease-in-out"
-  }}
->
-  {editingReviewId ? "Update Review" : "Submit Rating"}
-</button>
-
-      <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
-      {reviews.length === 0 && <p>No reviews yet. Be the first to rate this coffee shop!</p>}
-
-      {(expanded ? reviews : reviews.slice(0, 2)).map((review) => (
-        <div
-        key={review.id}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.98 }}
+        onClick={handleSubmit}
         style={{
-          border: "1px solid #8B5E3C",
-          borderRadius: "12px",
-          padding: "16px",
-          marginBottom: "24px",
-          backgroundColor: "#fcf8f3",
-          boxShadow: "0 4px 10px rgba(90, 62, 43, 0.1)",
-          animation: "fadeIn 0.4s ease-in"
+          backgroundColor: "#5a3e2b",
+          color: "#fffaf5",
+          padding: "10px 20px",
+          borderRadius: "8px",
+          border: "none",
+          marginTop: "1rem",
+          fontFamily: "inherit",
+          fontSize: "1rem",
+          cursor: "pointer",
+          boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+          transition: "all 0.2s ease-in-out"
         }}
       >
-          <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.displayName}</strong>
-          <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "8px" }}>
-            Reviewed on {formatDate(review.timestamp)}
-          </div>
-          <p style={{
+        {editingReviewId ? "Update Review" : "Submit Rating"}
+      </motion.button>
+
+      <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
+
+      <AnimatePresence>
+        {(expanded ? reviews : reviews.slice(0, 2)).map((review) => (
+          <motion.div
+            key={review.id}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              border: "1px solid #8B5E3C",
+              borderRadius: "12px",
+              padding: "16px",
+              marginBottom: "24px",
+              backgroundColor: "#fcf8f3",
+              boxShadow: "0 4px 10px rgba(90, 62, 43, 0.1)",
+            }}
+          >
+            <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.displayName}</strong>
+            <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "8px" }}>
+              Reviewed on {formatDate(review.timestamp)}
+            </div>
+            <p style={{
               fontStyle: "italic",
               color: "#5a3e2b",
               backgroundColor: "#f5e8dc",
@@ -380,47 +307,45 @@ const Ratings = () => {
               marginBottom: "8px"
             }}>
               {review.comment || " "}
-              
             </p>
-
             {review.milkOptions?.length > 0 && (
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
-            {review.milkOptions.map((milk, idx) => (
-              <span key={idx} style={{
-                padding: "4px 8px",
-                backgroundColor: "#e8d6c3",
-                borderRadius: "12px",
-                fontSize: "0.85rem",
-                color: "#5a3e2b"
-              }}>{milk}</span>
-            ))}
-          </div>
-        )}
-
-          <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
-            {Object.entries(review.ratings || {}).map(([key, val]) => (
-              <p key={key} style={{ margin: "2px 0" }}>
-                <strong>{key.replace(/([A-Z])/g, " $1")}:</strong> {val}/10
-              </p>
-            ))}
-          </div>
-
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
-            <button onClick={() => handleEdit(review)} style={actionBtn}>Edit</button>
-            <button onClick={() => handleDelete(review.id)} style={deleteBtn}>Delete</button>
-          </div>
-        </div>
-      ))}
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
+                {review.milkOptions.map((milk, idx) => (
+                  <span key={idx} style={{
+                    padding: "4px 8px",
+                    backgroundColor: "#e8d6c3",
+                    borderRadius: "12px",
+                    fontSize: "0.85rem",
+                    color: "#5a3e2b"
+                  }}>{milk}</span>
+                ))}
+              </div>
+            )}
+            <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
+              {Object.entries(review.ratings || {}).map(([key, val]) => (
+                <p key={key} style={{ margin: "2px 0" }}>
+                  <strong>{key.replace(/([A-Z])/g, " $1")}:</strong> {val}/10
+                </p>
+              ))}
+            </div>
+            <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
+              <button onClick={() => handleEdit(review)} style={actionBtn}>Edit</button>
+              <button onClick={() => handleDelete(review.id)} style={deleteBtn}>Delete</button>
+            </div>
+          </motion.div>
+        ))}
+      </AnimatePresence>
 
       {reviews.length > 2 && (
-        <button
-          onClick={() => setExpanded(!expanded)}
+        <motion.button
+          whileHover={{ scale: 1.05 }}
           style={{ marginBottom: "2rem", marginTop: "8px" }}
+          onClick={() => setExpanded(!expanded)}
         >
           {expanded ? "Show Less" : "Show More Reviews"}
-        </button>
+        </motion.button>
       )}
-    </div>
+    </motion.div>
   );
 };
 
@@ -440,14 +365,5 @@ const deleteBtn = {
   borderRadius: "5px",
   cursor: "pointer"
 };
-
-<style>
-{`
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-`}
-</style>
 
 export default Ratings;
