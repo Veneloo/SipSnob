@@ -169,7 +169,7 @@ const ProfilePage = () => {
       </div>
 
       {/* Friends Section */}
-      <h2 style={{ marginTop: "40px", color: "#5a3e2b" }}>My Friends</h2>
+      
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -178,12 +178,14 @@ const ProfilePage = () => {
           backgroundColor: "#fffaf5",
           padding: "20px",
           borderRadius: "12px",
-          margin: "0 auto",
+          margin: "0 auto 60px",
           width: "90%",
-          maxWidth: "600px",
+          maxWidth: "500px", 
           color: "#8b5e3c",
-          marginBottom: "60px",
+          fontStyle: "italic",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.05)",
         }}
+      
       >
         <FriendsSection />
       </motion.div>
