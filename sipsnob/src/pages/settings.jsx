@@ -110,13 +110,14 @@ const Settings = () => {
         >
           <h1>Settings</h1>
           <div>
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              className="button"
-              style={{ backgroundColor: "#A2845E", color: "#5a3e2b" }}
-            >
-              Cancel
-            </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.03 }}
+            className="button"
+            style={{ backgroundColor: "#A2845E", color: "#5a3e2b" }}
+            onClick={() => navigate("/home")}
+          >
+            Cancel
+          </motion.button>
             <motion.button
               whileHover={{ scale: 1.03 }}
               className="button"
