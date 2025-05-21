@@ -21,6 +21,14 @@ const Ratings = () => {
   const shop = location.state?.shop || {};
   const { currentUser } = useContext(AuthContext);
 
+  const ratingLabels = {
+    drinkConsistency: "☕️ Drink Consistency",
+    ambiance: "🪑 Ambiance",
+    waitTime: "⏱️ Wait Time",
+    pricing: "💸 Pricing",
+    customerService: "🤝 Customer Service"
+  };
+
   const [ratings, setRatings] = useState({
     drinkConsistency: 5,
     ambiance: 5,
@@ -91,9 +99,9 @@ const Ratings = () => {
       setError("You must be logged in to submit a review.");
       return;
     }
-  
+
     const reviewId = editingReviewId || uuidv4();
-  
+
     const payload = {
       id: reviewId,
       shopId: shop.place_id,
@@ -106,24 +114,20 @@ const Ratings = () => {
       timestamp: new Date().toISOString(),
       userId: currentUser.uid,
     };
-  
-    console.log("Submitting review payload:", payload);
-  
+
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await setDoc(userReviewRef, payload);
-      console.log("Saved to user subcollection");
-  
+
       const publicReviewRef = doc(db, "reviews", reviewId);
       await setDoc(publicReviewRef, payload);
-      console.log("Public review saved successfully.");
-  
+
       setError("");
-      alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
+      alert(editingReviewId ? "Review updated!" : "Rating submitted!");
       setEditingReviewId(null);
       navigate("/home");
     } catch (err) {
-      console.error("Submission error:", err);
+      console.error("Submission error:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
@@ -160,7 +164,7 @@ const Ratings = () => {
       setSugarFree(null);
       setComment("");
     } catch (err) {
-      console.error("Error deleting review:", err.message);
+      console.error("Delete error:", err.message);
       setError("Something went wrong. Try again.");
     }
   };
@@ -174,48 +178,100 @@ const Ratings = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="page-container" style={{ fontFamily: "YoungSerif", color: "#5a3e2b" }}>
       <h1 className="rating-header">{editingReviewId ? "Edit Review" : "Rate Shop"}</h1>
-      <button onClick={() => navigate("/discover")}>← Back to Discover</button>
+      <button
+        onClick={() => navigate("/discover")}
+        style={{
+          backgroundColor: "#A2845E",
+          color: "#fff",
+          border: "none",
+          padding: "8px 12px",
+          borderRadius: "8px",
+          marginBottom: "1rem",
+          cursor: "pointer"
+        }}
+      >
+        ← Back to Discover
+      </button>
 
       <h2>{shop.name}</h2>
 
+
       {Object.entries(ratings).map(([category, value]) => (
-        <div key={category}>
-          <label>{category.replace(/([A-Z])/g, " $1")}:</label>
-          <input
-            type="range"
-            min="1"
-            max="10"
-            value={value}
-            onChange={(e) => handleRatingChange(e, category)}
-          />
-          <span>{value}</span>
-        </div>
-      ))}
+  <div key={category} style={{ marginBottom: "24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "16px" }}>
+    {/* Left side: Label */}
+    <label style={{ flex: "1", fontWeight: "bold", color: "#5a3e2b", whiteSpace: "nowrap" }}>
+      {ratingLabels[category] || category}:
+    </label>
 
-      <div style={{ marginTop: "1rem", textAlign: "left", width: "100%" }}>
-        <label htmlFor="comment" style={{ fontWeight: "bold", color: "#5a3e2b" }}>
-          Optional Comment:
-        </label>
-        <textarea
-          id="comment"
-          placeholder="Share your thoughts about this coffee shop..."
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          rows={4}
-          style={{
-            width: "100%",
-            padding: "10px",
-            borderRadius: "8px",
-            border: "1px solid #ccc",
-            marginTop: "8px",
-            fontFamily: "inherit",
-          }}
-        />
-      </div>
+    {/* Middle: Slider */}
+    <input
+      type="range"
+      min="1"
+      max="10"
+      value={value}
+      onChange={(e) => handleRatingChange(e, category)}
+      style={{
+        flex: "3",
+        height: "6px",
+        borderRadius: "4px",
+        background: `linear-gradient(to right, #8B5E3C ${value * 10}%, #f2e3d5 ${value * 10}%)`,
+        appearance: "none",
+        outline: "none",
+        accentColor: "#8B5E3C",
+        cursor: "pointer"
+      }}
+    />
 
-      <hr style={{ width: "90%", margin: "30px auto", borderTop: "2px solid #A2845E" }} />
+    {/* Right side: Number */}
+    <span style={{ flex: "0", fontWeight: "bold", color: "#5a3e2b", minWidth: "30px", textAlign: "right" }}>
+      {value}/10
+    </span>
+  </div>
+))}
+
+
+    <div style={{ marginTop: "1rem", width: "100%" }}>
+      <label style={{ 
+        fontWeight: "bold", 
+        fontSize: "1.1rem", 
+        color: "#5a3e2b", 
+        marginBottom: "8px", 
+        display: "block" 
+      }}>
+        Leave a comment:
+      </label>
+      
+    <textarea
+      placeholder="Share your thoughts about this coffee shop..."
+      value={comment}
+      onChange={(e) => setComment(e.target.value)}
+      style={{
+        width: "100%",
+        height: "140px",
+        marginTop: "16px",
+        padding: "14px",
+        borderRadius: "10px",
+        border: "2px solid #b79c83",
+        fontFamily: "inherit",
+        fontSize: "1rem",
+        backgroundColor: "#fffaf5",
+        color: "#5a3e2b",
+        resize: "vertical",
+        boxShadow: "inset 0 2px 4px rgba(0,0,0,0.08)"
+      }}
+    />
+
+  <div style={{ 
+    textAlign: "right", 
+    fontSize: "0.85rem", 
+    marginTop: "6px", 
+    color: comment.length >= 400 ? "#b22222" : "#8B5E3C" 
+  }}>
+    {comment.length}/400 characters
+  </div>
+</div>
 
       <div style={{ marginTop: "1rem" }}>
         <label>Alternative Milk Options:</label>
@@ -228,15 +284,23 @@ const Ratings = () => {
                 checked={milkOptions.includes(option)}
                 onChange={handleCheckboxChange}
               />
-              {option}
+              {" " + option}
             </label>
           ))}
         </div>
       </div>
+      
 
-      <div style={{ marginTop: "1rem" }}>
+      <div style={{ marginTop: "1rem", textAlign: "center" }}>
         <label>Food Items Available:</label>
-        <div style={{ display: "flex", gap: "16px", marginTop: "4px" }}>
+        <div style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "32px",
+                marginTop: "6px",
+                marginBottom: "8px",
+                flexWrap: "wrap"
+              }}>
           {["Yes", "No"].map((val) => (
             <label key={val}>
               <input
@@ -245,15 +309,15 @@ const Ratings = () => {
                 checked={foodAvailable === val}
                 onChange={() => setFoodAvailable(val)}
               />
-              {val}
+              {" " + val}
             </label>
           ))}
         </div>
       </div>
 
-      <div style={{ marginTop: "1rem" }}>
+      <div style={{ marginTop: "1rem", textAlign: "center" }}>
         <label>Sugar-Free Syrup Options Available:</label>
-        <div style={{ display: "flex", gap: "16px", marginTop: "4px" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: "16px", marginTop: "4px" }}>
           {["Yes", "No"].map((val) => (
             <label key={val}>
               <input
@@ -262,7 +326,7 @@ const Ratings = () => {
                 checked={sugarFree === val}
                 onChange={() => setSugarFree(val)}
               />
-              {val}
+              {" " + val}
             </label>
           ))}
         </div>
@@ -270,31 +334,70 @@ const Ratings = () => {
 
       {error && <p style={{ color: "red" }}>{error}</p>}
 
-      <button onClick={handleSubmit}>
-        {editingReviewId ? "Update Review" : "Submit Rating"}
-      </button>
+      <button
+  onClick={handleSubmit}
+  style={{
+    backgroundColor: "#5a3e2b",
+    color: "#fffaf5",
+    padding: "10px 20px",
+    borderRadius: "8px",
+    border: "none",
+    marginTop: "1rem",
+    fontFamily: "inherit",
+    fontSize: "1rem",
+    cursor: "pointer",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
+    transition: "all 0.2s ease-in-out"
+  }}
+>
+  {editingReviewId ? "Update Review" : "Submit Rating"}
+</button>
 
       <h3 style={{ marginTop: "2rem" }}>Your Reviews for this Shop:</h3>
       {reviews.length === 0 && <p>No reviews yet. Be the first to rate this coffee shop!</p>}
 
       {(expanded ? reviews : reviews.slice(0, 2)).map((review) => (
         <div
-          key={review.id}
-          style={{
-            border: "1px solid #8B5E3C",
-            borderRadius: "12px",
-            padding: "16px",
-            marginBottom: "16px",
-            backgroundColor: "#fffaf5",
-            boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-          }}
-        >
+        key={review.id}
+        style={{
+          border: "1px solid #8B5E3C",
+          borderRadius: "12px",
+          padding: "16px",
+          marginBottom: "24px",
+          backgroundColor: "#fcf8f3",
+          boxShadow: "0 4px 10px rgba(90, 62, 43, 0.1)",
+          animation: "fadeIn 0.4s ease-in"
+        }}
+      >
           <strong style={{ fontSize: "0.9rem", color: "#5a3e2b" }}>{review.displayName}</strong>
           <div style={{ fontSize: "0.8rem", color: "#888", marginBottom: "8px" }}>
             Reviewed on {formatDate(review.timestamp)}
           </div>
+          <p style={{
+              fontStyle: "italic",
+              color: "#5a3e2b",
+              backgroundColor: "#f5e8dc",
+              padding: "10px",
+              borderRadius: "8px",
+              marginBottom: "8px"
+            }}>
+              {review.comment || " "}
+              
+            </p>
 
-          <p style={{ fontStyle: "italic" }}>{review.comment || "(No comment provided)"}</p>
+            {review.milkOptions?.length > 0 && (
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" }}>
+            {review.milkOptions.map((milk, idx) => (
+              <span key={idx} style={{
+                padding: "4px 8px",
+                backgroundColor: "#e8d6c3",
+                borderRadius: "12px",
+                fontSize: "0.85rem",
+                color: "#5a3e2b"
+              }}>{milk}</span>
+            ))}
+          </div>
+        )}
 
           <div style={{ fontSize: "0.9rem", marginTop: "8px" }}>
             {Object.entries(review.ratings || {}).map(([key, val]) => (
@@ -305,19 +408,48 @@ const Ratings = () => {
           </div>
 
           <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
-            <button onClick={() => handleEdit(review)}>Edit</button>
-            <button onClick={() => handleDelete(review.id)}>Delete</button>
+            <button onClick={() => handleEdit(review)} style={actionBtn}>Edit</button>
+            <button onClick={() => handleDelete(review.id)} style={deleteBtn}>Delete</button>
           </div>
         </div>
       ))}
 
       {reviews.length > 2 && (
-        <button onClick={() => setExpanded(!expanded)} style={{ marginBottom: "2rem" }}>
+        <button
+          onClick={() => setExpanded(!expanded)}
+          style={{ marginBottom: "2rem", marginTop: "8px" }}
+        >
           {expanded ? "Show Less" : "Show More Reviews"}
         </button>
       )}
     </div>
   );
 };
+
+const actionBtn = {
+  backgroundColor: "#d7b898",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "5px",
+  cursor: "pointer"
+};
+
+const deleteBtn = {
+  backgroundColor: "#A2845E",
+  color: "#fff",
+  border: "none",
+  padding: "6px 12px",
+  borderRadius: "5px",
+  cursor: "pointer"
+};
+
+<style>
+{`
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+`}
+</style>
 
 export default Ratings;
