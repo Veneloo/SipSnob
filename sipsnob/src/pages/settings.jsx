@@ -54,10 +54,15 @@ const Settings = () => {
   }, []);
 
   const handleSaveChanges = async () => {
+    console.log("Save Changes clicked");
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+      alert("You must be logged in to update your profile.");
+      return;
+    }
 
     const trimmedUsername = profileData.username.trim().toLowerCase();
+    console.log("Trimmed username:", trimmedUsername);
     if (!trimmedUsername || trimmedUsername.length < 3) {
       alert("Username must be at least 3 characters.");
       return;
@@ -65,6 +70,7 @@ const Settings = () => {
 
     const q = query(collection(db, "users"), where("username", "==", trimmedUsername));
     const snapshot = await getDocs(q);
+    console.log("Snapshot matches:", snapshot.docs.map(doc => doc.id));
     const isTaken = snapshot.docs.some((docSnap) => docSnap.id !== user.uid);
     if (isTaken) {
       alert("Username is already taken.");
@@ -96,8 +102,8 @@ const Settings = () => {
         <div className="row-container" style={{ width: "100%", flexWrap: "wrap", justifyContent: "space-between", alignItems: "center", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>
           <h1>Settings</h1>
           <div>
-            <button className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b", maxHeight: "fit-content" }}>Cancel</button>
-            <button className="button" style={{ maxHeight: "fit-content", backgroundColor: "#5a3e2b" }} onClick={handleSaveChanges}>Save Changes</button>
+            <button type="button" className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b", maxHeight: "fit-content" }}>Cancel</button>
+            <button type="button" className="button" style={{ maxHeight: "fit-content", backgroundColor: "#5a3e2b" }} onClick={handleSaveChanges}>Save Changes</button>
           </div>
         </div>
 
@@ -176,3 +182,4 @@ const Settings = () => {
 };
 
 export default Settings;
+
