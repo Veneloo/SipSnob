@@ -4,11 +4,13 @@ import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { AuthContext } from "../context/authContext";
 import defaultImg from "../assets/sampleimg.png";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const ProfilePage = () => {
   const { currentUser } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
   const [reviews, setReviews] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -82,6 +84,7 @@ const ProfilePage = () => {
         <motion.button
           whileHover={{ scale: 1.05 }}
           className="button"
+          onClick={() => navigate("/settings#ProfileInfo")}
           style={{
             backgroundColor: "#d7b898",
             padding: "5px 15px",
