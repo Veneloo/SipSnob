@@ -110,11 +110,9 @@ const Ratings = () => {
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
       await setDoc(userReviewRef, payload);
-      console.log("Saved to user subcollection");
 
       const publicReviewRef = doc(db, "reviews", reviewId);
       await setDoc(publicReviewRef, payload);
-      console.log("Public review saved successfully.");
 
       setError("");
       alert(editingReviewId ? "Review updated!" : "Rating submitted successfully!");
@@ -192,11 +190,28 @@ const Ratings = () => {
         </div>
       ))}
 
-      <textarea
-        placeholder="Write your review here..."
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-      />
+      <div style={{ marginTop: "1rem", textAlign: "left", width: "100%" }}>
+        <label htmlFor="comment" style={{ fontWeight: "bold", color: "#5a3e2b" }}>
+          Optional Comment:
+        </label>
+        <textarea
+          id="comment"
+          placeholder="Share your thoughts about this coffee shop..."
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          rows={4}
+          style={{
+            width: "100%",
+            padding: "10px",
+            borderRadius: "8px",
+            border: "1px solid #ccc",
+            marginTop: "8px",
+            fontFamily: "inherit",
+          }}
+        />
+      </div>
+
+      <hr style={{ width: "90%", margin: "30px auto", borderTop: "2px solid #A2845E" }} />
 
       <div style={{ marginTop: "1rem" }}>
         <label>Alternative Milk Options:</label>
