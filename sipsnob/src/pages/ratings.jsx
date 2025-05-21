@@ -224,13 +224,11 @@ const Ratings = () => {
       }}
     />
 
-    {/* Right side: Number */}
     <span style={{ flex: "0", fontWeight: "bold", color: "#5a3e2b", minWidth: "30px", textAlign: "right" }}>
       {value}/10
     </span>
   </div>
 ))}
-
 
     <div style={{ marginTop: "1rem", width: "100%" }}>
       <label style={{ 

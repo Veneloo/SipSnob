@@ -1,71 +1,178 @@
-import React, { useEffect, useState } from "react";
-import './pages.css';
-import sampleImg from "../assets/sampleimg.png";
-import { useNavigate } from "react-router-dom";
-import FriendItem from "../components/FriendItem";
-import RatingItem from "../components/RatingItem";
-import CommentItem from "../components/CommentItem";
-import { auth, db } from "../firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import React, { useEffect, useState, useContext } from "react";
+import { db } from "../firebaseConfig";
+import { doc, getDoc, collection, getDocs } from "firebase/firestore";
+import { AuthContext } from "../context/authContext";
+import defaultImg from "../assets/sampleimg.png";
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const [sectionOpen, sectionSelect] = useState("comments");
-  const [userData, setUserData] = useState(null);
+  const { currentUser } = useContext(AuthContext);
+  const [profile, setProfile] = useState({});
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const user = auth.currentUser;
-      if (user) {
-        const userRef = doc(db, "users", user.uid);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          setUserData(userSnap.data());
-        }
-      }
+      if (!currentUser) return;
+      const ref = doc(db, "users", currentUser.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) setProfile(snap.data());
     };
-    fetchUser();
-  }, []);
 
-  const sampleRatingHistory = [ /* ... same rating data ... */ ];
-  const sampleCommentHistory = [ /* ... same comment data ... */ ];
-  const sampleFriendList = [ /* ... same friend data ... */ ];
+    const fetchReviews = async () => {
+      if (!currentUser) return;
+      const snapshot = await getDocs(collection(db, "users", currentUser.uid, "reviews"));
+      const data = snapshot.docs.map((doc) => doc.data());
+      setReviews(data);
+    };
+
+    fetchUser();
+    fetchReviews();
+  }, [currentUser]);
 
   return (
-    <div className="page-container">
-      <div className="profile-info column-container" style={{ alignItems: "center" }}>
-        <div
+    <div
+      className="page-container"
+      style={{
+        padding: "20px",
+        textAlign: "center",
+        marginTop: "60px", 
+      }}
+    >
+      {/* Profile Card */}
+      <div style={{
+        backgroundColor: "#5a3e2b",
+        borderRadius: "24px",
+        color: "#f5e1c8",
+        padding: "20px",
+        margin: "0 auto",
+        width: "90%",
+        maxWidth: "250px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+      }}>
+        <img
+          src={profile.profileImage || defaultImg}
+          alt="profile"
           style={{
-            height: "150px",
-            width: "150px",
-            backgroundImage: `url(${sampleImg})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            borderRadius: "100%",
-            boxShadow: "0 1px 2px rgb(0,0,0,0.1)",
-            border: "1px solid rgb(0,0,0,0.5)",
+            width: "120px",
+            height: "120px",
+            borderRadius: "50%",
+            objectFit: "cover",
+            border: "3px solid #f5e1c8",
+            marginBottom: "12px"
           }}
         />
-
-        {userData ? (
-          <div>
-            <h2 style={{ color: "#f5e1c8", marginBottom: "0px" }}>{userData.full_name}</h2>
-            <p style={{ color: "#d7b898", marginBlock: "0px" }}>{userData.username ?? "@user"}</p>
-            <p style={{ color: "#d7b898", marginBlock: "0px" }}>{userData.location ?? "Location not set"}</p>
-            <button
-              className="button"
-              onClick={() => navigate("/settings")}
-              style={{ backgroundColor: "#d7b898", color: "#8B5E3C" }}
-            >
-              Edit
-            </button>
-          </div>
-        ) : (
-          <p style={{ color: "#d7b898" }}>Loading user info...</p>
-        )}
+        <h2>{profile.full_name || "Name"}</h2>
+        <p>{profile.username}</p>
+        <p>{profile.location}</p>
+        <button style={{
+          backgroundColor: "#d7b898",
+          padding: "8px 16px",
+          borderRadius: "8px",
+          border: "none",
+          marginTop: "12px",
+          fontWeight: "bold"
+        }}>
+          Edit
+        </button>
       </div>
 
-      {/* Remainder of the profile sections with ratings/comments/friends goes here */}
+    {/* Ratings Section */}
+    <h2 style={{ marginTop: "30px", color: "#5a3e2b" }}>My Ratings</h2>
+    <div
+      style={{
+        minHeight: "320px",
+        overflowY: "auto",
+        margin: "0 auto",
+        width: "400px",
+        maxWidth: "750px",
+        paddingRight: "8px",
+      }}
+    >
+      {reviews.length === 0 ? (
+        <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>
+          You haven’t rated any coffee shops yet.
+        </p>
+      ) : (
+        reviews.map((review) => (
+          <div
+            key={review.id}
+            style={{
+              backgroundColor: "#fffaf5",
+              padding: "28px",
+              borderRadius: "16px",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+              marginBottom: "20px",
+              minHeight: "180px",
+              textAlign: "center",
+              transition: "transform 0.2s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.01)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <h3
+              style={{
+                color: "#5a3e2b",
+                fontSize: "1.3rem",
+                marginBottom: "10px",
+              }}
+            >
+              {review.shopName}
+            </h3>
+            <p
+              style={{
+                fontStyle: "italic",
+                fontWeight: "500",
+                color: "#5a3e2b",
+                marginBottom: "16px",
+                fontSize: "1rem",
+              }}
+            >
+              {review.comment?.trim() !== "" ? review.comment : "No comment"}
+            </p>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-start",
+                gap: "6px",
+                textAlign: "left",
+                margin: "0 auto",
+                maxWidth: "360px",
+                fontSize: "1rem",
+              }}
+            >
+              {Object.entries(review.ratings || {}).map(([key, val]) => (
+                <div key={key} style={{ lineHeight: "1.5" }}>
+                  <strong>
+                    {key
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, (str) => str.toUpperCase())}
+                    :
+                  </strong>
+                  <span style={{ marginLeft: "8px", color: "#5a3e2b" }}>{val}/10</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+
+
+      {/* Friends Section */}
+      <h2 style={{ marginTop: "40px", color: "#5a3e2b" }}>My Friends</h2>
+      <div style={{
+        backgroundColor: "#fffaf5",
+        padding: "20px",
+        borderRadius: "12px",
+        margin: "0 auto",
+        width: "90%",
+        maxWidth: "500px",
+        color: "#8b5e3c",
+        fontStyle: "italic",
+        marginBottom: "60px"
+      }}>
+        You haven’t added any friends yet.
+      </div>
     </div>
   );
 };
