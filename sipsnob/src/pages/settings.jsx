@@ -40,6 +40,10 @@ const Settings = () => {
     }
   };
 
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   const handleSaveChanges = async () => {
     const user = auth.currentUser;
     if (!user) {
