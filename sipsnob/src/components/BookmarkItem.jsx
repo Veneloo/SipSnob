@@ -84,7 +84,7 @@ export default function BookmarkItem({ bookmarkDetails, onRemove }) {
           style={{
             position: 'absolute',
             top: 12,
-            right: 12,
+            right: 15,
             zIndex: 2,
             cursor: 'pointer',
             fontSize: '1.3rem',
