@@ -17,12 +17,11 @@ const Settings = () => {
   });
 
   const [changePassword, setChangePassword] = useState(false);
+  const [bookmarkedShops, setBookmarkedShops] = useState([]);
 
   const handleChangePassword = () => {
     setChangePassword(!changePassword);
   };
-
-  const [bookmarkedShops, setBookmarkedShops] = useState([]);
 
   const fetchUserData = async () => {
     const user = auth.currentUser;
@@ -54,7 +53,6 @@ const Settings = () => {
   }, []);
 
   const handleSaveChanges = async () => {
-    console.log("Save Changes clicked");
     const user = auth.currentUser;
     if (!user) {
       alert("You must be logged in to update your profile.");
@@ -62,7 +60,6 @@ const Settings = () => {
     }
 
     const trimmedUsername = profileData.username.trim().toLowerCase();
-    console.log("Trimmed username:", trimmedUsername);
     if (!trimmedUsername || trimmedUsername.length < 3) {
       alert("Username must be at least 3 characters.");
       return;
@@ -70,7 +67,6 @@ const Settings = () => {
 
     const q = query(collection(db, "users"), where("username", "==", trimmedUsername));
     const snapshot = await getDocs(q);
-    console.log("Snapshot matches:", snapshot.docs.map(doc => doc.id));
     const isTaken = snapshot.docs.some((docSnap) => docSnap.id !== user.uid);
     if (isTaken) {
       alert("Username is already taken.");
@@ -86,7 +82,6 @@ const Settings = () => {
       user_id: user.uid,
     }, { merge: true });
 
-    setProfileData(prev => ({ ...prev, username: trimmedUsername }));
     alert("Profile updated!");
   };
 
@@ -104,7 +99,17 @@ const Settings = () => {
           <h1>Settings</h1>
           <div>
             <button type="button" className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b", maxHeight: "fit-content" }}>Cancel</button>
-            <button type="button" className="button" style={{ maxHeight: "fit-content", backgroundColor: "#5a3e2b" }} onClick={handleSaveChanges}>Save Changes</button>
+            <button
+              type="submit"
+              className="button"
+              style={{ maxHeight: "fit-content", backgroundColor: "#5a3e2b" }}
+              onClick={(e) => {
+                e.preventDefault();
+                handleSaveChanges();
+              }}
+            >
+              Save Changes
+            </button>
           </div>
         </div>
 
@@ -120,7 +125,6 @@ const Settings = () => {
               <p style={{ fontWeight: "bolder" }}>{profileData.fullName}</p>
               <p style={{ color: "#A2845E" }}>{profileData.email}</p>
               <p style={{ color: "#A2845E" }}>{profileData.location || "Add Location"}</p>
-              <p style={{ color: "#A2845E" }}>{profileData.username ? `@${profileData.username}` : "Add Username"}</p>
             </div>
             <button className="button" style={{ maxHeight: "fit-content" }}>Upload Photo</button>
             <button className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b", maxHeight: "fit-content" }}>Delete</button>
@@ -149,7 +153,7 @@ const Settings = () => {
               <label style={{ alignSelf: "flex-start", color: "#A2845E" }}>Location:</label>
               <input className="input settings" value={profileData.location} onChange={(e) => setProfileData({ ...profileData, location: e.target.value })} />
 
-              <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }} onClick={handleChangePassword}>
+              <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }} onClick={() => handleChangePassword()}>
                 Change Password
               </button>
               {changePassword && (
