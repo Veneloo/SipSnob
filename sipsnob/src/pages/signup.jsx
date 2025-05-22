@@ -4,6 +4,8 @@ import { signUpUser } from "../firebase/auth";
 import { db } from "../firebaseConfig";
 import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { motion } from "framer-motion";
+import { updateProfile } from "firebase/auth";
+import { auth } from "../firebaseConfig";
 
 function SignUp() {
   const [error, setError] = useState('');
@@ -44,26 +46,22 @@ function SignUp() {
         return;
       }
 
-      const userCredential = await signUpUser(email, password);
-      const user = userCredential.user;
+      // Create user account
+      const user = await signUpUser(email, password, username);
 
-      if (!user || !user.uid) {
-        setError("Authentication failed. Try again.");
-        return;
-      }
-
+      // Set user document in Firestore with UID as document ID
       const userRef = doc(db, "users", user.uid);
       await setDoc(userRef, {
         email,
         username: username.toLowerCase(),
+        user_id: user.uid, // 
         createdAt: new Date(),
-        user_id: user.uid,
       });
 
       navigate("/home");
     } catch (err) {
       console.error(err);
-      setError(err.message || "An error occurred during sign-up.");
+      setError("Authentication failed. Try again.");
     }
   };
 
@@ -85,16 +83,14 @@ function SignUp() {
         flexDirection: "column",
       }}
     >
-      <div
-        style={{
-          top: "0",
-          width: "100vw",
-          padding: "2px",
-          textAlign: "center",
-          boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
-          zIndex: "1000",
-        }}
-      >
+      <div style={{
+        top: "0",
+        width: "100vw",
+        padding: "2px",
+        textAlign: "center",
+        boxShadow: "0 2px 2px rgb(0,0,0,0.2)",
+        zIndex: "1000",
+      }}>
         <p
           style={{
             fontSize: "24px",
@@ -126,9 +122,7 @@ function SignUp() {
           borderRadius: "10px",
         }}
       >
-        <h1 style={{ fontWeight: "bold", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>
-          Sign Up
-        </h1>
+        <h1 style={{ fontWeight: "bold", textShadow: "0 2px 2px rgb(0,0,0,0.2)" }}>Sign Up</h1>
 
         <form onSubmit={handleSignUp}>
           <label>Enter an email </label>
@@ -162,11 +156,7 @@ function SignUp() {
           />
           <br />
           {error && (
-            <motion.p
-              style={{ color: "red", margin: "25px" }}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
+            <motion.p style={{ color: "red", margin: "25px" }} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
               {error}
             </motion.p>
           )}
