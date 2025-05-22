@@ -118,10 +118,10 @@ const FriendProfilePage = () => {
             borderRadius: "25%",
             objectFit: "cover",
             border: "2px solid #d7b898",
-            marginBottom: "10px",
-            background: `linear-gradient(to right, #8B5E3C ${value * 10}%, #f2e3d5 ${value * 10}%)`
+            marginBottom: "10px"
           }}
         />
+
         <h2 style={{ color: "#f5e1c8", marginBottom: "5px" }}>{friend.full_name || "Name"}</h2>
         <p style={{ color: "#d7b898", marginBlock: "0" }}>@{friend.username}</p>
         <p style={{ color: "#d7b898", marginBlock: "0" }}>{friend.location}</p>
