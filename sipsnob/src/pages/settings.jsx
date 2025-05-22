@@ -154,8 +154,8 @@ const Settings = () => {
               <p style={{ color: "#A2845E" }}>{profileData.email}</p>
               <p style={{ color: "#A2845E" }}>{profileData.location || "Add Location"}</p>
             </div>
-            <button className="button">Upload Photo</button>
-            <button className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b" }}>Delete</button>
+            {/* <button className="button">Upload Photo</button>
+            <button className="button" style={{ backgroundColor: "#A2845E", color: "#5a3e2b" }}>Delete</button> */}
           </div>
 
           <h3>User Information</h3>
@@ -183,9 +183,9 @@ const Settings = () => {
               <label style={{ color: "#A2845E" }}>Location:</label>
               <input className="input settings" value={profileData.location} onChange={(e) => setProfileData({ ...profileData, location: e.target.value })} />
 
-              <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }} onClick={handleChangePassword}>
+              {/* <button className="button" style={{ backgroundColor: "#5a3e2b", maxWidth: "50%", alignSelf: "center" }} onClick={handleChangePassword}>
                 Change Password
-              </button>
+              </button> */}
 
               <AnimatePresence>
                 {changePassword && (
