@@ -164,7 +164,7 @@ function LogIn() {
             Log in
           </motion.button>
 
-          <br />
+          {/* <br />
           <motion.button
             whileHover={{ scale: 1.05 }}
             type="button"
@@ -181,7 +181,7 @@ function LogIn() {
             onClick={handleForgotPassword}
           >
             Forgot Password
-          </motion.button>
+          </motion.button> */}
 
           <AnimatePresence>
             {forgotPasswordOpen && (
