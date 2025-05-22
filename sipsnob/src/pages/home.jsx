@@ -1,72 +1,61 @@
 import React, { useEffect, useState } from "react";
 import './pages.css';
-import sampleImg from "../assets/sampleimg.png";
-import RatingItem from "../components/RatingItem";
-import BookmarkItem from "../components/BookmarkItem";
 import { useNavigate } from "react-router-dom";
 import { auth, db } from "../firebaseConfig";
 import { doc, getDoc, collection, getDocs, deleteDoc } from "firebase/firestore";
-import { motion } from "framer-motion"; 
+import { motion } from "framer-motion";
+import RatingItem from "../components/RatingItem";
+import BookmarkItem from "../components/BookmarkItem";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("User");
   const [bookmarkedShops, setBookmarkedShops] = useState([]);
-  const [feedRatings, setFeedRatings] = useState([]);
+  const [feedRatingIds, setFeedRatingIds] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       const user = auth.currentUser;
-      if (user) {
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
-        if (snap.exists()) {
-          setFullName(snap.data().full_name || "User");
+      if (!user) return;
+
+      const ref = doc(db, "users", user.uid);
+      const snap = await getDoc(ref);
+      if (snap.exists()) {
+        const data = snap.data();
+        setFullName(data.full_name || "User");
+
+        const feedIds = [];
+
+        // Add user's own reviews
+        const userReviewsRef = collection(db, `users/${user.uid}/reviews`);
+        const userReviewSnap = await getDocs(userReviewsRef);
+        userReviewSnap.forEach(doc => feedIds.push(doc.id));
+
+        // Add friends' reviews
+        const friendsRef = collection(db, `users/${user.uid}/friends`);
+        const friendsSnap = await getDocs(friendsRef);
+        for (const friendDoc of friendsSnap.docs) {
+          const friendId = friendDoc.id;
+          const friendReviewsRef = collection(db, `users/${friendId}/reviews`);
+          const friendReviewSnap = await getDocs(friendReviewsRef);
+          friendReviewSnap.forEach(doc => feedIds.push(doc.id));
         }
+
+        setFeedRatingIds(feedIds);
       }
     };
 
     const fetchBookmarks = async () => {
       const user = auth.currentUser;
-      if (user) {
-        const snapshot = await getDocs(collection(db, `users/${user.uid}/bookmarks`));
-        const bookmarks = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
-        setBookmarkedShops(bookmarks);
-      }
-    };
-
-    const fetchFeed = async () => {
-      const user = auth.currentUser;
       if (!user) return;
 
-      const userId = user.uid;
-      const ratingsRef = collection(db, `users/${userId}/ratings`);
-      const friendsRef = collection(db, `users/${userId}/friends`);
-
-      const ratingsSnap = await getDocs(ratingsRef);
-      const userRatings = ratingsSnap.docs.map(doc => ({ ...doc.data(), user: "You", id: doc.id }));
-
-      const friendsSnap = await getDocs(friendsRef);
-      const friendRatings = [];
-
-      for (const docRef of friendsSnap.docs) {
-        const friendId = docRef.data().friendId;
-        const friendRatingsSnap = await getDocs(collection(db, `users/${friendId}/ratings`));
-        friendRatingsSnap.forEach(doc => {
-          friendRatings.push({ ...doc.data(), user: docRef.data().username || "Friend", id: doc.id });
-        });
-      }
-
-      const allRatings = [...userRatings, ...friendRatings].sort(
-        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-      );
-
-      setFeedRatings(allRatings);
+      const snapshot = await getDocs(collection(db, `users/${user.uid}/bookmarks`));
+      const bookmarks = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setBookmarkedShops(bookmarks);
     };
 
     fetchUserData();
     fetchBookmarks();
-    fetchFeed();
   }, []);
 
   const handleRemoveBookmark = async (bookmarkDetails) => {
@@ -82,12 +71,7 @@ const HomePage = () => {
   };
 
   return (
-    <motion.div
-      className="page-container"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-    >
+    <motion.div className="page-container" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
       <motion.h1
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -106,12 +90,10 @@ const HomePage = () => {
         <h2 style={{ color: "#A2845E", textShadow: "0 1px 1px rgb(0,0,0,0.1)" }}>
           Bookmarked shops near you
         </h2>
-
         <motion.div
           style={{
             display: 'flex',
             overflowX: 'auto',
-            overflowY: 'hidden',
             scrollBehavior: 'smooth',
             width: '70vw',
             margin: "24px",
@@ -126,25 +108,11 @@ const HomePage = () => {
         >
           {bookmarkedShops.length > 0 ? (
             bookmarkedShops.map((item) => (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4 }}
-              >
-                <BookmarkItem
-                  bookmarkDetails={item}
-                  onRemove={handleRemoveBookmark}
-                />
-              </motion.div>
+              <BookmarkItem key={item.id} bookmarkDetails={item} onRemove={handleRemoveBookmark} />
             ))
           ) : (
             <div style={{ width: "inherit", height: "fit-content", margin: "0", color: "#572e05" }}>
-              <h3>
-                There are no bookmarks to display.
-                <br />
-                Go to the Discover & Search tab to find shops!
-              </h3>
+              <h3>There are no bookmarks to display.<br />Go to the Discover tab to find shops!</h3>
               <button className="button" onClick={() => navigate("/discover")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
                 Discover Coffee Shops
               </button>
@@ -153,13 +121,9 @@ const HomePage = () => {
         </motion.div>
       </div>
 
+      {/* Feed Section */}
       <br />
-
-      {/* Feed */}
-      <h2 style={{ color: "#A2845E", textShadow: "0 1px 1px rgb(0,0,0,0.1)" }}>
-        Your Feed
-      </h2>
-
+      <h2 style={{ color: "#A2845E", textShadow: "0 1px 1px rgb(0,0,0,0.1)" }}>Your Feed</h2>
       <motion.div
         className="feed"
         style={{ width: "95%" }}
@@ -168,24 +132,27 @@ const HomePage = () => {
         transition={{ duration: 0.6 }}
         viewport={{ once: true, amount: 0.2 }}
       >
-        {feedRatings.map((rating, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
-          >
-            <RatingItem ratingDetails={rating} />
-          </motion.div>
-        ))}
-
-        {feedRatings.length === 0 && (
-          <div style={{ width: "inherit", height: "fit-content", color: "#572e05", backgroundColor: "rgb(90, 62, 43)", padding: "12px", borderRadius: "24px" }}>
-            <h3>
-              There is no friend activity to display.
-              <br />
-              Go to the settings tab to follow friends!
-            </h3>
+        {feedRatingIds.length > 0 ? (
+          feedRatingIds.map((id, index) => (
+            <motion.div
+              key={id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+            >
+              <RatingItem ratingId={id} />
+            </motion.div>
+          ))
+        ) : (
+          <div style={{
+            width: "inherit",
+            height: "fit-content",
+            color: "#572e05",
+            backgroundColor: "rgb(90, 62, 43)",
+            padding: "12px",
+            borderRadius: "24px"
+          }}>
+            <h3>There is no friend activity to display.<br />Go to the settings tab to follow friends!</h3>
             <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
               Add Friends
             </button>

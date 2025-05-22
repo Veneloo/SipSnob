@@ -1,5 +1,6 @@
+// RatingItem.jsx
 import React, { useState, useEffect } from "react";
-import { doc, onSnapshot } from "firebase/firestore";
+import { doc, onSnapshot, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig";
 import sampleImg from "../assets/sampleimg.png";
 
@@ -19,13 +20,23 @@ const formatRatingDetail = (label) => {
 
 const RatingItem = ({ ratingId }) => {
   const [ratingDetails, setRatingDetails] = useState(null);
+  const [userInfo, setUserInfo] = useState(null);
 
   useEffect(() => {
     if (!ratingId) return;
 
-    const unsubscribe = onSnapshot(doc(db, "reviews", ratingId), (docSnap) => {
+    const unsubscribe = onSnapshot(doc(db, "reviews", ratingId), async (docSnap) => {
       if (docSnap.exists()) {
-        setRatingDetails(docSnap.data());
+        const data = docSnap.data();
+        setRatingDetails(data);
+
+        if (data.userId) {
+          const userRef = doc(db, "users", data.userId);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            setUserInfo(userSnap.data());
+          }
+        }
       }
     });
 
@@ -43,17 +54,17 @@ const RatingItem = ({ ratingId }) => {
       margin: "20px 0",
       maxWidth: "700px"
     }}>
-      
+
       <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
         <div style={{
           width: "50px",
           height: "50px",
-          backgroundImage: `url(${sampleImg})`,
+          backgroundImage: `url(${userInfo?.pfp || sampleImg})`,
           backgroundSize: "cover",
           borderRadius: "50%"
         }} />
         <div>
-          <h3 style={{ margin: 0 }}>{ratingDetails.user || "Anonymous"} rated {ratingDetails.shopName}</h3>
+          <h3 style={{ margin: 0 }}>{userInfo?.username || "Anonymous"} rated {ratingDetails.shopName}</h3>
           <small>{new Date(ratingDetails.timestamp?.toDate?.() || Date.now()).toLocaleString()}</small>
         </div>
       </div>
