@@ -24,12 +24,14 @@ const HomePage = () => {
         const data = snap.data();
         setFullName(data.full_name || "User");
 
-        const feedIds = [];
+        const feedEntries = [];
 
         // Add user's own reviews
         const userReviewsRef = collection(db, `users/${user.uid}/reviews`);
         const userReviewSnap = await getDocs(userReviewsRef);
-        userReviewSnap.forEach(doc => feedIds.push(doc.id));
+        userReviewSnap.forEach(doc => {
+          feedEntries.push({ id: doc.id, timestamp: doc.data().timestamp });
+        });
 
         // Add friends' reviews
         const friendsRef = collection(db, `users/${user.uid}/friends`);
@@ -38,10 +40,19 @@ const HomePage = () => {
           const friendId = friendDoc.id;
           const friendReviewsRef = collection(db, `users/${friendId}/reviews`);
           const friendReviewSnap = await getDocs(friendReviewsRef);
-          friendReviewSnap.forEach(doc => feedIds.push(doc.id));
+          friendReviewSnap.forEach(doc => {
+            feedEntries.push({ id: doc.id, timestamp: doc.data().timestamp });
+          });
         }
 
-        setFeedRatingIds(feedIds);
+        // Sort by timestamp (newest first)
+        feedEntries.sort((a, b) => {
+          const aTime = a.timestamp?.toMillis?.() || 0;
+          const bTime = b.timestamp?.toMillis?.() || 0;
+          return bTime - aTime;
+        });
+
+        setFeedRatingIds(feedEntries.map(entry => entry.id));
       }
     };
 

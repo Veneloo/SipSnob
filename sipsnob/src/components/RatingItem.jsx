@@ -64,7 +64,11 @@ const RatingItem = ({ ratingId }) => {
         }} />
         <div>
           <h3 style={{ margin: 0 }}>{userInfo?.username || "Anonymous"} rated {ratingDetails.shopName}</h3>
-          <small>{new Date(ratingDetails.timestamp?.toDate?.() || Date.now()).toLocaleString()}</small>
+          <small>
+            {ratingDetails.timestamp
+              ? new Date(ratingDetails.timestamp).toLocaleString()
+              : "Unknown date"}
+          </small>
         </div>
       </div>
 
