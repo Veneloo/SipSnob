@@ -135,31 +135,39 @@ const Ratings = () => {
   };
   
   const handleDelete = async (reviewId) => {
+    if (!currentUser || !reviewId) {
+      setError("Missing user or review ID.");
+      return;
+    }
+  
     try {
       const userReviewRef = doc(db, "users", currentUser.uid, "reviews", reviewId);
-      await deleteDoc(userReviewRef);
-
       const publicReviewRef = doc(db, "reviews", reviewId);
-      await deleteDoc(publicReviewRef);
-
-      setEditingReviewId(null);
+  
+      const [userResult, publicResult] = await Promise.allSettled([
+        deleteDoc(userReviewRef),
+        deleteDoc(publicReviewRef)
+      ]);
+  
+      const failed = [];
+      if (userResult.status === "rejected") failed.push("user review");
+      if (publicResult.status === "rejected") failed.push("public review");
+  
+      if (failed.length > 0) {
+        console.warn("Failed to delete from:", failed);
+        alert(`Review deleted, but not fully removed from: ${failed.join(", ")}`);
+      } else {
+        alert("Review successfully deleted from all locations!");
+      }
+  
       setError("");
-      setRatings({
-        drinkConsistency: 5,
-        ambiance: 5,
-        waitTime: 5,
-        pricing: 5,
-        customerService: 5,
-      });
-      setMilkOptions([]);
-      setFoodAvailable(null);
-      setSugarFree(null);
-      setComment("");
+  
     } catch (err) {
-      console.error("Delete error:", err.message);
-      setError("Something went wrong. Try again.");
+      console.error("Unexpected deletion error:", err);
+      setError("Something went wrong while deleting the review.");
     }
   };
+  
 
   const formatDate = (iso) => {
     const date = new Date(iso);
@@ -342,7 +350,7 @@ const Ratings = () => {
           ))}
         </div>
       </div>
-      {/* You can apply motion.div to other sections like comments, checkboxes, etc., similarly if desired */}
+      
 
       {error && <motion.p style={{ color: "red" }} initial={{ scale: 0.9 }} animate={{ scale: 1 }}>{error}</motion.p>}
 
