@@ -44,7 +44,13 @@ function SignUp() {
         return;
       }
 
-      const user = await signUpUser(email, password, username);
+      const userCredential = await signUpUser(email, password);
+      const user = userCredential.user;
+
+      if (!user || !user.uid) {
+        setError("Authentication failed. Try again.");
+        return;
+      }
 
       const userRef = doc(db, "users", user.uid);
       await setDoc(userRef, {
@@ -57,7 +63,7 @@ function SignUp() {
       navigate("/home");
     } catch (err) {
       console.error(err);
-      setError(err.message);
+      setError(err.message || "An error occurred during sign-up.");
     }
   };
 
