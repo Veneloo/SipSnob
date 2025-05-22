@@ -12,83 +12,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [fullName, setFullName] = useState("User");
   const [bookmarkedShops, setBookmarkedShops] = useState([]);
-
-  const sampleFeed = [
-    {
-      shopName: "Blank Street (71st & Lex)",
-      user: "Axel",
-      timestamp: "2025-04-18T14:00:00",
-      ratings: {
-        drinkConsistency: 8,
-        ambiance: 7,
-        waitTime: 5,
-        pricing: 6,
-        customerService: 9,
-      },
-      milkOptions: ["Oat", "Almond"],
-      foodAvailable: "Yes",
-      sugarFree: "No",
-      comment: "Cute space! Wish there were more food options.",
-      replies: [
-        {
-          user: "Liliana",
-          timestamp: "2025-04-18T16:12:00",
-          text: "Totally agree! Their pastry section is lacking 😩",
-        },
-        {
-          user: "Hannah",
-          timestamp: "2025-04-18T18:45:00",
-          text: "They told me food is coming soon!",
-        },
-      ],
-    },
-    {
-      shopName: "The Daily Drip",
-      user: "John",
-      timestamp: "2025-04-14T10:20:00",
-      ratings: {
-        drinkConsistency: 7,
-        ambiance: 6,
-        waitTime: 8,
-        pricing: 5,
-        customerService: 7,
-      },
-      milkOptions: ["Whole", "Almond"],
-      foodAvailable: "Yes",
-      sugarFree: "No",
-      comment: "Fast service, decent coffee. Good spot for a quick stop.",
-      replies: [
-        {
-          user: "Sarah",
-          timestamp: "2025-04-14T12:05:00",
-          text: "Their croissants are underrated tbh!",
-        }
-      ]
-    },
-    {
-      shopName: "Mocha Mornings",
-      user: "Emily",
-      timestamp: "2025-04-16T13:55:00",
-      ratings: {
-        drinkConsistency: 9,
-        ambiance: 8,
-        waitTime: 3,
-        pricing: 6,
-        customerService: 9,
-      },
-      milkOptions: ["Oat", "Soy"],
-      foodAvailable: "No",
-      sugarFree: "Yes",
-      comment: "So cute inside! Wish they had food but the drinks are top tier.",
-      replies: [
-        {
-          user: "David",
-          timestamp: "2025-04-16T15:10:00",
-          text: "Right?? Their iced mocha is insane.",
-        }
-      ]
-    }
-  ];
+  const [feedRatings, setFeedRatings] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -111,8 +35,38 @@ const HomePage = () => {
       }
     };
 
+    const fetchFeed = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const userId = user.uid;
+      const ratingsRef = collection(db, `users/${userId}/ratings`);
+      const friendsRef = collection(db, `users/${userId}/friends`);
+
+      const ratingsSnap = await getDocs(ratingsRef);
+      const userRatings = ratingsSnap.docs.map(doc => ({ ...doc.data(), user: "You", id: doc.id }));
+
+      const friendsSnap = await getDocs(friendsRef);
+      const friendRatings = [];
+
+      for (const docRef of friendsSnap.docs) {
+        const friendId = docRef.data().friendId;
+        const friendRatingsSnap = await getDocs(collection(db, `users/${friendId}/ratings`));
+        friendRatingsSnap.forEach(doc => {
+          friendRatings.push({ ...doc.data(), user: docRef.data().username || "Friend", id: doc.id });
+        });
+      }
+
+      const allRatings = [...userRatings, ...friendRatings].sort(
+        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+      );
+
+      setFeedRatings(allRatings);
+    };
+
     fetchUserData();
     fetchBookmarks();
+    fetchFeed();
   }, []);
 
   const handleRemoveBookmark = async (bookmarkDetails) => {
@@ -133,7 +87,6 @@ const HomePage = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-
     >
       <motion.h1
         initial={{ opacity: 0, y: 10 }}
@@ -174,7 +127,7 @@ const HomePage = () => {
           {bookmarkedShops.length > 0 ? (
             bookmarkedShops.map((item) => (
               <motion.div
-                key={item.id} // ✅ Unique key fix
+                key={item.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4 }}
@@ -198,16 +151,12 @@ const HomePage = () => {
             </div>
           )}
         </motion.div>
-
       </div>
 
       <br />
 
       {/* Feed */}
-      <h2 style={{
-        color: "#A2845E",
-        textShadow: "0 1px 1px rgb(0,0,0,0.1)",
-      }}>
+      <h2 style={{ color: "#A2845E", textShadow: "0 1px 1px rgb(0,0,0,0.1)" }}>
         Your Feed
       </h2>
 
@@ -219,7 +168,7 @@ const HomePage = () => {
         transition={{ duration: 0.6 }}
         viewport={{ once: true, amount: 0.2 }}
       >
-        {sampleFeed.map((rating, index) => (
+        {feedRatings.map((rating, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 10 }}
@@ -230,7 +179,7 @@ const HomePage = () => {
           </motion.div>
         ))}
 
-        {sampleFeed.length === 0 && (
+        {feedRatings.length === 0 && (
           <div style={{ width: "inherit", height: "fit-content", color: "#572e05", backgroundColor: "rgb(90, 62, 43)", padding: "12px", borderRadius: "24px" }}>
             <h3>
               There is no friend activity to display.
