@@ -157,9 +157,9 @@ const ShopDetails = () => {
                 transition={{ delay: 0.4 }}
               >
                 <h3><strong>Opening Hours:</strong></h3>
-                <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left", backgroundColor: "#f5e1c8", padding: "12px 42px", borderRadius: "24px" }}>
+                <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left", backgroundColor: "#f5e1c8", padding: "12px 42px", borderRadius: "24px", minWidth: "fit-content" }}>
                   {shop.opening_hours.weekday_text.map((line, index) => (
-                    <li key={index}>{line}</li>
+                    <li style={{marginBlock: "5px"}} key={index}>{line}</li>
                   ))}
                 </ul>
               </motion.div>

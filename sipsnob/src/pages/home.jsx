@@ -99,7 +99,7 @@ const HomePage = () => {
       {/* Bookmarked Shops */}
       <div>
         <h2 style={{ color: "#A2845E", textShadow: "0 1px 1px rgb(0,0,0,0.1)" }}>
-          Bookmarked shops near you
+          Your Bookmarked Shops
         </h2>
         <motion.div
           style={{
