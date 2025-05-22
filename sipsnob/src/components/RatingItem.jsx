@@ -43,6 +43,7 @@ const RatingItem = ({ ratingId }) => {
       margin: "20px 0",
       maxWidth: "700px"
     }}>
+      
       <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
         <div style={{
           width: "50px",

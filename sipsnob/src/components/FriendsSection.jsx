@@ -71,16 +71,17 @@ const FriendsSection = () => {
   }, [currentUser]);
 
   return (
-    <div style={{ marginTop: "40px" }}>
-      <h2 style={{ color: "#5a3e2b" }}>My Friends</h2>
+    <div style={{ marginTop: "24px" }}>
+      <h2 style={{ color: "#f5e1c8"}}>View and Add Friends</h2>
 
       <div style={{
-        backgroundColor: "#fffaf5",
+        backgroundColor: "#d7b899",
         padding: "20px",
         borderRadius: "12px",
         margin: "0 auto",
         width: "90%",
         maxWidth: "600px",
+        
       }}>
        
 
@@ -96,7 +97,9 @@ const FriendsSection = () => {
               width: "60%",
               maxWidth: "300px",
               borderRadius: "10px",
-              border: "1px solid #ccc",
+              border: "2px solid #5a3e2b",
+              backgroundColor: "#d7b899",
+              color: "#5a3e2b"
             }}
           />
           <button onClick={handleSearch} className="button" style={{ backgroundColor: "#5a3e2b", color: "#f5e1c8" }}>
@@ -137,7 +140,8 @@ const FriendsSection = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                flexWrap: "wrap"
+                flexWrap: "wrap",
+                border: "2px solid #5a3e2b",
               }}
             >
               <div style={{ display: "flex", alignItems: "center" }}>

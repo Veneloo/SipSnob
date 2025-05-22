@@ -12,6 +12,7 @@ const ProfilePage = () => {
   const [profile, setProfile] = useState({});
   const [reviews, setReviews] = useState([]);
   const navigate = useNavigate();
+  const [profileSection, setProfileSection] = useState("Ratings")
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -44,6 +45,14 @@ const ProfilePage = () => {
     if (value === "next" && currentPage < totalPages) setCurrentPage((prev) => prev + 1);
   };
 
+  const formatDate = (iso) => {
+    const date = new Date(iso);
+    return date.toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+
   return (
     <div className="page-container" style={{ padding: "20px", textAlign: "center", marginTop: "60px", paddingBottom: "100px" }}>
       
@@ -61,7 +70,7 @@ const ProfilePage = () => {
           width: "90%",
           maxWidth: "250px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-          border: "1px solid #d7b898",
+          border: "2px solid #5a3e2b",
         }}
       >
         <img
@@ -99,12 +108,33 @@ const ProfilePage = () => {
         </motion.button>
       </motion.div>
 
+<div style={{display: "flex", flexDirection: "row", width: "fit-content" }}>
+  <h2 style={{cursor: "pointer",marginInline: "10px", color: profileSection==="Ratings" ? "#5a3e2b": "#8B5E3C"}} onClick={() => setProfileSection("Ratings")}>Ratings</h2>
+  <h2 style={{cursor: "pointer",marginInline: "10px", color: profileSection==="Friends" ? "#5a3e2b": "#8B5E3C"}} onClick={() => setProfileSection("Friends")}>Friends</h2>
+</div>
       {/* Ratings */}
-      <h2 style={{ marginBlock: "30px 0", color: "#5a3e2b" }}>My Ratings</h2>
 
-      <div className="row-container" style={{ justifyContent: "space-between", width: "360px" }}>
+
+      <div hidden={profileSection !="Ratings"} style={{
+          backgroundColor: "#8b5e3c",
+          padding: "20px",
+          borderRadius: "12px",
+          margin: "0 auto 60px",
+          width: "90%",
+          maxWidth: "500px", 
+          color: "#5a3e2b",
+          fontStyle: "italic",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.05)",
+          border: "2px solid #5a3e2b",
+          alignItems: "center",
+          justifyContent: "center"}}>
+      <h2 hidden={profileSection !="Ratings"} style={{ marginBlock: "30px 0", color: "#f5e1c8" }}>My Ratings</h2>
+      
+
+      <div hidden={profileSection !="Ratings"} className="row-container" style={{ justifyContent: "space-between", color: "#d7b898"}}>
         {currentPage !== 1 && (
           <motion.button
+          hidden={profileSection !="Ratings"}
             whileHover={{ scale: 1.05 }}
             className="button"
             style={{ backgroundColor: "#d7b898", color: "#5a3e2b", padding: "0 5px", marginBlock: "0 10px" }}
@@ -113,7 +143,7 @@ const ProfilePage = () => {
             <p style={{ margin: "0", padding: "0", fontSize: "small" }}>Back</p>
           </motion.button>
         )}
-        <p style={{ marginBlock: "0 10px" }}>{currentPage} of {totalPages}</p>
+        <p hidden={profileSection !="Ratings"} style={{ marginBlock: "0 10px" }}>{currentPage} of {totalPages}</p>
         {currentPage !== totalPages && (
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -121,12 +151,12 @@ const ProfilePage = () => {
             style={{ backgroundColor: "#d7b898", color: "#5a3e2b", padding: "0 5px", marginBlock: "0 10px" }}
             onClick={() => handlePageChange("next")}
           >
-            <p style={{ margin: "0", padding: "0", fontSize: "small" }}>Next</p>
+            <p hidden={profileSection !="Ratings"} style={{ margin: "0", padding: "0", fontSize: "small" }}>Next</p>
           </motion.button>
         )}
       </div>
 
-      <div style={{ minHeight: "320px", overflowY: "auto", margin: "0 auto", width: "400px", maxWidth: "750px", paddingRight: "8px" }}>
+
         {reviews.length === 0 ? (
           <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>
             You haven’t rated any coffee shops yet.
@@ -135,32 +165,81 @@ const ProfilePage = () => {
           <AnimatePresence>
             {displayedReviews.map((review) => (
               <motion.div
-                key={review.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.4 }}
-                style={{
-                  backgroundColor: "#fffaf5",
-                  padding: "28px",
-                  borderRadius: "16px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                  marginBottom: "20px",
-                  minHeight: "180px",
-                  textAlign: "center",
-                }}
-              >
-                <h3 style={{ color: "#5a3e2b", fontSize: "1.3rem", marginBottom: "10px" }}>{review.shopName}</h3>
-                <p style={{ fontStyle: "italic", fontWeight: "500", color: "#5a3e2b", marginBottom: "16px", fontSize: "1rem" }}>
-                  {review.comment?.trim() !== "" ? review.comment : "No comment"}
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "6px", textAlign: "left", margin: "0 auto", maxWidth: "360px", fontSize: "1rem" }}>
-                  {Object.entries(review.ratings || {}).map(([key, val]) => (
-                    <div key={key} style={{ lineHeight: "1.5" }}>
-                      <strong>{key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:</strong>
-                      <span style={{ marginLeft: "8px", color: "#5a3e2b" }}>{val}/10</span>
-                    </div>
-                  ))}
+              key={review.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                padding: "24px",
+                borderRadius: "20px",
+                backgroundColor: "#fff",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                margin: "20px 0",
+                maxWidth: "300px",
+                backgroundColor:"#d7b898",
+                display: "flex",
+                flexWrap: "wrap",
+                boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "2px solid #5a3e2b",
+              
+              }}
+            >
+
+              <div>
+                <h3 style={{ margin: 0 }}>{review.shopName}</h3>
+                <small style={{color: "#8B5E3C"}}>Reviewed on {formatDate(review.timestamp)}</small>
+                
+              </div>
+
+              {review.comment && (
+                <p style={{
+                fontStyle: "italic",
+                backgroundColor: "#f5e1c8",
+                color: "#5a3e2b",
+                padding: "10px",
+                borderRadius: "8px",
+                marginBottom: "10px",
+                maxWidth: "300px",
+                flexWrap: "wrap",
+                alignSelf: "center"
+              }}>
+                {review.comment || " "}
+              </p>
+
+
+
+              )}
+
+
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", textAlign: "left", margin: "0 auto", maxWidth: "360px", fontSize: "1rem", }}>
+              
+                
+                {Object.entries(review.ratings || {}).map(([key, val]) => (
+                  <div key={key} style={{ lineHeight: "1.5" }}>
+                    <strong>{key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:</strong>
+                    <span style={{ marginLeft: "8px", color: "#5a3e2b" }}>{val}/10</span>
+                  </div>
+                ))}
+                {review.milkOptions?.length > 0 && (
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" ,
+              alignSelf: "center" }}>
+                {review.milkOptions.map((milk, idx) => (
+                  <span key={idx} style={{
+                    padding: "4px 8px",
+                    backgroundColor: "#e8d6c3",
+                    borderRadius: "12px",
+                    fontSize: "0.85rem",
+                    color: "#5a3e2b"
+                  }}>{milk}</span>
+                ))}
+              </div>
+            )}
+              
+    
                 </div>
               </motion.div>
             ))}
@@ -171,11 +250,12 @@ const ProfilePage = () => {
       {/* Friends Section */}
       
       <motion.div
+      hidden={profileSection !="Friends"}
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         style={{
-          backgroundColor: "#fffaf5",
+          backgroundColor: "#5a3e2b",
           padding: "20px",
           borderRadius: "12px",
           margin: "0 auto 60px",
@@ -184,6 +264,8 @@ const ProfilePage = () => {
           color: "#8b5e3c",
           fontStyle: "italic",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.05)",
+          border: "2px solid #5a3e2b",
+
         }}
       
       >

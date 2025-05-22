@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { db } from "../firebaseConfig";
 import { doc, getDoc, collection, getDocs } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
+import defaultImg from "../assets/sampleimg.png";
+import { Navigate } from "react-router-dom";
 
 const FriendProfilePage = () => {
   const { friendId } = useParams();
   const [friend, setFriend] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate()
 
   const reviewsPerPage = 2;
   const totalPages = Math.ceil(reviews.length / reviewsPerPage);
@@ -34,13 +37,21 @@ const FriendProfilePage = () => {
     fetchFriendReviews();
   }, [friendId]);
 
+  const formatDate = (iso) => {
+    const date = new Date(iso);
+    return date.toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+
   if (!friend) return <p style={{ textAlign: "center", marginTop: "60px" }}>Loading friend profile...</p>;
 
   return (
     <div
         className="page-container"
         style={{
-            padding: "0px",
+            paddingBlock: "24px",
             textAlign: "center",
             marginTop: "0px",
             marginBottom: "40px",
@@ -48,14 +59,51 @@ const FriendProfilePage = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            justifyContent: "center",
+            background: "linear-gradient(#f5e1c8,#d7b898,#8B5E3C)"
         }}>
-      <h2 style={{ fontSize: "1.8rem", marginBottom: "8px", color: "#5a3e2b" }}>{friend.full_name || "No Name"}</h2>
-      <p style={{ fontWeight: "bold", color: "#8b5e3c" }}>@{friend.username}</p>
-      <p style={{ color: "#5a3e2b" }}>{friend.location}</p>
 
-      <h3 style={{ marginTop: "30px", color: "#5a3e2b" }}>Their Ratings</h3>
+        <button className="button" style={{alignSelf: "flex-start", justifyContent: "space-between", backgroundColor: "#8B5E3C", border: "2px solid #5a3e2b"}} onClick={() => navigate("/profile")}><span style={{marginInline: "0 5px", paddingLeft: "0"}}>◀ </span>Back</button>
 
-      <div className="row-container" style={{ justifyContent: "space-between", width: "360px", margin: "0 auto" }}>
+      <motion.div
+        initial={{ opacity: 0, y: 25 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        style={{
+          backgroundColor: "#8B5E3C",
+          borderRadius: "24px",
+          color: "#f5e1c8",
+          padding: "20px 12px",
+          margin: "0 auto 40px",
+          width: "90%",
+          maxWidth: "250px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          border: "2px solid #5a3e2b",
+          alignItems: "center"
+        }}
+      >
+      <img
+          src={friend.profileImage || defaultImg}
+          alt="profile"
+          style={{
+            width: "100px",
+            height: "100px",
+            borderRadius: "25%",
+            objectFit: "cover",
+            border: "2px solid #d7b898",
+            marginTop: "5px",
+            marginBottom: "0px",
+          }}
+        />
+        <div style={{ marginTop: "0" }}>
+          <h2 style={{ color: "#f5e1c8", marginBottom: "5px" }}>{friend.full_name || "Name"}</h2>
+          <p style={{ color: "#d7b898", marginBlock: "0" }}>@{friend.username}</p>
+          <p style={{ color: "#d7b898", marginBlock: "0" }}>{friend.location}</p>
+        </div>
+        </motion.div>
+      <h2 style={{ marginTop: "30px", color: "#5a3e2b" }}>Their Ratings</h2>
+
+      <div className="row-container" style={{ justifyContent: "space-between", margin: "0 auto" }}>
         {currentPage > 1 && (
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -79,39 +127,88 @@ const FriendProfilePage = () => {
         )}
       </div>
 
-      <div style={{ minHeight: "320px", overflowY: "auto", margin: "0 auto", width: "400px", maxWidth: "750px", paddingRight: "8px" }}>
+      <div style={{ minHeight: "320px", overflowY: "auto", margin: "0 auto", width: "400px", maxWidth: "750px", borderRadius: "16px",marginBottom: "20px", }}>
         {reviews.length === 0 ? (
           <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>No reviews yet.</p>
         ) : (
           <AnimatePresence>
             {displayedReviews.map((review) => (
               <motion.div
-                key={review.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 20 }}
-                transition={{ duration: 0.4 }}
-                style={{
-                  backgroundColor: "#fffaf5",
-                  padding: "28px",
-                  borderRadius: "16px",
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
-                  marginBottom: "20px",
-                  minHeight: "180px",
-                  textAlign: "center",
-                }}
-              >
-                <h3 style={{ color: "#5a3e2b", fontSize: "1.3rem", marginBottom: "10px" }}>{review.shopName}</h3>
-                <p style={{ fontStyle: "italic", fontWeight: "500", color: "#5a3e2b", marginBottom: "16px", fontSize: "1rem" }}>
-                  {review.comment?.trim() !== "" ? review.comment : "No comment"}
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: "6px", textAlign: "left", margin: "0 auto", maxWidth: "360px", fontSize: "1rem" }}>
-                  {Object.entries(review.ratings || {}).map(([key, val]) => (
-                    <div key={key} style={{ lineHeight: "1.5" }}>
-                      <strong>{key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:</strong>
-                      <span style={{ marginLeft: "8px", color: "#5a3e2b" }}>{val}/10</span>
-                    </div>
-                  ))}
+              key={review.id}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.3 }}
+              style={{
+                padding: "24px",
+                borderRadius: "20px",
+                backgroundColor: "#fff",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                margin: "20px 0",
+                maxWidth: "700px",
+                backgroundColor:"#d7b898",
+                display: "flex",
+                flexWrap: "wrap",
+                boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                border: "2px solid #5a3e2b"
+              
+              }}
+            >
+
+              <div>
+                <h3 style={{ margin: 0 }}>{review.shopName}</h3>
+                <small style={{color: "#8B5E3C"}}>Reviewed on {formatDate(review.timestamp)}</small>
+                
+              </div>
+
+              {review.comment && (
+                <p style={{
+                fontStyle: "italic",
+                backgroundColor: "#f5e1c8",
+                color: "#5a3e2b",
+                padding: "10px",
+                borderRadius: "8px",
+                marginBottom: "10px",
+                maxWidth: "300px",
+                flexWrap: "wrap",
+                alignSelf: "center"
+              }}>
+                {review.comment || " "}
+              </p>
+
+
+
+              )}
+
+
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", textAlign: "left", margin: "0 auto", maxWidth: "360px", fontSize: "1rem", }}>
+              
+                
+                {Object.entries(review.ratings || {}).map(([key, val]) => (
+                  <div key={key} style={{ lineHeight: "1.5" }}>
+                    <strong>{key.replace(/([A-Z])/g, " $1").replace(/^./, (str) => str.toUpperCase())}:</strong>
+                    <span style={{ marginLeft: "8px", color: "#5a3e2b" }}>{val}/10</span>
+                  </div>
+                ))}
+                {review.milkOptions?.length > 0 && (
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginTop: "8px" ,
+              alignSelf: "center" }}>
+                {review.milkOptions.map((milk, idx) => (
+                  <span key={idx} style={{
+                    padding: "4px 8px",
+                    backgroundColor: "#e8d6c3",
+                    borderRadius: "12px",
+                    fontSize: "0.85rem",
+                    color: "#5a3e2b"
+                  }}>{milk}</span>
+                ))}
+              </div>
+            )}
+              
+    
                 </div>
               </motion.div>
             ))}
