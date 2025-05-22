@@ -54,11 +54,13 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="page-container" style={{ padding: "20px", textAlign: "center", marginTop: "60px", paddingBottom: "100px" }}>
+    <motion.div initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.4 }} className="page-container" style={{ padding: "20px", textAlign: "center", marginTop: "60px", paddingBottom: "100px" }}>
       
       {/* Profile Card */}
       <motion.div
-        initial={{ opacity: 0, y: 25 }}
+        initial={{ opacity: 0, y: -25 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         style={{
@@ -174,7 +176,6 @@ const ProfilePage = () => {
                 padding: "24px",
                 borderRadius: "20px",
                 backgroundColor: "#fff",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 margin: "20px 0",
                 maxWidth: "300px",
                 backgroundColor:"#d7b898",
@@ -184,7 +185,9 @@ const ProfilePage = () => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
+                justifySelf: "center",
                 border: "2px solid #5a3e2b",
+
               
               }}
             >
@@ -271,7 +274,7 @@ const ProfilePage = () => {
       >
         <FriendsSection />
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
