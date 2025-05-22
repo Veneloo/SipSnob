@@ -119,6 +119,7 @@ const FriendProfilePage = () => {
             objectFit: "cover",
             border: "2px solid #d7b898",
             marginBottom: "10px",
+            background: `linear-gradient(to right, #8B5E3C ${value * 10}%, #f2e3d5 ${value * 10}%)`
           }}
         />
         <h2 style={{ color: "#f5e1c8", marginBottom: "5px" }}>{friend.full_name || "Name"}</h2>

@@ -188,6 +188,7 @@ const Ratings = () => {
       <motion.button
         onClick={() => navigate("/discover")}
         whileHover={{ scale: 1.05 }}
+        className="button"
         style={{
           backgroundColor: "#A2845E",
           color: "#fff",
@@ -231,7 +232,7 @@ const Ratings = () => {
             style={{
               flex: "3",
               height: "6px",
-              background: `linear-gradient(to right, #8B5E3C ${value * 10}%, #f2e3d5 ${value * 10}%)`,
+              background: `linear-gradient(to right, #8B5E3C ${(value - 1) * 10}%, #f2e3d5 ${(value - 1) * 10 + 1}%)`,
               borderRadius: "4px",
               appearance: "none",
               outline: "none",
@@ -416,7 +417,7 @@ const Ratings = () => {
         </div>
         </div> 
 
-        <div style={{ marginTop: "16px", display: "flex", justifyContent: "center", flexDirection: "column" }}>
+      <div style={{ marginTop: "16px", display: "flex", justifyContent: "center", flexDirection: "column" }}>
 
         <p style={{
               fontStyle: "italic",
@@ -434,7 +435,7 @@ const Ratings = () => {
 
         {Object.entries(review.ratings || {}).map(([key, val]) => (
                 <p key={key} style={{ margin: "2px 0" }}>
-                  <strong>{key.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}:</strong> {val}/10
+                  <strong >{key.replace(/([A-Z])/g, " $1").replace(/^./, str => str.toUpperCase())}:</strong> {val}/10
                 </p>
           ))}
               {review.milkOptions?.length > 0 && (
@@ -451,7 +452,8 @@ const Ratings = () => {
                 ))}
               </div>
             )}
-
+        <p style={{ marginBlock: "2px 0" }}><strong>Food Available:</strong> {review.foodAvailable || "Unknown"}</p>
+        <p style={{ margin: "2px 0" }}><strong>Sugar-Free Syrups:</strong> {review.sugarFree || "Unknown"}</p>
 
       </div>
             <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px", marginTop: "12px" }}>
