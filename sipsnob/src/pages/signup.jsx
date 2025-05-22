@@ -4,7 +4,6 @@ import { signUpUser } from "../firebase/auth";
 import { db } from "../firebaseConfig";
 import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { motion } from "framer-motion";
-import { updateProfile } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 
 function SignUp() {
@@ -54,7 +53,7 @@ function SignUp() {
       await setDoc(userRef, {
         email,
         username: username.toLowerCase(),
-        user_id: user.uid, // 
+        user_id: user.uid,
         createdAt: new Date(),
       });
 
