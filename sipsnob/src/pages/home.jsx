@@ -160,9 +160,9 @@ const HomePage = () => {
             overflowX: 'auto',
             overflowY: 'hidden',
             scrollBehavior: 'smooth',
-            width: '75vw',
+            width: '70vw',
             margin: "24px",
-            justifyContent: "center",
+            justifyContent: "flex-start",
             borderRadius: "50px",
             textAlign: "center"
           }}
@@ -172,7 +172,7 @@ const HomePage = () => {
           viewport={{ once: true, amount: 0.2 }}
         >
           {bookmarkedShops.length > 0 ? (
-            bookmarkedShops.slice(0, 10).map((item) => (
+            bookmarkedShops.map((item) => (
               <motion.div
                 key={item.id} // ✅ Unique key fix
                 initial={{ opacity: 0, y: 10 }}
@@ -199,17 +199,6 @@ const HomePage = () => {
           )}
         </motion.div>
 
-        {bookmarkedShops.length !== 0 && (
-          <motion.button
-            className="button"
-            onClick={() => navigate("/settings#Bookmarks")}
-            style={{ color: "#f5e1c8", backgroundColor: "#A2845E" }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            View All Bookmarks
-          </motion.button>
-        )}
       </div>
 
       <br />

@@ -81,6 +81,7 @@ const FriendsSection = () => {
         margin: "0 auto",
         width: "90%",
         maxWidth: "600px",
+        flexWrap: "wrap"
         
       }}>
        
@@ -162,7 +163,7 @@ const FriendsSection = () => {
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
+              <div style={{ display: "flex", gap: "10px", marginTop: "12px", flexWrap: "wrap" }}>
                 <button
                   onClick={() => navigate(`/profile/${friend.id}`)}
                   className="button"
