@@ -4,7 +4,6 @@ import { signUpUser } from "../firebase/auth";
 import { db } from "../firebaseConfig";
 import { doc, setDoc, collection, getDocs, query, where } from "firebase/firestore";
 import { motion } from "framer-motion";
-import { auth } from "../firebaseConfig";
 
 function SignUp() {
   const [error, setError] = useState('');
@@ -59,8 +58,8 @@ function SignUp() {
 
       navigate("/home");
     } catch (err) {
-      console.error(err);
-      setError("Authentication failed. Try again.");
+      console.error("Firebase SignUp Error:", err);
+      setError(err.message);
     }
   };
 
