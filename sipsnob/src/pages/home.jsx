@@ -164,7 +164,7 @@ const HomePage = () => {
             borderRadius: "24px"
           }}>
             <h3>There is no friend activity to display.<br />Go to the settings tab to follow friends!</h3>
-            <button className="button" onClick={() => navigate("/settings")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
+            <button className="button" onClick={() => navigate("/profile")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
               Add Friends
             </button>
           </div>

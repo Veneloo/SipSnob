@@ -5,6 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import "./pages.css";
 import { motion } from "framer-motion";
+import RatingItem from "../components/RatingItem";
 
 const ShopDetails = () => {
   const { shopId } = useParams();
@@ -116,7 +117,8 @@ const ShopDetails = () => {
                         alt={`Photo ${index + 1}`}
                         style={{
                           width: "100%",
-                          maxHeight: "400px",
+                          maxHeight: "250px",
+                          overflowY: "clip",
                           objectFit: "cover",
                           borderRadius: 8
                         }}
@@ -131,12 +133,19 @@ const ShopDetails = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
+              style={{marginBlock: "32px"}}
             >
               {shop.formatted_address && (
-                <p><strong>Address:</strong> {shop.formatted_address}</p>
+                <p><strong style={{ padding: "6px 12px",
+                backgroundColor: "#5a3e2b",
+                borderRadius: "12px",
+                color: "#e8d6c3", margin: "12px"}}>Address:</strong> {shop.formatted_address}</p>
               )}
               {shop.formatted_phone_number && (
-                <p><strong>Phone:</strong> {shop.formatted_phone_number}</p>
+                <p><strong style={{ padding: "6px 12px",
+                backgroundColor: "#5a3e2b",
+                borderRadius: "12px",
+                color: "#e8d6c3", margin: "12px"}}>Phone:</strong> {shop.formatted_phone_number}</p>
               )}
             </motion.div>
 
@@ -146,7 +155,7 @@ const ShopDetails = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                <strong>Opening Hours:</strong>
+                <h3><strong>Opening Hours:</strong></h3>
                 <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left" }}>
                   {shop.opening_hours.weekday_text.map((line, index) => (
                     <li key={index}>{line}</li>
@@ -162,16 +171,20 @@ const ShopDetails = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                <strong>Recent Reviews:</strong>
+                <h3><strong>Recent Reviews:</strong></h3>
                 <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left" }}>
                   {shop.reviews.slice(0, 3).map((review, index) => (
-                    <li key={index} style={{ marginBottom: "0.75rem" }}>
-                      <p style={{ marginBottom: "0.25rem" }}>
-                        <strong>{review.author_name}</strong> ({review.rating}⭐)
-                      </p>
-                      <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>{review.text}</p>
-                    </li>
-                  ))}
+                      <motion.div
+                      key={review}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+                    >
+
+                    <RatingItem ratingId={review.reviewId}/>
+
+                    </motion.div>
+                ))}
                 </ul>
               </motion.div>
             )}
