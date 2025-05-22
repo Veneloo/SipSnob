@@ -154,19 +154,15 @@ const Ratings = () => {
       if (publicResult.status === "rejected") failed.push("public review");
   
       if (failed.length > 0) {
-        console.warn("Failed to delete from:", failed);
-        alert(`Review deleted, but not fully removed from: ${failed.join(", ")}`);
+        setError(`Review deleted, but not fully removed from: ${failed.join(", ")}`);
       } else {
-        alert("Review successfully deleted from all locations!");
+        setError(""); // success, no error
       }
   
-      setError("");
-  
-    } catch (err) {
-      console.error("Unexpected deletion error:", err);
+    } catch {
       setError("Something went wrong while deleting the review.");
     }
-  };
+  };  
   
 
   const formatDate = (iso) => {
