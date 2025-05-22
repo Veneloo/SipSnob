@@ -51,6 +51,7 @@ function SignUp() {
         email,
         username: username.toLowerCase(),
         createdAt: new Date(),
+        user_id: user.uid,
       });
 
       navigate("/home");
