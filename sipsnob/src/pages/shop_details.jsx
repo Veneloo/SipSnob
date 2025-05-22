@@ -58,6 +58,7 @@ const ShopDetails = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
+      style={{paddingBlock: "12px"}}
     >
       <motion.h1
         style={{ fontSize: "1.875rem", color: "#5a3e2b", marginBottom: "1rem" }}
@@ -105,7 +106,7 @@ const ShopDetails = () => {
 
             {shop.photos?.length > 0 && (
               <motion.div
-                style={{ maxWidth: 500, margin: "1rem auto" }}
+                style={{ maxWidth: "500px", margin: "1rem auto"}}
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
               >
@@ -133,16 +134,16 @@ const ShopDetails = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
-              style={{marginBlock: "32px"}}
+              style={{ display: "flex", flexWrap: "wrap", marginBlock: "32px", justifyContent: "center"}}
             >
               {shop.formatted_address && (
-                <p><strong style={{ padding: "6px 12px",
+                <p style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", marginBottom: "0", paddingBottom: "0"}}><strong style={{ padding: "6px 12px",
                 backgroundColor: "#5a3e2b",
                 borderRadius: "12px",
                 color: "#e8d6c3", margin: "12px"}}>Address:</strong> {shop.formatted_address}</p>
               )}
               {shop.formatted_phone_number && (
-                <p><strong style={{ padding: "6px 12px",
+                <p style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", alignItems: "center", marginTop: "0", paddingTop: "0"}}><strong style={{ padding: "6px 12px",
                 backgroundColor: "#5a3e2b",
                 borderRadius: "12px",
                 color: "#e8d6c3", margin: "12px"}}>Phone:</strong> {shop.formatted_phone_number}</p>
@@ -156,13 +157,16 @@ const ShopDetails = () => {
                 transition={{ delay: 0.4 }}
               >
                 <h3><strong>Opening Hours:</strong></h3>
-                <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left" }}>
+                <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left", backgroundColor: "#f5e1c8", padding: "12px 42px", borderRadius: "24px" }}>
                   {shop.opening_hours.weekday_text.map((line, index) => (
                     <li key={index}>{line}</li>
                   ))}
                 </ul>
               </motion.div>
             )}
+
+              {shop.reviews.length === 0 && <p>No reviews yet. Be the first to rate this coffee shop!</p>}
+
 
             {shop.reviews?.length > 0 && (
               <motion.div

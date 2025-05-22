@@ -72,7 +72,6 @@ const ProfilePage = () => {
           width: "90%",
           maxWidth: "250px",
           boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-          border: "2px solid #5a3e2b",
         }}
       >
         <img
@@ -83,7 +82,6 @@ const ProfilePage = () => {
             height: "100px",
             borderRadius: "25%",
             objectFit: "cover",
-            border: "2px solid #d7b898",
             marginTop: "5px",
             marginBottom: "0px",
           }}
@@ -118,16 +116,15 @@ const ProfilePage = () => {
 
 
       <div hidden={profileSection !="Ratings"} style={{
-          backgroundColor: "#8b5e3c",
+          backgroundColor: "#5a3e2b",
           padding: "20px",
           borderRadius: "12px",
           margin: "0 auto 60px",
           width: "90%",
-          maxWidth: "500px", 
+          maxWidth: "450px", 
           color: "#5a3e2b",
           fontStyle: "italic",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.05)",
-          border: "2px solid #5a3e2b",
           alignItems: "center",
           justifyContent: "center"}}>
       <h2 hidden={profileSection !="Ratings"} style={{ marginBlock: "30px 0", color: "#f5e1c8" }}>My Ratings</h2>
@@ -166,6 +163,7 @@ const ProfilePage = () => {
         ) : (
           <AnimatePresence>
             {displayedReviews.map((review) => (
+              <div style={{display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center"}}>
               <motion.div
               key={review.id}
               initial={{ opacity: 0, y: 10 }}
@@ -186,7 +184,6 @@ const ProfilePage = () => {
                 justifyContent: "center",
                 alignItems: "center",
                 justifySelf: "center",
-                border: "2px solid #5a3e2b",
 
               
               }}
@@ -218,7 +215,7 @@ const ProfilePage = () => {
               )}
 
 
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px", textAlign: "left", margin: "0 auto", maxWidth: "360px", fontSize: "1rem", }}>
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "6px", textAlign: "center", margin: "0 auto", maxWidth: "360px", fontSize: "1rem", }}>
               
                 
                 {Object.entries(review.ratings || {}).map(([key, val]) => (
@@ -244,7 +241,7 @@ const ProfilePage = () => {
               
     
                 </div>
-              </motion.div>
+              </motion.div></div>
             ))}
           </AnimatePresence>
         )}
