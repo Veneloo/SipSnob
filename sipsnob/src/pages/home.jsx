@@ -122,7 +122,7 @@ const HomePage = () => {
               <BookmarkItem key={item.id} bookmarkDetails={item} onRemove={handleRemoveBookmark} />
             ))
           ) : (
-            <div style={{ width: "inherit", height: "fit-content", margin: "0", color: "#572e05" }}>
+            <div style={{ width: "650px", height: "fit-content", margin: "auto", color: "#572e05",backgroundColor: "rgba(90, 62, 43, 0.3)", padding: "12px", borderRadius: "32px"}}>
               <h3>There are no bookmarks to display.<br />Go to the Discover tab to find shops!</h3>
               <button className="button" onClick={() => navigate("/discover")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>
                 Discover Coffee Shops
@@ -156,12 +156,12 @@ const HomePage = () => {
           ))
         ) : (
           <div style={{
-            width: "inherit",
+            width: "650px",
             height: "fit-content",
             color: "#572e05",
-            backgroundColor: "rgb(90, 62, 43)",
+            backgroundColor: "rgba(90, 62, 43, 0.3)",
             padding: "12px",
-            borderRadius: "24px"
+            borderRadius: "32px"
           }}>
             <h3>There is no friend activity to display.<br />Go to the settings tab to follow friends!</h3>
             <button className="button" onClick={() => navigate("/profile")} style={{ backgroundColor: "#A2845E", color: "#f5e1c8" }}>

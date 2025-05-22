@@ -168,30 +168,6 @@ const ShopDetails = () => {
               {shop.reviews.length === 0 && <p>No reviews yet. Be the first to rate this coffee shop!</p>}
 
 
-            {shop.reviews?.length > 0 && (
-              <motion.div
-                style={{ marginTop: "1.5rem" }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-              >
-                <h3><strong>Recent Reviews:</strong></h3>
-                <ul style={{ marginTop: "0.5rem", paddingInlineStart: "20px", textAlign: "left" }}>
-                  {shop.reviews.slice(0, 3).map((review, index) => (
-                      <motion.div
-                      key={review}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
-                    >
-
-                    <RatingItem ratingId={review.reviewId}/>
-
-                    </motion.div>
-                ))}
-                </ul>
-              </motion.div>
-            )}
           </motion.div>
         )
       )}

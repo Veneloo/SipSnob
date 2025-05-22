@@ -130,7 +130,7 @@ const ProfilePage = () => {
       <h2 hidden={profileSection !="Ratings"} style={{ marginBlock: "30px 0", color: "#f5e1c8" }}>My Ratings</h2>
       
 
-      <div hidden={profileSection !="Ratings"} className="row-container" style={{ justifyContent: "space-between", color: "#d7b898"}}>
+      { totalPages != 0 && (<div hidden={profileSection !="Ratings"} className="row-container" style={{ justifyContent: "space-between", color: "#d7b898"}}>
         {currentPage !== 1 && (
           <motion.button
           hidden={profileSection !="Ratings"}
@@ -153,11 +153,11 @@ const ProfilePage = () => {
             <p hidden={profileSection !="Ratings"} style={{ margin: "0", padding: "0", fontSize: "small" }}>Next</p>
           </motion.button>
         )}
-      </div>
+      </div>)}
 
 
         {reviews.length === 0 ? (
-          <p style={{ fontStyle: "italic", color: "#5a3e2b" }}>
+          <p style={{ fontStyle: "italic", color: "#d7b898" }}>
             You haven’t rated any coffee shops yet.
           </p>
         ) : (

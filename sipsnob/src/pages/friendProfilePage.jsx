@@ -77,7 +77,7 @@ const FriendProfilePage = () => {
         flexDirection: "column",
         alignItems: "center",
         boxSizing: "border-box",
-        overflowX: "hidden",
+        overflowX: "hidden"
       }}
     >
       <button
@@ -199,6 +199,9 @@ const FriendProfilePage = () => {
                   border: "2px solid #5a3e2b",
                   textAlign: "center",
                   boxShadow: "0px 0px 5px rgba(0, 0, 0, 0.2)",
+                  display: "flex",
+                  flexDirection: "column",
+                  flexWrap: "wrap"
                 }}
               >
                 <h3 style={{ margin: 0 }}>{review.shopName}</h3>
